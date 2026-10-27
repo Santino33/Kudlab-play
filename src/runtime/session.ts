@@ -2,7 +2,7 @@ import { Api, ApiError } from '../delivery/api';
 import { newSecret } from '../contract/canonical';
 import { secretSchema, type SessionContext } from '../contract/schema';
 import { Database, request } from '../storage/database';
-import { Journal, type Snapshot, type Execution } from '../evidence/journal';
+import { Journal, type Snapshot, type Execution, type Outbox } from '../evidence/journal';
 
 export interface Credential {
   key: string; claimId: string; runtimeSecret: string; launchGrant?: string; context?: SessionContext;
@@ -26,13 +26,23 @@ export class Session {
     let context: SessionContext;
     try { context = await this.api.claim(c.launchGrant, c.claimId, c.runtimeSecret); }
     catch (error) { await this.defer(c, error); throw error; }
-    await this.db.transaction(['credentials'], async tx => {
+    try { await this.db.transaction(['credentials', 'executions', 'outbox'], async tx => {
       const s = tx.objectStore('credentials');
       const previous = await request<Credential | undefined>(s.get(context.sessionId));
-      if (previous && previous.claimId !== c.claimId) throw new Error('CLAIM_CONFLICT');
+      const recovery = !context.capabilities.canStart && context.capabilities.canSubmit && context.attemptNumber !== null;
+      if (recovery) {
+        const out = await request<Outbox | undefined>(tx.objectStore('outbox').get(context.sessionId));
+        const execution = await request<Execution | undefined>(tx.objectStore('executions').get(context.sessionId));
+        if (!out || !execution) throw new Error('LOCAL_EVIDENCE_NOT_FOUND');
+        if (out.envelope.configurationHash !== context.configurationHash || out.envelope.publishedVersionId !== context.publishedVersionId || out.envelope.gameBuildId !== context.gameBuildId || out.envelope.contractVersion !== context.contractVersion) throw new Error('LOCAL_EVIDENCE_MISMATCH');
+        await request(tx.objectStore('outbox').put({ ...out, status: 'PENDING', nextAttemptAt: 0 }));
+      } else if (previous && previous.claimId !== c.claimId) throw new Error('CLAIM_CONFLICT');
       await request(s.put({ key: context.sessionId, claimId: c.claimId, runtimeSecret: c.runtimeSecret, context, phase: 'READY', bridgeId: c.bridgeId }));
       await request(s.delete(c.key));
-    });
+    }); } catch (error) {
+      await this.defer(c, new ApiError(409, error instanceof Error ? error.message : 'LOCAL_RECOVERY_FAILED'));
+      throw error;
+    }
     return context;
   }
   private async defer(c: Credential, error: unknown): Promise<void> {

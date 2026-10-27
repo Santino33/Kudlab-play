@@ -16,8 +16,11 @@ export class SupervisedBridge {
     window.addEventListener('message', this.listener);
     window.parent.postMessage({ type: 'RUNTIME_READY', bridgeId: this.bridgeId }, this.origin);
   }
-  notify(type: 'EXECUTION_FINISHED' | 'DELIVERY_PENDING' | 'RESULTS_SAVED', sessionId: string, submissionId: string): void {
+  notify(type: 'EXECUTION_FINISHED' | 'DELIVERY_PENDING' | 'RESULTS_SAVED' | 'RECOVERY_REQUESTED', sessionId: string, submissionId: string): void {
     if (window.parent !== window) window.parent.postMessage({ type, bridgeId: this.bridgeId, sessionId, submissionId }, this.origin);
+  }
+  recoveryUnavailable(sessionId: string): void {
+    if (window.parent !== window) window.parent.postMessage({ type: 'RECOVERY_UNAVAILABLE', bridgeId: this.bridgeId, sessionId }, this.origin);
   }
   destroy(): void { if (this.listener) window.removeEventListener('message', this.listener); }
 }
