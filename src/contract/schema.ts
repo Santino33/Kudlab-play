@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { VIEWPORT_POLICY, viewportGeometry } from './layout';
+import type { EvidenceReceipt, RuntimeEnvelope } from '../../contract/kudlab-runtime-1.1.0/types';
 
 export const BUILD_ID = 'tg01-reference-rebuild-1';
 export const VIEWPORT_BUILD_ID = 'tg01-viewport-rebuild-2';
@@ -130,11 +131,11 @@ export const envelopeSchema = z.strictObject({
   }
   if (new TextEncoder().encode(JSON.stringify(e)).byteLength > 1048576) fail();
 });
-export type Envelope = z.infer<typeof envelopeSchema>;
+export type Envelope = RuntimeEnvelope;
 export const legacyContextSchema = contextSchema.safeExtend({ contractVersion: z.literal('1.0'), gameBuildId: z.literal(BUILD_ID), config: legacyConfigSchema });
 export const viewportContextSchema = contextSchema.safeExtend({ contractVersion: z.literal('1.1'), gameBuildId: z.literal(VIEWPORT_BUILD_ID), config: viewportConfigSchema });
 export const legacyEnvelopeSchema = envelopeSchema.safeExtend({ contractVersion: z.literal('1.0'), gameBuildId: z.literal(BUILD_ID), device: legacyDeviceSchema });
 export const viewportEnvelopeSchema = envelopeSchema.safeExtend({ contractVersion: z.literal('1.1'), gameBuildId: z.literal(VIEWPORT_BUILD_ID), device: viewportDeviceSchema });
 export const receiptSchema = z.strictObject({ receiptId: uuid, sessionId: uuid, submissionId: uuidV4, receivedAt: utc, evidenceHash: digest, processingStatusAtReceipt: z.literal('PENDING') });
-export type Receipt = z.infer<typeof receiptSchema>;
+export type Receipt = EvidenceReceipt;
 export const startResponseSchema = z.strictObject({ sessionId: uuid, attemptNumber: z.number().int().min(1).max(10), executionStatus: z.literal('RUNNING'), startedAtServer: utc, uploadAllowedUntil: utc });

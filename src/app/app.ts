@@ -90,6 +90,12 @@ export class App {
         const origin = import.meta.env.VITE_TEACHER_ORIGIN || 'https://docente.invalid';
         this.bridge = new SupervisedBridge(origin, bridgeId!);
         this.bridge.connect(grant => { void this.claim(grant); });
+        const recoverySessionId = new URLSearchParams(location.search).get('recoverySessionId');
+        if (uuidV4.safeParse(recoverySessionId).success) {
+          const out = await this.db.get<Outbox>('outbox', recoverySessionId!);
+          if (out) this.bridge.notify('RECOVERY_REQUESTED', out.sessionId, out.envelope.submissionId);
+          else this.bridge.recoveryUnavailable(recoverySessionId!);
+        }
       }
       this.maintenanceTimer = setInterval(() => { void this.maintain(); }, 1500);
       this.render();
@@ -134,10 +140,17 @@ export class App {
       this.launchBound = true;
       this.lastOut = undefined; this.deliveryState = 'PENDING'; this.screen = 'instructions';
       this.problem = ''; this.status = 'Tu actividad está lista';
+      if (!this.context.capabilities.canStart && this.context.capabilities.canSubmit) {
+        this.lastOut = await this.db!.get<Outbox>('outbox', this.context.sessionId);
+        this.screen = 'finish'; this.status = 'Recuperando el envío guardado en este navegador.';
+        void this.maintain(true);
+      }
       this.render();
       this.say(this.status);
-    } catch {
-      this.status = 'No pudimos confirmar la autorización. Comprueba la conexión y pide ayuda a tu profesor.';
+    } catch (error) {
+      this.status = error instanceof Error && error.message === 'LOCAL_EVIDENCE_NOT_FOUND'
+        ? 'No encontramos el envío en este navegador. Vuelve al mismo sitio, dispositivo y perfil donde realizaste la actividad. No se iniciará otra partida.'
+        : 'No pudimos confirmar la autorización. Comprueba la conexión y pide ayuda a tu profesor.';
     } finally { this.claiming = false; this.refreshAvailability(); }
   }
   private async maintain(force = false): Promise<void> {

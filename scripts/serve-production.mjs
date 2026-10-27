@@ -21,4 +21,4 @@ createServer(async (req, res) => {
     if (file.startsWith('/assets/')) res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
     res.end(data);
   } catch { res.writeHead(404); res.end(); }
-}).listen(4174, '127.0.0.1', () => console.log('Build con CSP: http://127.0.0.1:4174'));
+}).listen(Number(process.env.PORT ?? 4174), '127.0.0.1', () => console.log('Build con CSP, servidor exclusivo de verificación'));

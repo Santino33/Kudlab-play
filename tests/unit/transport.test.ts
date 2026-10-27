@@ -71,6 +71,33 @@ async function pending() {
   return { db, out };
 }
 describe('bandeja y acuses', () => {
+  it('recovery replaces only the matching local capability and unblocks identical evidence', async () => {
+    const { db, out } = await pending();
+    await db.put('outbox', { ...out, status: 'AUTH_REQUIRED' });
+    const c = contextFixture(); c.configurationHash = await hash(c.config);
+    // Match the stored evidence's historical profile, without changing its body/hash.
+    const stored = await db.get<Outbox>('outbox', sessionId);
+    c.configurationHash = stored!.envelope.configurationHash;
+    c.attemptNumber = 1; c.executionStatus = 'INTERRUPTED'; c.uploadAllowedUntil = '2026-11-01T12:00:00.000Z';
+    c.capabilities = { canStart: false, canSubmit: true, canReadReceipt: true };
+    // The fixture's placeholder hash is replaced consistently before closing the journal below.
+    const validHash = await hash(c.config);
+    const validOut = { ...stored!, envelope: { ...stored!.envelope, configurationHash: validHash } };
+    validOut.body = JSON.stringify(validOut.envelope); validOut.hash = await hash(validOut.envelope);
+    await db.put('outbox', validOut); c.configurationHash = validHash;
+    const s = new Session(db, new Api('http://localhost', async () => Response.json(c)), 'recovery', () => true);
+    await s.claim(newSecret());
+    expect((await db.get<Outbox>('outbox', sessionId))?.status).toBe('PENDING');
+    expect((await db.get<Outbox>('outbox', sessionId))?.body).toBe(validOut.body);
+    expect((await db.get<{ phase: string; context: typeof c }>('credentials', sessionId))?.context.capabilities.canStart).toBe(false);
+  });
+  it('recovery without the original local evidence cannot create a game or loop claims', async () => {
+    const db = await Database.open(crypto.randomUUID()), c = contextFixture(); let calls = 0;
+    c.configurationHash = await hash(c.config); c.attemptNumber = 1; c.uploadAllowedUntil = '2026-11-01T12:00:00.000Z'; c.capabilities = { canStart: false, canSubmit: true, canReadReceipt: true };
+    const s = new Session(db, new Api('http://localhost', async () => { calls++; return Response.json(c); }), 'recovery', () => true);
+    await expect(s.claim(newSecret())).rejects.toThrow('LOCAL_EVIDENCE_NOT_FOUND');
+    await s.reconcileClaims(true); expect(calls).toBe(1); expect(await db.all('outbox')).toEqual([]);
+  });
   it('marca SENDING y solo permite una solicitud en vuelo por sesión', async () => {
     const { db, out } = await pending();
     let release!: () => void; let entered!: () => void;

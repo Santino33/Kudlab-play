@@ -1,5 +1,11 @@
 # Kudlab-play
 
+**Integración J-02:** cliente conectado al contrato canónico versionado de Kudlab,
+recuperación supervisada de entrega con capacidad renovada (sin volver a jugar) y
+suite opcional `npx playwright test --config=playwright.integration.config.ts`
+contra backend/frontend/PostgreSQL reales aislados. No usa el simulador de J-01.
+Configuración y protocolo: [integración Kudlab](docs/kudlab-integration.md).
+
 Aplicación web estática de tareas digitales **J-01**. Incluye únicamente **TG-01 · Lluvia de estrellas**, reconstruida con TypeScript, DOM y Canvas 2D propios. Sin React, backend de negocio, cuentas estudiantiles ni métricas cognitivas nuevas.
 
 > Desarrollo con **datos sintéticos**. No habilitada para menores reales. El simulador no acredita integración con Kudlab ni consentimiento, conservación o validación metodológica.
