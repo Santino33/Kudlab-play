@@ -1,0 +1,40 @@
+{
+  "name": "kudlab-play",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "dev:demo": "vite --config vite.demo.config.ts --host 127.0.0.1 --port 4173 --strictPort",
+    "build": "tsc --noEmit && vite build && node scripts/build-sw.mjs",
+    "preview": "vite preview --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "lint": "eslint src tests scripts *.ts",
+    "check:production": "node scripts/check-production.mjs",
+    "contract:generate": "tsx scripts/generate-contract.ts",
+    "capture": "node scripts/capture.mjs"
+  },
+  "dependencies": {
+    "@fontsource/nunito": "5.3.0",
+    "canonicalize": "5.1.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.64.1",
+    "@types/node": "26.6.5",
+    "eslint": "10.13.0",
+    "fake-indexeddb": "6.2.6",
+    "globals": "17.13.0",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.1",
+    "vite": "8.3.5",
+    "vitest": "5.0.5"
+  }
+}

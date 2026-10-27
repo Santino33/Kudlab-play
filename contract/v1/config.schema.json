@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "durationMs": {
+      "type": "number",
+      "const": 120000
+    },
+    "segmentBoundariesMs": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "number",
+          "const": 0
+        },
+        {
+          "type": "number",
+          "const": 40000
+        },
+        {
+          "type": "number",
+          "const": 80000
+        },
+        {
+          "type": "number",
+          "const": 120000
+        }
+      ],
+      "items": false,
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "logicalWidth": {
+      "type": "number",
+      "const": 960
+    },
+    "logicalHeight": {
+      "type": "number",
+      "const": 600
+    },
+    "lanes": {
+      "type": "number",
+      "const": 6
+    },
+    "fallSpeedUnitsPerSecond": {
+      "type": "number",
+      "const": 210
+    },
+    "spawnIntervalMs": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "number",
+          "const": 1100
+        },
+        "max": {
+          "type": "number",
+          "const": 1800
+        }
+      },
+      "required": [
+        "min",
+        "max"
+      ],
+      "additionalProperties": false
+    },
+    "starProbability": {
+      "type": "number",
+      "const": 0.7
+    },
+    "stimulusSizeUnits": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "number",
+          "const": 75
+        },
+        "max": {
+          "type": "number",
+          "const": 105
+        }
+      },
+      "required": [
+        "min",
+        "max"
+      ],
+      "additionalProperties": false
+    },
+    "minimumDistanceUnits": {
+      "type": "number",
+      "const": 180
+    },
+    "positionAttempts": {
+      "type": "number",
+      "const": 30
+    },
+    "presentationRule": {
+      "type": "string",
+      "const": "FULLY_VISIBLE"
+    },
+    "maxFrameGapMs": {
+      "type": "number",
+      "const": 250
+    },
+    "minimumStageScale": {
+      "type": "number",
+      "const": 0.6
+    },
+    "inputProfile": {
+      "type": "string",
+      "const": "POINTER_V1"
+    }
+  },
+  "required": [
+    "durationMs",
+    "segmentBoundariesMs",
+    "logicalWidth",
+    "logicalHeight",
+    "lanes",
+    "fallSpeedUnitsPerSecond",
+    "spawnIntervalMs",
+    "starProbability",
+    "stimulusSizeUnits",
+    "minimumDistanceUnits",
+    "positionAttempts",
+    "presentationRule",
+    "maxFrameGapMs",
+    "minimumStageScale",
+    "inputProfile"
+  ],
+  "additionalProperties": false
+}

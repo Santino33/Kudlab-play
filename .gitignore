@@ -1,0 +1,9 @@
+node_modules/
+dist/
+test-results/
+playwright-report/
+.taste-skill/
+.playwright-cli/
+.env
+.env.local
+coverage/

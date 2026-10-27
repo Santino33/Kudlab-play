@@ -1,0 +1,58 @@
+{
+  "contractVersion": "1.0",
+  "sessionId": "10000000-0000-4000-8000-000000000001",
+  "submissionId": "20000000-0000-4000-8000-000000000001",
+  "taskId": "TG-01",
+  "publishedVersionId": "30000000-0000-4000-8000-000000000001",
+  "configVersion": 1,
+  "configurationHash": "56d7153e0655670dc3f16658abdb135c63cae389f381cbdb20638b37d4a36de9",
+  "gameBuildId": "tg01-reference-rebuild-1",
+  "state": "interrupted",
+  "terminationReason": "visibility_lost",
+  "clock": {
+    "id": "40000000-0000-4000-8000-000000000001",
+    "timeOriginUnixMs": 1793059200000
+  },
+  "timing": {
+    "startedAtMs": 1000,
+    "finishedAtMs": 8000,
+    "lastCheckpointAtMs": 8000
+  },
+  "device": {
+    "viewportWidth": 1280,
+    "viewportHeight": 800,
+    "stageScale": 1,
+    "touchCapable": false
+  },
+  "events": [
+    {
+      "trial": 1,
+      "stimulus": "star",
+      "spawnedAtMs": 1100,
+      "presentedAtMs": 1500.125,
+      "respondedAtMs": 1900.25,
+      "closedAtMs": 1900.25,
+      "result": "hit",
+      "segment": 1,
+      "closureReason": "response",
+      "responseWindowCompleted": false,
+      "responseDevice": "mouse",
+      "geometry": {
+        "lane": 2,
+        "x": 240,
+        "size": 90
+      }
+    }
+  ],
+  "incidents": [
+    {
+      "sequence": 1,
+      "type": "visibility_lost",
+      "clockId": "40000000-0000-4000-8000-000000000001",
+      "atMs": 8000,
+      "endedAtMs": null,
+      "recordedAtClient": null,
+      "category": "EXECUTION_INTERRUPTED"
+    }
+  ]
+}

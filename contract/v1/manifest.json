@@ -1,0 +1,14 @@
+{
+  "contractVersion": "1.0",
+  "canonicalization": "RFC8785",
+  "digest": "SHA-256",
+  "files": {
+    "config.schema.json": "bb738ba3ad855778a6af36f80c915b4aa9c96b938eaadd2f211036991c0aab65",
+    "context.schema.json": "5b892271b229a0302aeaed3efa8e6c286cc040d1c16de2cdaaf62832a18d82d5",
+    "envelope.schema.json": "888dfc9d6ea73b0b75842370f382456657dad00a275b55fa08e42b95eb1451b3",
+    "receipt.schema.json": "e084a25f239ef1c0bace134dddc753db3e6c7255d6a9dff3aad332d6545f7594",
+    "context.synthetic.json": "d95c7def2d9cfdd72e14924f6565928ed00c01f32870d718e7d92d33da9c94d2",
+    "envelope.synthetic.json": "2a3facff513712755cbb67850511d23e7c8a30aee9753653b998ffddb4186c06",
+    "canonical-vectors.json": "612af61fcabe6ded767217a50414e85ad07c7e1477d09a0191bbb45aaad804fc"
+  }
+}
