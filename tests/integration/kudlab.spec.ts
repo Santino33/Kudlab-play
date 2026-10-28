@@ -2,8 +2,10 @@ import { test, expect } from '@playwright/test';
 import { execFileSync } from 'node:child_process';
 
 const teacherOrigin = process.env.KUDLAB_TEACHER_ORIGIN ?? 'http://localhost:5173';
+const apiOrigin = process.env.KUDLAB_API_ORIGIN ?? 'http://localhost:4300';
+const playOrigin = process.env.KUDLAB_PLAY_ORIGIN ?? 'http://127.0.0.1:4178';
 test('J02: profesor asigna, juega offline, recupera y consulta evidencia real en PostgreSQL', async ({ page, context }) => {
-  await expect.poll(async () => { try { return (await page.request.get('http://localhost:4300/api/auth/jwks')).status(); } catch { return 0; } }, { timeout: 15000 }).toBe(200);
+  await expect.poll(async () => { try { return (await page.request.get(`${apiOrigin}/api/auth/jwks`)).status(); } catch { return 0; } }, { timeout: 15000 }).toBe(200);
   await page.goto(teacherOrigin);
   await page.getByLabel('Correo', { exact: true }).fill('teacher-a@pilot.edu.co');
   await page.getByLabel('Contraseña', { exact: true }).fill('TeacherPass1');
@@ -30,7 +32,7 @@ test('J02: profesor asigna, juega offline, recupera y consulta evidencia real en
   await expect(frame.getByRole('button', { name: 'Reintentar envío', exact: true })).toBeVisible({ timeout: 130000 });
   await expect(frame.getByRole('heading', { name: 'Terminaste la actividad', exact: true })).toBeVisible();
   await page.screenshot({ path: 'test-results/kudlab-integration/pending-offline.png', fullPage: true });
-  const runtimePage = page.frames().find(f => f.url().startsWith('http://127.0.0.1:4178/'))!;
+  const runtimePage = page.frames().find(f => f.url().startsWith(`${playOrigin}/`))!;
   await runtimePage.evaluate(() => location.reload());
   await expect(frame.getByRole('button', { name: 'Reintentar envío', exact: true })).toBeVisible();
   await context.setOffline(false);
@@ -65,7 +67,8 @@ test('J02: profesor asigna, juega offline, recupera y consulta evidencia real en
     const sessionId = href!.split('/').at(-1)!;
     execFileSync(process.execPath, ['--import', 'tsx', 'tests/game-expire-capability.ts', sessionId], { cwd: backend, env: { ...process.env, DATABASE_URL: database } });
     await page.unroute('**/game-runtime/sessions/*/results');
-    await secondFrame.getByRole('button', { name: 'Reintentar envío', exact: true }).click();
+    // Expedite the same outbox operation; automatic maintenance may already have consumed the retry UI.
+    await secondFrame.locator('body').evaluate(() => window.dispatchEvent(new Event('online')));
     await expect(secondFrame.getByText('Necesitamos ayuda de tu profesor para enviar los resultados', { exact: true })).toBeVisible();
     await page.getByRole('link', { name: 'Consultar sesión', exact: true }).click();
     await page.getByRole('link', { name: 'Recuperar envío en este navegador', exact: true }).click();

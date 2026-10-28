@@ -1,5 +1,11 @@
 # Kudlab-play
 
+**J-03:** entrada pública con código alfanumérico de **5 caracteres**, por ejemplo
+sintético `ERD34`, y `/pendientes` para enviar evidencia desde el navegador original.
+Sin sesión docente, cuentas infantiles ni otra ingesta. Misma TG-01/perfil 1.1 y
+compatibilidad histórica 1.0. [Acceso, almacenamiento y límites](docs/access-code.md).
+Uso real continúa bloqueado; las exclusiones J-03 históricas inferiores ya no describen esta ampliación.
+
 **Integración J-02:** cliente conectado al contrato canónico versionado de Kudlab,
 recuperación supervisada de entrega con capacidad renovada (sin volver a jugar) y
 suite opcional `npx playwright test --config=playwright.integration.config.ts`
@@ -56,7 +62,7 @@ npm run preview
 
 Publicar **solo `dist/`**, no el repositorio ni el servidor del simulador. `dist/` contiene recursos locales, el SW versionado, la licencia de la fuente y `_headers`. El hosting debe aplicar esas cabeceras o su equivalente: `vite preview` no es un servidor productivo ni aplica automáticamente `_headers`. Sin configuración, los orígenes `.invalid` bloquean de forma segura cualquier integración.
 
-La autorización nueva de J-01 procede del puente supervisado de Kudlab. La página de nivel superior permite ejemplo, recuperación y preparación ya vinculada; el acceso nuevo por código pertenece a **J-03** y no está implementado. No se incluye un botón productivo de «sesión ficticia».
+La autorización de J-01/J-02 procede del puente supervisado de Kudlab, que se conserva. **J-03** añade entrada por código y pendientes en nivel superior, sin asumir almacenamiento compartido con el iframe. No se incluye un botón productivo de «sesión ficticia».
 
 Detalles: [despliegue y puente](docs/deployment.md), [arquitectura](docs/architecture.md), [seguridad](docs/security-review.md), [amenazas](docs/threat-model.md), [revisión visual](docs/design-review.md), [origen y licencias](docs/third-party.md).
 

@@ -11,7 +11,7 @@ import { registry, supported } from '../games/registry';
 import { button, el, shape } from './dom';
 import { countdown } from './countdown';
 
-type Screen = 'instructions' | 'example' | 'running' | 'finish';
+type Screen = 'access' | 'pending' | 'instructions' | 'example' | 'running' | 'finish';
 export class App {
   private db?: Database;
   private session?: Session;
@@ -54,9 +54,14 @@ export class App {
   private reasonNode?: HTMLElement;
   private exampleTimers: ReturnType<typeof setTimeout>[] = [];
   private api = new Api(import.meta.env.VITE_API_ORIGIN || 'https://api.invalid');
+  private publicEntry = window.parent === window;
+  private pendingItems: Outbox[] = [];
+  private pendingSignature = '';
+  private retryCodeAt = 0;
 
   constructor(private root: HTMLElement) {}
   async init(): Promise<void> {
+    if (this.publicEntry) this.screen = location.pathname === '/pendientes' ? 'pending' : 'access';
     this.live.setAttribute('role', 'status'); this.live.setAttribute('aria-live', 'polite');
     const header = el('header', 'header');
     const brand = el('div', 'brand'); brand.append(shape('star'), el('span', '', 'Kudlab'), el('span', 'brand-play', 'Play'));
@@ -83,10 +88,10 @@ export class App {
       this.session = new Session(this.db, this.api, this.owner);
       this.delivery = new Delivery(this.db, this.api, this.owner);
       this.ready = true;
-      this.status = 'Pide a tu profesor que abra la actividad desde Kudlab.';
+      this.status = this.publicEntry ? '' : 'Pide a tu profesor que abra la actividad desde Kudlab.';
       await this.maintain();
       const bridgeId = this.bridgeId;
-      if (uuidV4.safeParse(bridgeId).success) {
+      if (!this.publicEntry && uuidV4.safeParse(bridgeId).success) {
         const origin = import.meta.env.VITE_TEACHER_ORIGIN || 'https://docente.invalid';
         this.bridge = new SupervisedBridge(origin, bridgeId!);
         this.bridge.connect(grant => { void this.claim(grant); });
@@ -160,7 +165,7 @@ export class App {
       if (navigator.onLine) await this.session.reconcileClaims().catch(() => undefined);
       await this.session.recoverStarted();
       const credentials = await this.db.all<Credential>('credentials');
-      if (!this.context && uuidV4.safeParse(this.bridgeId).success) {
+      if (!this.publicEntry && !this.context && uuidV4.safeParse(this.bridgeId).success) {
         this.context = credentials.find(c => c.phase === 'READY' && c.bridgeId === this.bridgeId && c.context?.capabilities.canStart)?.context;
         if (this.context) this.launchBound = true;
         if (this.context && this.screen === 'finish' && !this.engine && this.context.sessionId !== this.lastOut?.sessionId) {
@@ -176,9 +181,14 @@ export class App {
           if (this.lastOut?.sessionId === out.sessionId) this.updateDelivery(state);
         }
       }
-      if (!this.context && outboxes.length && this.screen === 'instructions') {
+      if (!this.publicEntry && !this.context && outboxes.length && this.screen === 'instructions') {
         this.lastOut = outboxes[0]; this.deliveryState = (await this.db.get<Outbox>('outbox', outboxes[0].sessionId))?.status ?? 'SAVED';
         this.screen = 'finish'; this.render();
+      }
+      if (this.publicEntry) {
+        this.pendingItems = await this.db.all<Outbox>('outbox');
+        const signature = this.pendingItems.map(o => `${o.key}:${o.status}`).join('|');
+        if (signature !== this.pendingSignature && this.screen === 'pending' && !this.main.querySelector('input:focus')) { this.pendingSignature = signature; this.render(); }
       }
       // A verified receipt can survive a failed cleanup; retry cleanup while preserving remote success.
       const receipts = await this.db.all<{ key: string; expiresAt: number }>('receipts');
@@ -192,11 +202,84 @@ export class App {
     for (const timer of this.exampleTimers) clearTimeout(timer);
     this.exampleTimers = [];
     this.main.replaceChildren(); this.startButton = undefined; this.reasonNode = undefined;
-    if (this.screen === 'instructions') this.instructions();
+    if (this.screen === 'access') this.accessScreen();
+    else if (this.screen === 'pending') this.pendingScreen();
+    else if (this.screen === 'instructions') this.instructions();
     else if (this.screen === 'example') this.example();
     else if (this.screen === 'finish') this.finishScreen();
     if (this.updateAvailable) this.main.append(el('p', 'update-note', 'Hay una versión nueva. Al terminar, cierra todas las pestañas de la actividad y vuelve a abrirla. Los envíos pendientes se conservan.'));
     if (focus) { const title = this.main.querySelector('h1'); title?.setAttribute('tabindex', '-1'); title?.focus(); }
+  }
+  private publicLink(path: '/' | '/pendientes', text: string): HTMLAnchorElement {
+    const link = el('a', 'button secondary', text); link.href = path; return link;
+  }
+  private accessForm(recovery?: Outbox): HTMLFormElement {
+    const form = el('form', 'access-form'); form.noValidate = true;
+    const id = `activity-code-${recovery?.key ?? 'entry'}`;
+    const label = el('label', '', recovery ? 'Código para enviar' : 'Código de actividad'); label.htmlFor = id;
+    const input = el('input', 'code-input'); input.id = id; input.name = 'activity-code'; input.type = 'text'; input.autocomplete = 'off'; input.autocapitalize = 'characters'; input.spellcheck = false; input.maxLength = 64; input.required = true; input.disabled = !this.ready;
+    const help = el('p', 'access-help', 'Son 5 letras o números. Puedes pegar el código que te compartió tu profesor.'); help.id = `${id}-help`;
+    const feedback = el('p', 'availability'); feedback.id = `${id}-feedback`; feedback.setAttribute('role', 'status');
+    input.setAttribute('aria-describedby', `${help.id} ${feedback.id}`);
+    const submit = button(recovery ? 'Enviar pendiente' : 'Continuar', () => undefined, 'button primary'); submit.type = 'submit'; submit.disabled = !this.ready;
+    const clear = () => { input.value = ''; };
+    window.addEventListener('pagehide', clear);
+    const hide = () => { if (document.hidden) clear(); };
+    document.addEventListener('visibilitychange', hide);
+    window.addEventListener('blur', clear);
+    // Remove handlers when this form leaves the document, without retaining its secret input.
+    const observer = new MutationObserver(() => { if (!form.isConnected) { document.removeEventListener('visibilitychange', hide); window.removeEventListener('pagehide', clear); window.removeEventListener('blur', clear); observer.disconnect(); } });
+    observer.observe(this.main, { childList: true });
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      if (this.claiming || !this.ready || !this.session) return;
+      if (Date.now() < this.retryCodeAt) { feedback.textContent = `Espera ${Math.ceil((this.retryCodeAt - Date.now()) / 1000)} segundos antes de reintentar.`; return; }
+      if (!navigator.onLine) { feedback.textContent = 'Necesitamos conexión para comprobar el código.'; return; }
+      const value = input.value;
+      this.claiming = true; submit.disabled = true; feedback.textContent = 'Comprobando el código…';
+      void this.session.claimCode(value, recovery ? { sessionId: recovery.sessionId, submissionId: recovery.envelope.submissionId } : undefined).then(async context => {
+        clear();
+        if (!supported(context)) throw new Error('VERSION_UNSUPPORTED');
+        if (recovery) {
+          this.context = undefined; this.lastOut = undefined;
+          feedback.textContent = 'Autorización de envío confirmada. Comprobando recepción…';
+          await this.delivery!.send(recovery.sessionId, true);
+          this.pendingItems = await this.db!.all<Outbox>('outbox'); this.render(); this.say(this.pendingItems.some(o => o.sessionId === recovery.sessionId) ? 'El registro sigue pendiente.' : 'El servidor confirmó la recepción.');
+        } else {
+          this.context = context; this.launchBound = true; this.lastOut = undefined; this.deliveryState = 'PENDING'; this.screen = 'instructions'; this.status = 'Tu actividad está lista'; this.problem = ''; this.render(true);
+        }
+      }).catch(error => {
+        input.setAttribute('aria-invalid', 'true');
+        if (error instanceof ApiError && error.status === 429) { this.retryCodeAt = Date.now() + error.retryAfterMs; feedback.textContent = `Espera ${Math.max(1, Math.ceil(error.retryAfterMs / 1000))} segundos antes de reintentar.`; }
+        else if (error instanceof ApiError && (error.status === 0 || error.status >= 500) || error instanceof Error && error.message === 'ONLINE_REQUIRED') feedback.textContent = 'No pudimos comprobarlo. Reintenta cuando tengas conexión. Si recargas, vuelve a ingresar el mismo código.';
+        else if (error instanceof Error && error.message === 'INVALID_CODE') feedback.textContent = 'Escribe las 5 letras o números del código, sin cambiar unos caracteres por otros.';
+        else feedback.textContent = recovery ? 'No podemos enviar este pendiente con ese código. Pide ayuda a tu profesor; conserva este navegador.' : 'No podemos abrir una actividad con este código. Revísalo o pide ayuda a tu profesor. Para enviar resultados usa «Enviar una actividad pendiente».';
+      }).finally(() => { this.claiming = false; submit.disabled = false; });
+    });
+    input.addEventListener('input', () => input.removeAttribute('aria-invalid'));
+    form.append(label, input, help, submit, feedback); return form;
+  }
+  private accessScreen(): void {
+    const section = el('section', 'access-sheet');
+    section.append(el('h1', '', 'Tu actividad empieza aquí'), el('p', 'intro-copy', 'Ingresa el código que te compartió tu profesor.'), this.accessForm(), this.publicLink('/pendientes', 'Enviar una actividad pendiente'));
+    if (!this.ready) section.append(el('p', 'availability', this.problem || 'Comprobando el respaldo de este navegador…'));
+    section.append(el('p', 'access-help', 'No necesitas una cuenta ni escribir tu nombre. No compartas tu código.'));
+    this.main.append(section);
+  }
+  private pendingScreen(): void {
+    this.main.append(el('h1', '', 'Actividades pendientes'), el('p', 'intro-copy', 'Solo podemos enviar lo que conserva este navegador. No necesitas volver a jugar.'), this.publicLink('/', 'Ingresar otro código'));
+    if (!this.ready) { this.main.append(el('p', 'availability', this.problem || 'Comprobando el respaldo local…')); return; }
+    if (!this.pendingItems.length) { this.main.append(el('p', 'delivery-note', 'En este navegador no encontramos resultados pendientes. Si jugaste en otro sitio, perfil o dentro de Kudlab, vuelve por esa misma vía.')); return; }
+    const list = el('ul', 'pending-list');
+    for (const out of this.pendingItems) {
+      const row = el('li', 'pending-row');
+      row.append(el('h2', '', 'Lluvia de estrellas'), el('p', '', `Fecha informativa del dispositivo: ${new Date(out.envelope.clock.timeOriginUnixMs).toLocaleString('es-CO')}`));
+      row.append(el('p', '', out.status === 'AUTH_REQUIRED' || out.status === 'BLOCKED' ? 'El envío necesita una autorización de tu profesor.' : 'Hay un respaldo local; falta confirmar la recepción.'));
+      if (out.status === 'AUTH_REQUIRED' || out.status === 'BLOCKED') row.append(this.accessForm(out));
+      else row.append(button('Reintentar envío', () => { void this.maintain(true); }));
+      list.append(row);
+    }
+    this.main.append(list, el('p', 'access-help', 'No borres los datos del sitio. Si no corresponde el código, no seleccionaremos otra actividad automáticamente.'));
   }
   private instructions(): void {
     const intro = el('div', 'intro');
@@ -431,6 +514,7 @@ export class App {
     const delivery = el('div', 'delivery-note'); delivery.append(el('h2', '', heading), el('p', '', text));
     if (this.lastOut && !this.memoryOnly && this.deliveryState === 'PENDING') delivery.append(button('Reintentar envío', () => { void this.maintain(true); }));
     section.append(delivery); this.main.append(section);
+    if (this.publicEntry) this.main.append(this.publicLink('/pendientes', 'Enviar una actividad pendiente'), this.publicLink('/', 'Ingresar otro código'));
   }
   private help(): void {
     // Never place a modal over a measured stimulus. Help is available only outside execution.

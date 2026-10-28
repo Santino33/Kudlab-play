@@ -1,0 +1,3426 @@
+{
+  "GameConfig": {
+    "anyOf": [
+      {
+        "type": "object",
+        "properties": {
+          "durationMs": {
+            "type": "number",
+            "const": 120000
+          },
+          "segmentBoundariesMs": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "number",
+                "const": 0
+              },
+              {
+                "type": "number",
+                "const": 40000
+              },
+              {
+                "type": "number",
+                "const": 80000
+              },
+              {
+                "type": "number",
+                "const": 120000
+              }
+            ]
+          },
+          "logicalWidth": {
+            "type": "number",
+            "const": 960
+          },
+          "logicalHeight": {
+            "type": "number",
+            "const": 600
+          },
+          "lanes": {
+            "type": "number",
+            "const": 6
+          },
+          "fallSpeedUnitsPerSecond": {
+            "type": "number",
+            "const": 210
+          },
+          "spawnIntervalMs": {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "number",
+                "const": 1100
+              },
+              "max": {
+                "type": "number",
+                "const": 1800
+              }
+            },
+            "required": [
+              "min",
+              "max"
+            ],
+            "additionalProperties": false
+          },
+          "starProbability": {
+            "type": "number",
+            "const": 0.7
+          },
+          "stimulusSizeUnits": {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "number",
+                "const": 75
+              },
+              "max": {
+                "type": "number",
+                "const": 105
+              }
+            },
+            "required": [
+              "min",
+              "max"
+            ],
+            "additionalProperties": false
+          },
+          "minimumDistanceUnits": {
+            "type": "number",
+            "const": 180
+          },
+          "positionAttempts": {
+            "type": "number",
+            "const": 30
+          },
+          "presentationRule": {
+            "type": "string",
+            "const": "FULLY_VISIBLE"
+          },
+          "maxFrameGapMs": {
+            "type": "number",
+            "const": 250
+          },
+          "minimumStageScale": {
+            "type": "number",
+            "const": 0.6
+          },
+          "inputProfile": {
+            "type": "string",
+            "const": "POINTER_V1"
+          }
+        },
+        "required": [
+          "durationMs",
+          "segmentBoundariesMs",
+          "logicalWidth",
+          "logicalHeight",
+          "lanes",
+          "fallSpeedUnitsPerSecond",
+          "spawnIntervalMs",
+          "starProbability",
+          "stimulusSizeUnits",
+          "minimumDistanceUnits",
+          "positionAttempts",
+          "presentationRule",
+          "maxFrameGapMs",
+          "minimumStageScale",
+          "inputProfile"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "durationMs": {
+            "type": "number",
+            "const": 120000
+          },
+          "segmentBoundariesMs": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "number",
+                "const": 0
+              },
+              {
+                "type": "number",
+                "const": 40000
+              },
+              {
+                "type": "number",
+                "const": 80000
+              },
+              {
+                "type": "number",
+                "const": 120000
+              }
+            ]
+          },
+          "fallSpeedUnitsPerSecond": {
+            "type": "number",
+            "const": 210
+          },
+          "spawnIntervalMs": {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "number",
+                "const": 1100
+              },
+              "max": {
+                "type": "number",
+                "const": 1800
+              }
+            },
+            "required": [
+              "min",
+              "max"
+            ],
+            "additionalProperties": false
+          },
+          "starProbability": {
+            "type": "number",
+            "const": 0.7
+          },
+          "stimulusSizeUnits": {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "number",
+                "const": 75
+              },
+              "max": {
+                "type": "number",
+                "const": 105
+              }
+            },
+            "required": [
+              "min",
+              "max"
+            ],
+            "additionalProperties": false
+          },
+          "minimumDistanceUnits": {
+            "type": "number",
+            "const": 180
+          },
+          "positionAttempts": {
+            "type": "number",
+            "const": 30
+          },
+          "presentationRule": {
+            "type": "string",
+            "const": "FULLY_VISIBLE"
+          },
+          "maxFrameGapMs": {
+            "type": "number",
+            "const": 250
+          },
+          "minimumStageScale": {
+            "type": "number",
+            "const": 0.6
+          },
+          "inputProfile": {
+            "type": "string",
+            "const": "POINTER_V1"
+          },
+          "layoutRule": {
+            "type": "string",
+            "const": "VIEWPORT_FIT_V2"
+          },
+          "referenceWidthUnits": {
+            "type": "number",
+            "const": 480
+          },
+          "minimumLaneWidthUnits": {
+            "type": "number",
+            "const": 120
+          },
+          "maximumLanes": {
+            "type": "number",
+            "const": 6
+          }
+        },
+        "required": [
+          "durationMs",
+          "segmentBoundariesMs",
+          "fallSpeedUnitsPerSecond",
+          "spawnIntervalMs",
+          "starProbability",
+          "stimulusSizeUnits",
+          "minimumDistanceUnits",
+          "positionAttempts",
+          "presentationRule",
+          "maxFrameGapMs",
+          "minimumStageScale",
+          "inputProfile",
+          "layoutRule",
+          "referenceWidthUnits",
+          "minimumLaneWidthUnits",
+          "maximumLanes"
+        ],
+        "additionalProperties": false
+      }
+    ]
+  },
+  "RuntimeContext": {
+    "type": "object",
+    "properties": {
+      "sessionId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "taskId": {
+        "type": "string",
+        "const": "TG-01"
+      },
+      "publishedVersionId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "configVersion": {
+        "type": "integer",
+        "exclusiveMinimum": 0,
+        "maximum": 9007199254740991
+      },
+      "configurationHash": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
+      "gameBuildId": {
+        "type": "string",
+        "enum": [
+          "tg01-reference-rebuild-1",
+          "tg01-viewport-rebuild-2"
+        ]
+      },
+      "contractVersion": {
+        "type": "string",
+        "enum": [
+          "1.0",
+          "1.1"
+        ]
+      },
+      "config": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "durationMs": {
+                "type": "number",
+                "const": 120000
+              },
+              "segmentBoundariesMs": {
+                "type": "array",
+                "prefixItems": [
+                  {
+                    "type": "number",
+                    "const": 0
+                  },
+                  {
+                    "type": "number",
+                    "const": 40000
+                  },
+                  {
+                    "type": "number",
+                    "const": 80000
+                  },
+                  {
+                    "type": "number",
+                    "const": 120000
+                  }
+                ]
+              },
+              "logicalWidth": {
+                "type": "number",
+                "const": 960
+              },
+              "logicalHeight": {
+                "type": "number",
+                "const": 600
+              },
+              "lanes": {
+                "type": "number",
+                "const": 6
+              },
+              "fallSpeedUnitsPerSecond": {
+                "type": "number",
+                "const": 210
+              },
+              "spawnIntervalMs": {
+                "type": "object",
+                "properties": {
+                  "min": {
+                    "type": "number",
+                    "const": 1100
+                  },
+                  "max": {
+                    "type": "number",
+                    "const": 1800
+                  }
+                },
+                "required": [
+                  "min",
+                  "max"
+                ],
+                "additionalProperties": false
+              },
+              "starProbability": {
+                "type": "number",
+                "const": 0.7
+              },
+              "stimulusSizeUnits": {
+                "type": "object",
+                "properties": {
+                  "min": {
+                    "type": "number",
+                    "const": 75
+                  },
+                  "max": {
+                    "type": "number",
+                    "const": 105
+                  }
+                },
+                "required": [
+                  "min",
+                  "max"
+                ],
+                "additionalProperties": false
+              },
+              "minimumDistanceUnits": {
+                "type": "number",
+                "const": 180
+              },
+              "positionAttempts": {
+                "type": "number",
+                "const": 30
+              },
+              "presentationRule": {
+                "type": "string",
+                "const": "FULLY_VISIBLE"
+              },
+              "maxFrameGapMs": {
+                "type": "number",
+                "const": 250
+              },
+              "minimumStageScale": {
+                "type": "number",
+                "const": 0.6
+              },
+              "inputProfile": {
+                "type": "string",
+                "const": "POINTER_V1"
+              }
+            },
+            "required": [
+              "durationMs",
+              "segmentBoundariesMs",
+              "logicalWidth",
+              "logicalHeight",
+              "lanes",
+              "fallSpeedUnitsPerSecond",
+              "spawnIntervalMs",
+              "starProbability",
+              "stimulusSizeUnits",
+              "minimumDistanceUnits",
+              "positionAttempts",
+              "presentationRule",
+              "maxFrameGapMs",
+              "minimumStageScale",
+              "inputProfile"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "durationMs": {
+                "type": "number",
+                "const": 120000
+              },
+              "segmentBoundariesMs": {
+                "type": "array",
+                "prefixItems": [
+                  {
+                    "type": "number",
+                    "const": 0
+                  },
+                  {
+                    "type": "number",
+                    "const": 40000
+                  },
+                  {
+                    "type": "number",
+                    "const": 80000
+                  },
+                  {
+                    "type": "number",
+                    "const": 120000
+                  }
+                ]
+              },
+              "fallSpeedUnitsPerSecond": {
+                "type": "number",
+                "const": 210
+              },
+              "spawnIntervalMs": {
+                "type": "object",
+                "properties": {
+                  "min": {
+                    "type": "number",
+                    "const": 1100
+                  },
+                  "max": {
+                    "type": "number",
+                    "const": 1800
+                  }
+                },
+                "required": [
+                  "min",
+                  "max"
+                ],
+                "additionalProperties": false
+              },
+              "starProbability": {
+                "type": "number",
+                "const": 0.7
+              },
+              "stimulusSizeUnits": {
+                "type": "object",
+                "properties": {
+                  "min": {
+                    "type": "number",
+                    "const": 75
+                  },
+                  "max": {
+                    "type": "number",
+                    "const": 105
+                  }
+                },
+                "required": [
+                  "min",
+                  "max"
+                ],
+                "additionalProperties": false
+              },
+              "minimumDistanceUnits": {
+                "type": "number",
+                "const": 180
+              },
+              "positionAttempts": {
+                "type": "number",
+                "const": 30
+              },
+              "presentationRule": {
+                "type": "string",
+                "const": "FULLY_VISIBLE"
+              },
+              "maxFrameGapMs": {
+                "type": "number",
+                "const": 250
+              },
+              "minimumStageScale": {
+                "type": "number",
+                "const": 0.6
+              },
+              "inputProfile": {
+                "type": "string",
+                "const": "POINTER_V1"
+              },
+              "layoutRule": {
+                "type": "string",
+                "const": "VIEWPORT_FIT_V2"
+              },
+              "referenceWidthUnits": {
+                "type": "number",
+                "const": 480
+              },
+              "minimumLaneWidthUnits": {
+                "type": "number",
+                "const": 120
+              },
+              "maximumLanes": {
+                "type": "number",
+                "const": 6
+              }
+            },
+            "required": [
+              "durationMs",
+              "segmentBoundariesMs",
+              "fallSpeedUnitsPerSecond",
+              "spawnIntervalMs",
+              "starProbability",
+              "stimulusSizeUnits",
+              "minimumDistanceUnits",
+              "positionAttempts",
+              "presentationRule",
+              "maxFrameGapMs",
+              "minimumStageScale",
+              "inputProfile",
+              "layoutRule",
+              "referenceWidthUnits",
+              "minimumLaneWidthUnits",
+              "maximumLanes"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "executionStatus": {
+        "type": "string",
+        "enum": [
+          "READY",
+          "RUNNING",
+          "COMPLETED",
+          "INTERRUPTED",
+          "EXPIRED",
+          "UNCONFIRMED"
+        ]
+      },
+      "attemptNumber": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "startAllowedUntil": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+      },
+      "uploadAllowedUntil": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "serverTime": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+      },
+      "capabilities": {
+        "type": "object",
+        "properties": {
+          "canStart": {
+            "type": "boolean"
+          },
+          "canSubmit": {
+            "type": "boolean"
+          },
+          "canReadReceipt": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "canStart",
+          "canSubmit",
+          "canReadReceipt"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "sessionId",
+      "taskId",
+      "publishedVersionId",
+      "configVersion",
+      "configurationHash",
+      "gameBuildId",
+      "contractVersion",
+      "config",
+      "executionStatus",
+      "attemptNumber",
+      "startAllowedUntil",
+      "uploadAllowedUntil",
+      "serverTime",
+      "capabilities"
+    ],
+    "additionalProperties": false
+  },
+  "RuntimeEnvelope": {
+    "type": "object",
+    "properties": {
+      "contractVersion": {
+        "type": "string",
+        "enum": [
+          "1.0",
+          "1.1"
+        ]
+      },
+      "sessionId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "submissionId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "taskId": {
+        "type": "string",
+        "const": "TG-01"
+      },
+      "publishedVersionId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "configVersion": {
+        "type": "integer",
+        "exclusiveMinimum": 0,
+        "maximum": 9007199254740991
+      },
+      "configurationHash": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
+      "gameBuildId": {
+        "type": "string",
+        "enum": [
+          "tg01-reference-rebuild-1",
+          "tg01-viewport-rebuild-2"
+        ]
+      },
+      "state": {
+        "type": "string",
+        "enum": [
+          "completed",
+          "interrupted"
+        ]
+      },
+      "terminationReason": {
+        "type": "string",
+        "enum": [
+          "time_limit",
+          "user_exit",
+          "visibility_lost",
+          "script_error",
+          "storage_failure",
+          "frame_gap",
+          "layout_changed",
+          "recovered_after_reload",
+          "evidence_limit",
+          "resource_error"
+        ]
+      },
+      "clock": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "timeOriginUnixMs": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "id",
+          "timeOriginUnixMs"
+        ],
+        "additionalProperties": false
+      },
+      "timing": {
+        "type": "object",
+        "properties": {
+          "startedAtMs": {
+            "type": "number",
+            "minimum": 0
+          },
+          "finishedAtMs": {
+            "type": "number",
+            "minimum": 0
+          },
+          "lastCheckpointAtMs": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "startedAtMs",
+          "finishedAtMs",
+          "lastCheckpointAtMs"
+        ],
+        "additionalProperties": false
+      },
+      "device": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "viewportWidth": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "viewportHeight": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "stageScale": {
+                "type": "number",
+                "minimum": 0.6
+              },
+              "touchCapable": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "viewportWidth",
+              "viewportHeight",
+              "stageScale",
+              "touchCapable"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "viewportWidth": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "viewportHeight": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "stageScale": {
+                "type": "number",
+                "minimum": 0.6
+              },
+              "touchCapable": {
+                "type": "boolean"
+              },
+              "stageWidthCss": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "stageHeightCss": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            },
+            "required": [
+              "viewportWidth",
+              "viewportHeight",
+              "stageScale",
+              "touchCapable",
+              "stageWidthCss",
+              "stageHeightCss"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "events": {
+        "maxItems": 1000,
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "trial": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "stimulus": {
+              "type": "string",
+              "enum": [
+                "star",
+                "moon"
+              ]
+            },
+            "spawnedAtMs": {
+              "type": "number",
+              "minimum": 0
+            },
+            "presentedAtMs": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "respondedAtMs": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "closedAtMs": {
+              "type": "number",
+              "minimum": 0
+            },
+            "result": {
+              "type": "string",
+              "enum": [
+                "hit",
+                "false_alarm",
+                "miss",
+                "correct_rejection",
+                "not_evaluated"
+              ]
+            },
+            "segment": {
+              "anyOf": [
+                {
+                  "anyOf": [
+                    {
+                      "type": "number",
+                      "const": 1
+                    },
+                    {
+                      "type": "number",
+                      "const": 2
+                    },
+                    {
+                      "type": "number",
+                      "const": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "closureReason": {
+              "type": "string",
+              "enum": [
+                "response",
+                "window_elapsed",
+                "session_cutoff",
+                "interruption",
+                "never_presented"
+              ]
+            },
+            "responseWindowCompleted": {
+              "type": "boolean"
+            },
+            "responseDevice": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": [
+                    "mouse",
+                    "touch",
+                    "pen"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "geometry": {
+              "type": "object",
+              "properties": {
+                "lane": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 6
+                },
+                "x": {
+                  "type": "number"
+                },
+                "size": {
+                  "type": "number",
+                  "minimum": 75,
+                  "maximum": 105
+                }
+              },
+              "required": [
+                "lane",
+                "x",
+                "size"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "trial",
+            "stimulus",
+            "spawnedAtMs",
+            "presentedAtMs",
+            "respondedAtMs",
+            "closedAtMs",
+            "result",
+            "segment",
+            "closureReason",
+            "responseWindowCompleted",
+            "responseDevice",
+            "geometry"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "incidents": {
+        "maxItems": 1000,
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "sequence": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "focus_lost",
+                "visibility_lost",
+                "script_error",
+                "audio_unavailable",
+                "network_lost",
+                "network_restored",
+                "storage_failure",
+                "frame_gap",
+                "layout_changed",
+                "recovered_after_reload",
+                "resource_error",
+                "evidence_limit"
+              ]
+            },
+            "clockId": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "atMs": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "endedAtMs": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "recordedAtClient": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "EXECUTION_INTERRUPTED",
+                "CONTEXT_ONLY",
+                "MEASUREMENT_AFFECTED"
+              ]
+            }
+          },
+          "required": [
+            "sequence",
+            "type",
+            "clockId",
+            "atMs",
+            "endedAtMs",
+            "recordedAtClient",
+            "category"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "contractVersion",
+      "sessionId",
+      "submissionId",
+      "taskId",
+      "publishedVersionId",
+      "configVersion",
+      "configurationHash",
+      "gameBuildId",
+      "state",
+      "terminationReason",
+      "clock",
+      "timing",
+      "device",
+      "events",
+      "incidents"
+    ],
+    "additionalProperties": false
+  },
+  "EvidenceReceipt": {
+    "type": "object",
+    "properties": {
+      "receiptId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "sessionId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "submissionId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "receivedAt": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+      },
+      "evidenceHash": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
+      "processingStatusAtReceipt": {
+        "type": "string",
+        "const": "PENDING"
+      }
+    },
+    "required": [
+      "receiptId",
+      "sessionId",
+      "submissionId",
+      "receivedAt",
+      "evidenceHash",
+      "processingStatusAtReceipt"
+    ],
+    "additionalProperties": false
+  },
+  "RuntimeStart": {
+    "type": "object",
+    "properties": {
+      "sessionId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "attemptNumber": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10
+      },
+      "executionStatus": {
+        "type": "string",
+        "const": "RUNNING"
+      },
+      "startedAtServer": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+      },
+      "uploadAllowedUntil": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+      }
+    },
+    "required": [
+      "sessionId",
+      "attemptNumber",
+      "executionStatus",
+      "startedAtServer",
+      "uploadAllowedUntil"
+    ],
+    "additionalProperties": false
+  },
+  "Assignment": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "taskId": {
+        "type": "string",
+        "const": "TG-01"
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "publishedVersionId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "configVersion": {
+        "type": "integer",
+        "exclusiveMinimum": 0,
+        "maximum": 9007199254740991
+      },
+      "groupId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "startsAt": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+      },
+      "endsAt": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+      },
+      "maxAttempts": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "OPEN",
+          "CANCELLED"
+        ]
+      },
+      "availability": {
+        "type": "string",
+        "enum": [
+          "FUTURE",
+          "CURRENT",
+          "EXPIRED",
+          "CANCELLED"
+        ]
+      },
+      "recipientCount": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9007199254740991
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+      },
+      "recipients": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "studentId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "studentDisplayName": {
+              "type": "string"
+            },
+            "studentCode": {
+              "type": "string"
+            },
+            "attemptsStarted": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "activeSessionId": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "canLaunch": {
+              "type": "boolean"
+            },
+            "unavailableReasons": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "TASK_UNAVAILABLE",
+                  "OUTSIDE_WINDOW",
+                  "ASSIGNMENT_CANCELLED",
+                  "PARTICIPATION_BLOCKED",
+                  "ATTEMPT_LIMIT",
+                  "ACTIVE_SESSION",
+                  "CONFIGURATION_UNSUPPORTED"
+                ]
+              }
+            }
+          },
+          "required": [
+            "id",
+            "studentId",
+            "studentDisplayName",
+            "studentCode",
+            "attemptsStarted",
+            "activeSessionId",
+            "canLaunch",
+            "unavailableReasons"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "id",
+      "taskId",
+      "title",
+      "publishedVersionId",
+      "configVersion",
+      "groupId",
+      "startsAt",
+      "endsAt",
+      "maxAttempts",
+      "status",
+      "availability",
+      "recipientCount",
+      "createdAt",
+      "recipients"
+    ],
+    "additionalProperties": false
+  },
+  "AssignmentSummary": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "taskId": {
+        "type": "string",
+        "const": "TG-01"
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "publishedVersionId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "configVersion": {
+        "type": "integer",
+        "exclusiveMinimum": 0,
+        "maximum": 9007199254740991
+      },
+      "groupId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "startsAt": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+      },
+      "endsAt": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+      },
+      "maxAttempts": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "OPEN",
+          "CANCELLED"
+        ]
+      },
+      "availability": {
+        "type": "string",
+        "enum": [
+          "FUTURE",
+          "CURRENT",
+          "EXPIRED",
+          "CANCELLED"
+        ]
+      },
+      "recipientCount": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9007199254740991
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+      }
+    },
+    "required": [
+      "id",
+      "taskId",
+      "title",
+      "publishedVersionId",
+      "configVersion",
+      "groupId",
+      "startsAt",
+      "endsAt",
+      "maxAttempts",
+      "status",
+      "availability",
+      "recipientCount",
+      "createdAt"
+    ],
+    "additionalProperties": false
+  },
+  "AssignmentPage": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "taskId": {
+              "type": "string",
+              "const": "TG-01"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1
+            },
+            "publishedVersionId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "configVersion": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "groupId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "startsAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+            },
+            "endsAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+            },
+            "maxAttempts": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "OPEN",
+                "CANCELLED"
+              ]
+            },
+            "availability": {
+              "type": "string",
+              "enum": [
+                "FUTURE",
+                "CURRENT",
+                "EXPIRED",
+                "CANCELLED"
+              ]
+            },
+            "recipientCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+            }
+          },
+          "required": [
+            "id",
+            "taskId",
+            "title",
+            "publishedVersionId",
+            "configVersion",
+            "groupId",
+            "startsAt",
+            "endsAt",
+            "maxAttempts",
+            "status",
+            "availability",
+            "recipientCount",
+            "createdAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "nextCursor": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "items",
+      "nextCursor"
+    ],
+    "additionalProperties": false
+  },
+  "AssignmentCreate": {
+    "type": "object",
+    "properties": {
+      "requestId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "taskId": {
+        "type": "string",
+        "const": "TG-01"
+      },
+      "publishedVersionId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "groupId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "studentIds": {
+        "minItems": 1,
+        "maxItems": 1000,
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        }
+      },
+      "startsAt": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+      },
+      "endsAt": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+      },
+      "maxAttempts": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10
+      }
+    },
+    "required": [
+      "requestId",
+      "taskId",
+      "publishedVersionId",
+      "groupId",
+      "studentIds",
+      "startsAt",
+      "endsAt",
+      "maxAttempts"
+    ],
+    "additionalProperties": false
+  },
+  "OperationRequest": {
+    "type": "object",
+    "properties": {
+      "requestId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      }
+    },
+    "required": [
+      "requestId"
+    ],
+    "additionalProperties": false
+  },
+  "LaunchGrant": {
+    "type": "object",
+    "properties": {
+      "sessionId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "grantId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "launchGrant": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$"
+      },
+      "expiresAt": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+      },
+      "runtimeOrigin": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "required": [
+      "sessionId",
+      "grantId",
+      "launchGrant",
+      "expiresAt",
+      "runtimeOrigin"
+    ],
+    "additionalProperties": false
+  },
+  "SessionSummary": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "studentId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "taskId": {
+        "type": "string",
+        "const": "TG-01"
+      },
+      "assignmentId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "attemptNumber": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "launchMode": {
+        "type": "string",
+        "enum": [
+          "SUPERVISED",
+          "CODE"
+        ]
+      },
+      "configVersion": {
+        "type": "integer",
+        "exclusiveMinimum": 0,
+        "maximum": 9007199254740991
+      },
+      "gameBuildId": {
+        "type": "string"
+      },
+      "executionStatus": {
+        "type": "string",
+        "enum": [
+          "READY",
+          "RUNNING",
+          "COMPLETED",
+          "INTERRUPTED",
+          "EXPIRED",
+          "UNCONFIRMED"
+        ]
+      },
+      "processingStatus": {
+        "type": "string",
+        "enum": [
+          "NOT_RECEIVED",
+          "PENDING",
+          "PROCESSING",
+          "COMPLETED",
+          "FAILED"
+        ]
+      },
+      "preparedAt": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+      },
+      "startedAtServer": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "receivedAt": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "incidentCount": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9007199254740991
+      },
+      "recordedTrialCount": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9007199254740991
+      }
+    },
+    "required": [
+      "id",
+      "studentId",
+      "taskId",
+      "assignmentId",
+      "attemptNumber",
+      "launchMode",
+      "configVersion",
+      "gameBuildId",
+      "executionStatus",
+      "processingStatus",
+      "preparedAt",
+      "startedAtServer",
+      "receivedAt",
+      "incidentCount",
+      "recordedTrialCount"
+    ],
+    "additionalProperties": false
+  },
+  "SessionDetail": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "studentId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "taskId": {
+        "type": "string",
+        "const": "TG-01"
+      },
+      "assignmentId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "attemptNumber": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "launchMode": {
+        "type": "string",
+        "enum": [
+          "SUPERVISED",
+          "CODE"
+        ]
+      },
+      "configVersion": {
+        "type": "integer",
+        "exclusiveMinimum": 0,
+        "maximum": 9007199254740991
+      },
+      "gameBuildId": {
+        "type": "string"
+      },
+      "executionStatus": {
+        "type": "string",
+        "enum": [
+          "READY",
+          "RUNNING",
+          "COMPLETED",
+          "INTERRUPTED",
+          "EXPIRED",
+          "UNCONFIRMED"
+        ]
+      },
+      "processingStatus": {
+        "type": "string",
+        "enum": [
+          "NOT_RECEIVED",
+          "PENDING",
+          "PROCESSING",
+          "COMPLETED",
+          "FAILED"
+        ]
+      },
+      "preparedAt": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+      },
+      "startedAtServer": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "receivedAt": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "incidentCount": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9007199254740991
+      },
+      "recordedTrialCount": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9007199254740991
+      },
+      "publishedVersionId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "configurationHash": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
+      "configuration": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "durationMs": {
+                "type": "number",
+                "const": 120000
+              },
+              "segmentBoundariesMs": {
+                "type": "array",
+                "prefixItems": [
+                  {
+                    "type": "number",
+                    "const": 0
+                  },
+                  {
+                    "type": "number",
+                    "const": 40000
+                  },
+                  {
+                    "type": "number",
+                    "const": 80000
+                  },
+                  {
+                    "type": "number",
+                    "const": 120000
+                  }
+                ]
+              },
+              "logicalWidth": {
+                "type": "number",
+                "const": 960
+              },
+              "logicalHeight": {
+                "type": "number",
+                "const": 600
+              },
+              "lanes": {
+                "type": "number",
+                "const": 6
+              },
+              "fallSpeedUnitsPerSecond": {
+                "type": "number",
+                "const": 210
+              },
+              "spawnIntervalMs": {
+                "type": "object",
+                "properties": {
+                  "min": {
+                    "type": "number",
+                    "const": 1100
+                  },
+                  "max": {
+                    "type": "number",
+                    "const": 1800
+                  }
+                },
+                "required": [
+                  "min",
+                  "max"
+                ],
+                "additionalProperties": false
+              },
+              "starProbability": {
+                "type": "number",
+                "const": 0.7
+              },
+              "stimulusSizeUnits": {
+                "type": "object",
+                "properties": {
+                  "min": {
+                    "type": "number",
+                    "const": 75
+                  },
+                  "max": {
+                    "type": "number",
+                    "const": 105
+                  }
+                },
+                "required": [
+                  "min",
+                  "max"
+                ],
+                "additionalProperties": false
+              },
+              "minimumDistanceUnits": {
+                "type": "number",
+                "const": 180
+              },
+              "positionAttempts": {
+                "type": "number",
+                "const": 30
+              },
+              "presentationRule": {
+                "type": "string",
+                "const": "FULLY_VISIBLE"
+              },
+              "maxFrameGapMs": {
+                "type": "number",
+                "const": 250
+              },
+              "minimumStageScale": {
+                "type": "number",
+                "const": 0.6
+              },
+              "inputProfile": {
+                "type": "string",
+                "const": "POINTER_V1"
+              }
+            },
+            "required": [
+              "durationMs",
+              "segmentBoundariesMs",
+              "logicalWidth",
+              "logicalHeight",
+              "lanes",
+              "fallSpeedUnitsPerSecond",
+              "spawnIntervalMs",
+              "starProbability",
+              "stimulusSizeUnits",
+              "minimumDistanceUnits",
+              "positionAttempts",
+              "presentationRule",
+              "maxFrameGapMs",
+              "minimumStageScale",
+              "inputProfile"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "durationMs": {
+                "type": "number",
+                "const": 120000
+              },
+              "segmentBoundariesMs": {
+                "type": "array",
+                "prefixItems": [
+                  {
+                    "type": "number",
+                    "const": 0
+                  },
+                  {
+                    "type": "number",
+                    "const": 40000
+                  },
+                  {
+                    "type": "number",
+                    "const": 80000
+                  },
+                  {
+                    "type": "number",
+                    "const": 120000
+                  }
+                ]
+              },
+              "fallSpeedUnitsPerSecond": {
+                "type": "number",
+                "const": 210
+              },
+              "spawnIntervalMs": {
+                "type": "object",
+                "properties": {
+                  "min": {
+                    "type": "number",
+                    "const": 1100
+                  },
+                  "max": {
+                    "type": "number",
+                    "const": 1800
+                  }
+                },
+                "required": [
+                  "min",
+                  "max"
+                ],
+                "additionalProperties": false
+              },
+              "starProbability": {
+                "type": "number",
+                "const": 0.7
+              },
+              "stimulusSizeUnits": {
+                "type": "object",
+                "properties": {
+                  "min": {
+                    "type": "number",
+                    "const": 75
+                  },
+                  "max": {
+                    "type": "number",
+                    "const": 105
+                  }
+                },
+                "required": [
+                  "min",
+                  "max"
+                ],
+                "additionalProperties": false
+              },
+              "minimumDistanceUnits": {
+                "type": "number",
+                "const": 180
+              },
+              "positionAttempts": {
+                "type": "number",
+                "const": 30
+              },
+              "presentationRule": {
+                "type": "string",
+                "const": "FULLY_VISIBLE"
+              },
+              "maxFrameGapMs": {
+                "type": "number",
+                "const": 250
+              },
+              "minimumStageScale": {
+                "type": "number",
+                "const": 0.6
+              },
+              "inputProfile": {
+                "type": "string",
+                "const": "POINTER_V1"
+              },
+              "layoutRule": {
+                "type": "string",
+                "const": "VIEWPORT_FIT_V2"
+              },
+              "referenceWidthUnits": {
+                "type": "number",
+                "const": 480
+              },
+              "minimumLaneWidthUnits": {
+                "type": "number",
+                "const": 120
+              },
+              "maximumLanes": {
+                "type": "number",
+                "const": 6
+              }
+            },
+            "required": [
+              "durationMs",
+              "segmentBoundariesMs",
+              "fallSpeedUnitsPerSecond",
+              "spawnIntervalMs",
+              "starProbability",
+              "stimulusSizeUnits",
+              "minimumDistanceUnits",
+              "positionAttempts",
+              "presentationRule",
+              "maxFrameGapMs",
+              "minimumStageScale",
+              "inputProfile",
+              "layoutRule",
+              "referenceWidthUnits",
+              "minimumLaneWidthUnits",
+              "maximumLanes"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "declaredState": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "completed",
+              "interrupted"
+            ]
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "terminationReason": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "measuredDurationMs": {
+        "anyOf": [
+          {
+            "type": "number",
+            "minimum": 0
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "device": {
+        "anyOf": [
+          {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "receipt": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "receiptId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "sessionId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "submissionId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "receivedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+              },
+              "evidenceHash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "processingStatusAtReceipt": {
+                "type": "string",
+                "const": "PENDING"
+              }
+            },
+            "required": [
+              "receiptId",
+              "sessionId",
+              "submissionId",
+              "receivedAt",
+              "evidenceHash",
+              "processingStatusAtReceipt"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "calculation": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "runId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "ruleCode": {
+                "type": "string",
+                "const": "TG01-DESCRIPTIVE-1"
+              },
+              "ruleVersion": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "PENDING",
+                  "PROCESSING",
+                  "SUCCEEDED",
+                  "FAILED"
+                ]
+              },
+              "calculatedAt": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "summary": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {}
+              },
+              "indicators": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "metricCode": {
+                      "type": "string",
+                      "enum": [
+                        "accuracy_pct",
+                        "omission_rate_pct",
+                        "commission_rate_pct",
+                        "median_reaction_time_ms",
+                        "rt_sd_ms",
+                        "rt_cv_pct"
+                      ]
+                    },
+                    "scope": {
+                      "type": "string",
+                      "enum": [
+                        "SESSION",
+                        "SEGMENT_1",
+                        "SEGMENT_2",
+                        "SEGMENT_3"
+                      ]
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "CALCULATED",
+                        "NOT_AVAILABLE"
+                      ]
+                    },
+                    "value": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "unit": {
+                      "type": "string",
+                      "enum": [
+                        "%",
+                        "ms"
+                      ]
+                    },
+                    "numerator": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "denominator": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "sampleSize": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "unavailabilityReason": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "NO_VALID_TARGETS",
+                            "NO_VALID_DISTRACTORS",
+                            "NO_VALID_RT",
+                            "INSUFFICIENT_RT_FOR_VARIABILITY",
+                            "SEGMENT_NOT_REACHED",
+                            "TECHNICAL_EXCLUSION",
+                            "ZERO_MEAN_RT",
+                            "METHOD_NOT_APPROVED"
+                          ]
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "metricCode",
+                    "scope",
+                    "status",
+                    "value",
+                    "unit",
+                    "numerator",
+                    "denominator",
+                    "sampleSize",
+                    "unavailabilityReason"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "runId",
+              "ruleCode",
+              "ruleVersion",
+              "status",
+              "calculatedAt",
+              "summary",
+              "indicators"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "id",
+      "studentId",
+      "taskId",
+      "assignmentId",
+      "attemptNumber",
+      "launchMode",
+      "configVersion",
+      "gameBuildId",
+      "executionStatus",
+      "processingStatus",
+      "preparedAt",
+      "startedAtServer",
+      "receivedAt",
+      "incidentCount",
+      "recordedTrialCount",
+      "publishedVersionId",
+      "configurationHash",
+      "configuration",
+      "declaredState",
+      "terminationReason",
+      "measuredDurationMs",
+      "device",
+      "receipt",
+      "calculation"
+    ],
+    "additionalProperties": false
+  },
+  "SessionPage": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "studentId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "taskId": {
+              "type": "string",
+              "const": "TG-01"
+            },
+            "assignmentId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "attemptNumber": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 10
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "launchMode": {
+              "type": "string",
+              "enum": [
+                "SUPERVISED",
+                "CODE"
+              ]
+            },
+            "configVersion": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "gameBuildId": {
+              "type": "string"
+            },
+            "executionStatus": {
+              "type": "string",
+              "enum": [
+                "READY",
+                "RUNNING",
+                "COMPLETED",
+                "INTERRUPTED",
+                "EXPIRED",
+                "UNCONFIRMED"
+              ]
+            },
+            "processingStatus": {
+              "type": "string",
+              "enum": [
+                "NOT_RECEIVED",
+                "PENDING",
+                "PROCESSING",
+                "COMPLETED",
+                "FAILED"
+              ]
+            },
+            "preparedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+            },
+            "startedAtServer": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "receivedAt": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "incidentCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "recordedTrialCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "id",
+            "studentId",
+            "taskId",
+            "assignmentId",
+            "attemptNumber",
+            "launchMode",
+            "configVersion",
+            "gameBuildId",
+            "executionStatus",
+            "processingStatus",
+            "preparedAt",
+            "startedAtServer",
+            "receivedAt",
+            "incidentCount",
+            "recordedTrialCount"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "nextCursor": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "items",
+      "nextCursor"
+    ],
+    "additionalProperties": false
+  },
+  "RecoveryRequest": {
+    "type": "object",
+    "properties": {
+      "requestId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "submissionId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      }
+    },
+    "required": [
+      "requestId",
+      "submissionId"
+    ],
+    "additionalProperties": false
+  },
+  "ClaimRequest": {
+    "type": "object",
+    "properties": {
+      "claimId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "runtimeSecret": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$"
+      }
+    },
+    "required": [
+      "claimId",
+      "runtimeSecret"
+    ],
+    "additionalProperties": false
+  },
+  "StartRequest": {
+    "type": "object",
+    "properties": {
+      "startId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      }
+    },
+    "required": [
+      "startId"
+    ],
+    "additionalProperties": false
+  },
+  "EvidencePage": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "trial": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "stimulus": {
+                  "type": "string",
+                  "enum": [
+                    "star",
+                    "moon"
+                  ]
+                },
+                "spawnedAtMs": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "presentedAtMs": {
+                  "anyOf": [
+                    {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "respondedAtMs": {
+                  "anyOf": [
+                    {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "closedAtMs": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "hit",
+                    "false_alarm",
+                    "miss",
+                    "correct_rejection",
+                    "not_evaluated"
+                  ]
+                },
+                "segment": {
+                  "anyOf": [
+                    {
+                      "anyOf": [
+                        {
+                          "type": "number",
+                          "const": 1
+                        },
+                        {
+                          "type": "number",
+                          "const": 2
+                        },
+                        {
+                          "type": "number",
+                          "const": 3
+                        }
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "closureReason": {
+                  "type": "string",
+                  "enum": [
+                    "response",
+                    "window_elapsed",
+                    "session_cutoff",
+                    "interruption",
+                    "never_presented"
+                  ]
+                },
+                "responseWindowCompleted": {
+                  "type": "boolean"
+                },
+                "responseDevice": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "mouse",
+                        "touch",
+                        "pen"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "geometry": {
+                  "type": "object",
+                  "properties": {
+                    "lane": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 6
+                    },
+                    "x": {
+                      "type": "number"
+                    },
+                    "size": {
+                      "type": "number",
+                      "minimum": 75,
+                      "maximum": 105
+                    }
+                  },
+                  "required": [
+                    "lane",
+                    "x",
+                    "size"
+                  ],
+                  "additionalProperties": false
+                },
+                "calculationDecision": {}
+              },
+              "required": [
+                "trial",
+                "stimulus",
+                "spawnedAtMs",
+                "presentedAtMs",
+                "respondedAtMs",
+                "closedAtMs",
+                "result",
+                "segment",
+                "closureReason",
+                "responseWindowCompleted",
+                "responseDevice",
+                "geometry",
+                "calculationDecision"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "sequence": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "focus_lost",
+                    "visibility_lost",
+                    "script_error",
+                    "audio_unavailable",
+                    "network_lost",
+                    "network_restored",
+                    "storage_failure",
+                    "frame_gap",
+                    "layout_changed",
+                    "recovered_after_reload",
+                    "resource_error",
+                    "evidence_limit"
+                  ]
+                },
+                "clockId": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "atMs": {
+                  "anyOf": [
+                    {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "endedAtMs": {
+                  "anyOf": [
+                    {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "recordedAtClient": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "category": {
+                  "type": "string",
+                  "enum": [
+                    "EXECUTION_INTERRUPTED",
+                    "CONTEXT_ONLY",
+                    "MEASUREMENT_AFFECTED"
+                  ]
+                }
+              },
+              "required": [
+                "sequence",
+                "type",
+                "clockId",
+                "atMs",
+                "endedAtMs",
+                "recordedAtClient",
+                "category"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "nextCursor": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "items",
+      "nextCursor"
+    ],
+    "additionalProperties": false
+  },
+  "ReceiptResponse": {
+    "type": "object",
+    "properties": {
+      "receipt": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "receiptId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "sessionId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "submissionId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "receivedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+              },
+              "evidenceHash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "processingStatusAtReceipt": {
+                "type": "string",
+                "const": "PENDING"
+              }
+            },
+            "required": [
+              "receiptId",
+              "sessionId",
+              "submissionId",
+              "receivedAt",
+              "evidenceHash",
+              "processingStatusAtReceipt"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "receipt"
+    ],
+    "additionalProperties": false
+  },
+  "ProcessingRetry": {
+    "type": "object",
+    "properties": {
+      "sessionId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "runId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "processingStatus": {
+        "type": "string",
+        "const": "PENDING"
+      }
+    },
+    "required": [
+      "sessionId",
+      "runId",
+      "processingStatus"
+    ],
+    "additionalProperties": false
+  },
+  "CodeMetadata": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "recipientId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "scope": {
+        "type": "string",
+        "enum": [
+          "PLAY_AND_SUBMIT",
+          "SUBMIT_ONLY"
+        ]
+      },
+      "sessionId": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "ACTIVE",
+          "REVOKED",
+          "REPLACED",
+          "EXPIRED"
+        ]
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+      },
+      "expiresAt": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+      },
+      "lastClaimedAt": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "canReveal": {
+        "type": "boolean"
+      },
+      "unavailableReasons": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "id",
+      "recipientId",
+      "scope",
+      "sessionId",
+      "status",
+      "createdAt",
+      "expiresAt",
+      "lastClaimedAt",
+      "canReveal",
+      "unavailableReasons"
+    ],
+    "additionalProperties": false
+  },
+  "CodeBatchRequest": {
+    "type": "object",
+    "properties": {
+      "requestId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "recipientIds": {
+        "minItems": 1,
+        "maxItems": 100,
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        }
+      }
+    },
+    "required": [
+      "requestId",
+      "recipientIds"
+    ],
+    "additionalProperties": false
+  },
+  "CodeBatch": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "recipientId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "scope": {
+              "type": "string",
+              "enum": [
+                "PLAY_AND_SUBMIT",
+                "SUBMIT_ONLY"
+              ]
+            },
+            "sessionId": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "ACTIVE",
+                "REVOKED",
+                "REPLACED",
+                "EXPIRED"
+              ]
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+            },
+            "expiresAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+            },
+            "lastClaimedAt": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "canReveal": {
+              "type": "boolean"
+            },
+            "unavailableReasons": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "id",
+            "recipientId",
+            "scope",
+            "sessionId",
+            "status",
+            "createdAt",
+            "expiresAt",
+            "lastClaimedAt",
+            "canReveal",
+            "unavailableReasons"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "createdCount": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9007199254740991
+      },
+      "reusedCount": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9007199254740991
+      }
+    },
+    "required": [
+      "items",
+      "createdCount",
+      "reusedCount"
+    ],
+    "additionalProperties": false
+  },
+  "CodePage": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "recipientId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "scope": {
+              "type": "string",
+              "enum": [
+                "PLAY_AND_SUBMIT",
+                "SUBMIT_ONLY"
+              ]
+            },
+            "sessionId": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "ACTIVE",
+                "REVOKED",
+                "REPLACED",
+                "EXPIRED"
+              ]
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+            },
+            "expiresAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+            },
+            "lastClaimedAt": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "canReveal": {
+              "type": "boolean"
+            },
+            "unavailableReasons": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "id",
+            "recipientId",
+            "scope",
+            "sessionId",
+            "status",
+            "createdAt",
+            "expiresAt",
+            "lastClaimedAt",
+            "canReveal",
+            "unavailableReasons"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "nextCursor": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "items",
+      "nextCursor"
+    ],
+    "additionalProperties": false
+  },
+  "CodeReveal": {
+    "type": "object",
+    "properties": {
+      "codeId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "code": {
+        "type": "string",
+        "pattern": "^[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{5}$"
+      },
+      "expiresAt": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+      },
+      "scope": {
+        "type": "string",
+        "enum": [
+          "PLAY_AND_SUBMIT",
+          "SUBMIT_ONLY"
+        ]
+      }
+    },
+    "required": [
+      "codeId",
+      "code",
+      "expiresAt",
+      "scope"
+    ],
+    "additionalProperties": false
+  },
+  "CodeClaim": {
+    "type": "object",
+    "properties": {
+      "code": {
+        "type": "string",
+        "maxLength": 64,
+        "pattern": "^[A-Za-z2-9 -]+$"
+      },
+      "claimId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "runtimeSecret": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$"
+      }
+    },
+    "required": [
+      "code",
+      "claimId",
+      "runtimeSecret"
+    ],
+    "additionalProperties": false
+  },
+  "CodeRecover": {
+    "type": "object",
+    "properties": {
+      "code": {
+        "type": "string",
+        "maxLength": 64,
+        "pattern": "^[A-Za-z2-9 -]+$"
+      },
+      "claimId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "runtimeSecret": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$"
+      },
+      "sessionId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "submissionId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      }
+    },
+    "required": [
+      "code",
+      "claimId",
+      "runtimeSecret",
+      "sessionId",
+      "submissionId"
+    ],
+    "additionalProperties": false
+  },
+  "RecoveryCodeRequest": {
+    "type": "object",
+    "properties": {
+      "requestId": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "reconcileReceipt": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "requestId"
+    ],
+    "additionalProperties": false
+  },
+  "EmptyRequest": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+  },
+  "GameError": {
+    "type": "object",
+    "properties": {
+      "code": {
+        "type": "string",
+        "pattern": "^[A-Z_]+$"
+      },
+      "message": {
+        "type": "string"
+      },
+      "reason": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "code",
+      "message"
+    ],
+    "additionalProperties": false
+  }
+}

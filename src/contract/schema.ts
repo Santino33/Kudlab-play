@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { VIEWPORT_POLICY, viewportGeometry } from './layout';
-import type { EvidenceReceipt, RuntimeEnvelope } from '../../contract/kudlab-runtime-1.1.0/types';
+import type { EvidenceReceipt, RuntimeEnvelope } from '../../contract/kudlab-runtime-1.2.0/types';
 
 export const BUILD_ID = 'tg01-reference-rebuild-1';
 export const VIEWPORT_BUILD_ID = 'tg01-viewport-rebuild-2';

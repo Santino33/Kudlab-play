@@ -3,12 +3,14 @@ import { newSecret } from '../contract/canonical';
 import { secretSchema, type SessionContext } from '../contract/schema';
 import { Database, request } from '../storage/database';
 import { Journal, type Snapshot, type Execution, type Outbox } from '../evidence/journal';
+import { normalizeCode } from './access-code';
 
 export interface Credential {
   key: string; claimId: string; runtimeSecret: string; launchGrant?: string; context?: SessionContext;
   startId?: string; phase: 'CLAIMING' | 'READY' | 'STARTING' | 'START_CONFIRMED'; preparedSnapshot?: Snapshot;
   operationBlocked?: boolean; nextAttemptAt?: number; attemptCount?: number; lastErrorCode?: string;
   bridgeId?: string;
+  access?: { kind: 'PLAY' | 'RECOVER'; sessionId?: string; submissionId?: string };
 }
 export class Session {
   constructor(readonly db: Database, readonly api: Api, readonly owner: string, private online = () => navigator.onLine) {}
@@ -26,6 +28,26 @@ export class Session {
     let context: SessionContext;
     try { context = await this.api.claim(c.launchGrant, c.claimId, c.runtimeSecret); }
     catch (error) { await this.defer(c, error); throw error; }
+    return this.bind(c, context);
+  }
+  async claimCode(value: string, recovery?: { sessionId: string; submissionId: string }): Promise<SessionContext> {
+    this.requireOnline(); const code = normalizeCode(value);
+    const kind = recovery ? 'RECOVER' : 'PLAY';
+    if (recovery) {
+      const out = await this.db.get<Outbox>('outbox', recovery.sessionId);
+      if (!out || out.envelope.submissionId !== recovery.submissionId) throw new Error('LOCAL_EVIDENCE_NOT_FOUND');
+    }
+    const pending = (await this.db.all<Credential>('credentials')).find(c => (c.phase === 'CLAIMING' || kind === 'PLAY' && c.phase === 'READY' && c.context?.capabilities.canStart && Date.parse(c.context.startAllowedUntil) > Date.now()) && !c.operationBlocked && c.access?.kind === kind && c.access.sessionId === recovery?.sessionId);
+    if (pending?.lastErrorCode === 'RATE_LIMITED' && (pending.nextAttemptAt ?? 0) > Date.now()) throw new ApiError(429, 'RATE_LIMITED', pending.nextAttemptAt! - Date.now());
+    const c: Credential = pending ?? { key: `access:${crypto.randomUUID()}`, claimId: crypto.randomUUID(), runtimeSecret: newSecret(), phase: 'CLAIMING', access: { kind, ...recovery } };
+    await this.db.put('credentials', c);
+    let context: SessionContext;
+    try { context = await this.api.access(code, c.claimId, c.runtimeSecret, recovery); }
+    catch (error) { await this.defer(c, error); throw error; }
+    if (recovery && (context.sessionId !== recovery.sessionId || context.capabilities.canStart || !context.capabilities.canSubmit)) throw new Error('LOCAL_EVIDENCE_MISMATCH');
+    return this.bind(c, context);
+  }
+  private async bind(c: Credential, context: SessionContext): Promise<SessionContext> {
     try { await this.db.transaction(['credentials', 'executions', 'outbox'], async tx => {
       const s = tx.objectStore('credentials');
       const previous = await request<Credential | undefined>(s.get(context.sessionId));
@@ -37,8 +59,8 @@ export class Session {
         if (out.envelope.configurationHash !== context.configurationHash || out.envelope.publishedVersionId !== context.publishedVersionId || out.envelope.gameBuildId !== context.gameBuildId || out.envelope.contractVersion !== context.contractVersion) throw new Error('LOCAL_EVIDENCE_MISMATCH');
         await request(tx.objectStore('outbox').put({ ...out, status: 'PENDING', nextAttemptAt: 0 }));
       } else if (previous && previous.claimId !== c.claimId) throw new Error('CLAIM_CONFLICT');
-      await request(s.put({ key: context.sessionId, claimId: c.claimId, runtimeSecret: c.runtimeSecret, context, phase: 'READY', bridgeId: c.bridgeId }));
-      await request(s.delete(c.key));
+      await request(s.put({ key: context.sessionId, claimId: c.claimId, runtimeSecret: c.runtimeSecret, context, phase: 'READY', bridgeId: c.bridgeId, access: c.access }));
+      if (c.key !== context.sessionId) await request(s.delete(c.key));
     }); } catch (error) {
       await this.defer(c, new ApiError(409, error instanceof Error ? error.message : 'LOCAL_RECOVERY_FAILED'));
       throw error;
@@ -56,7 +78,7 @@ export class Session {
     this.requireOnline();
     const contexts: SessionContext[] = [];
     for (const c of await this.db.all<Credential>('credentials')) {
-      if (c.phase !== 'CLAIMING' || c.operationBlocked || ((c.nextAttemptAt ?? 0) > Date.now() && (!force || c.lastErrorCode === 'RATE_LIMITED'))) continue;
+      if (c.phase !== 'CLAIMING' || !c.launchGrant || c.operationBlocked || ((c.nextAttemptAt ?? 0) > Date.now() && (!force || c.lastErrorCode === 'RATE_LIMITED'))) continue;
       try { contexts.push(await this.completeClaim(c)); } catch { /* status persisted; isolate other sessions */ }
     }
     return contexts;

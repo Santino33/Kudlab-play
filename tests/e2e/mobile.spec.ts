@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 for (const viewport of [{ width: 320, height: 568 }, { width: 390, height: 844 }, { width: 844, height: 390 }, { width: 1440, height: 900 }]) {
   test(`${viewport.width}×${viewport.height}: demo limpia, cuenta en el botón y escenario de borde a borde`, async ({ page }) => {
     await page.setViewportSize(viewport);
-    await page.goto('http://localhost:4173/demo.html');
+    await page.goto(`${teacherOrigin}/demo.html`);
     await expect(page.getByRole('combobox')).toHaveCount(0);
     await expect(page.getByText('Herramientas de desarrollo')).toHaveCount(0);
     const frame = page.frameLocator('iframe');
@@ -16,7 +16,7 @@ for (const viewport of [{ width: 320, height: 568 }, { width: 390, height: 844 }
     await expect(count).toHaveText('2');
     await expect(count).toHaveText('1');
     await expect(frame.locator('canvas')).toBeVisible();
-    const child = page.frames().find(f => f.url().startsWith('http://127.0.0.1:4173/'))!;
+    const child = page.frames().find(f => f.url().startsWith(`${demoOrigin}/`))!;
     const geometry = await child.evaluate(() => {
       const canvas = document.querySelector('canvas')!.getBoundingClientRect();
       const top = document.querySelector('.game-top')!.getBoundingClientRect();
@@ -33,11 +33,11 @@ for (const viewport of [{ width: 320, height: 568 }, { width: 390, height: 844 }
 }
 test('la cuenta atrás no crea estímulos, no consume tiempo medido y una recarga no la reanuda', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('http://localhost:4173/demo.html');
+  await page.goto(`${teacherOrigin}/demo.html`);
   const frame = page.frameLocator('iframe');
   await frame.getByRole('button', { name: 'Comenzar', exact: true }).click();
   await expect(frame.locator('.countdown')).toHaveText('3');
-  const child = page.frames().find(f => f.url().startsWith('http://127.0.0.1:4173/'))!;
+  const child = page.frames().find(f => f.url().startsWith(`${demoOrigin}/`))!;
   const count = await child.evaluate(async () => {
     const db = await new Promise<IDBDatabase>(resolve => { const r = indexedDB.open('kudlab-play-runtime'); r.onsuccess = () => resolve(r.result); });
     const n = await new Promise<number>(resolve => { const r = db.transaction('trials').objectStore('trials').count(); r.onsuccess = () => resolve(r.result); });
@@ -50,9 +50,10 @@ test('la cuenta atrás no crea estímulos, no consume tiempo medido y una recarg
   await expect(frame.locator('.countdown')).toHaveCount(0);
 });
 test('laboratorio separado: herramientas cerradas y errores explicados en español', async ({ page }) => {
-  await page.goto('http://localhost:4173/laboratorio.html');
+  await page.goto(`${teacherOrigin}/laboratorio.html`);
   await expect(page.getByRole('combobox')).toBeHidden();
   await page.getByText('Herramientas de desarrollo', { exact: true }).click();
   await page.getByRole('combobox').selectOption('401');
   await expect(page.getByRole('status')).toContainText('La autorización de envío ya no sirve');
 });
+import { demoOrigin, teacherOrigin } from './origins';
