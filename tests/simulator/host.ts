@@ -1,5 +1,6 @@
 import '../../src/styles.css';
 const host = document.querySelector<HTMLElement>('#host')!;
+const runtimeOrigin = import.meta.env.VITE_API_ORIGIN;
 const clean = location.pathname === '/demo.html';
 host.className = clean ? 'demo-clean' : 'simulator-shell';
 const bar = document.createElement('div'); bar.className = 'simulator-bar';
@@ -39,12 +40,12 @@ const launch = async () => {
   grant = (await response.json()).launchGrant;
   bridgeId = crypto.randomUUID(); frame?.remove();
   frame = document.createElement('iframe'); frame.title = 'Actividad infantil'; frame.className = 'runtime-frame';
-  frame.src = `http://127.0.0.1:4173/?bridgeId=${bridgeId}`; host.append(frame);
+  frame.src = `${runtimeOrigin}/?bridgeId=${bridgeId}`; host.append(frame);
 };
 button.onclick = () => { void launch(); };
 window.addEventListener('message', event => {
-  if (event.origin !== 'http://127.0.0.1:4173' || event.source !== frame?.contentWindow || event.data.bridgeId !== bridgeId) return;
-  if (event.data.type === 'RUNTIME_READY') frame?.contentWindow?.postMessage({ type: 'LAUNCH_AUTHORIZATION', bridgeId, launchGrant: grant }, 'http://127.0.0.1:4173');
+  if (event.origin !== runtimeOrigin || event.source !== frame?.contentWindow || event.data.bridgeId !== bridgeId) return;
+  if (event.data.type === 'RUNTIME_READY') frame?.contentWindow?.postMessage({ type: 'LAUNCH_AUTHORIZATION', bridgeId, launchGrant: grant }, runtimeOrigin);
 });
 if (clean) {
   modeReady = fetch('/__simulator/mode', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mode: 'normal' }) });

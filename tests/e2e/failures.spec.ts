@@ -1,7 +1,7 @@
 import { test, expect, type Frame, type Page } from '@playwright/test';
 
 async function launch(page: Page, mode = 'normal') {
-  await page.goto('http://localhost:4173/laboratorio.html');
+  await page.goto(`${teacherOrigin}/laboratorio.html`);
   await page.getByText('Herramientas de desarrollo', { exact: true }).click();
   await page.getByRole('combobox').selectOption(mode);
   await page.getByRole('button', { name: 'Crear sesión sintética' }).click();
@@ -9,7 +9,7 @@ async function launch(page: Page, mode = 'normal') {
   await expect(frame.locator('#start-reason')).toHaveText('Tu actividad está lista');
   return frame;
 }
-function child(page: Page) { return page.frames().find(f => f.url().startsWith('http://127.0.0.1:4173/'))!; }
+function child(page: Page) { return page.frames().find(f => f.url().startsWith(`${demoOrigin}/`))!; }
 async function rows<T>(frame: Frame, store: string): Promise<T[]> {
   return frame.evaluate(async store => {
     const db = await new Promise<IDBDatabase>((resolve, reject) => { const r = indexedDB.open('kudlab-play-runtime'); r.onsuccess = () => resolve(r.result); r.onerror = () => reject(r.error); });
@@ -70,7 +70,7 @@ test('almacenamiento bloqueado en iframe no anuncia listo ni inicia', async ({ p
   await context.addInitScript(() => {
     if (location.hostname === '127.0.0.1') indexedDB.open = () => { throw new DOMException('blocked', 'SecurityError'); };
   });
-  await page.goto('http://localhost:4173/laboratorio.html');
+  await page.goto(`${teacherOrigin}/laboratorio.html`);
   await page.getByRole('button', { name: 'Crear sesión sintética' }).click();
   const f = page.frameLocator('iframe');
   await expect(f.locator('#start-reason')).toContainText('No podemos preparar un respaldo');
@@ -95,7 +95,7 @@ test('segunda pestaña no mide la misma sesión', async ({ page, context }) => {
   await f.getByRole('button', { name: 'Comenzar', exact: true }).click();
   await expect(f.locator('canvas')).toBeVisible();
   const second = await context.newPage();
-  await second.goto('http://localhost:4173/laboratorio.html');
+  await second.goto(`${teacherOrigin}/laboratorio.html`);
   const url = child(page).url();
   await second.evaluate(url => { const iframe = document.createElement('iframe'); iframe.src = url; iframe.style.cssText = 'width:100%;height:800px'; document.body.append(iframe); }, url);
   const secondFrame = second.frameLocator('iframe');
@@ -105,7 +105,7 @@ test('segunda pestaña no mide la misma sesión', async ({ page, context }) => {
   expect(await rows(child(page), 'executions')).toHaveLength(1);
 });
 test('claim perdido recupera la misma preparación y no consume intento', async ({ page }) => {
-  await page.goto('http://localhost:4173/laboratorio.html');
+  await page.goto(`${teacherOrigin}/laboratorio.html`);
   await page.getByText('Herramientas de desarrollo', { exact: true }).click();
   await page.getByRole('combobox').selectOption('lost_claim');
   const bodies: string[] = [];
@@ -197,3 +197,4 @@ test('bloqueo de render superior a 250 ms interrumpe sin fabricar omisiones', as
   const out = (await rows<{ envelope: { terminationReason: string } }>(child(page), 'outbox'))[0];
   expect(out.envelope.terminationReason).toBe('frame_gap');
 });
+import { demoOrigin, teacherOrigin } from './origins';
