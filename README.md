@@ -1,5 +1,15 @@
 # Kudlab-play
 
+## Docker local
+
+Este checkout incluye build multietapa Node 24 + nginx sin privilegios, sin
+simulador en el runtime. La composición conjunta se arranca desde Kudlab Frontend:
+`npm run docker:setup -- /ruta/a/backend /ruta/a/este/Play`, luego `npm run docker:up`.
+Play queda en `http://127.0.0.1:4178`, incluido `/pendientes`, con CSP y worker de
+la build. API y origen docente se fijan al compilar: reconstruir si cambian.
+Ver `docs/docker-local.md` del frontend para configuración, evidencia y límites.
+El backend normal mantiene bloqueadas las partidas; arrancar Play no concede participación.
+
 **J-03:** entrada pública con código alfanumérico de **5 caracteres**, por ejemplo
 sintético `ERD34`, y `/pendientes` para enviar evidencia desde el navegador original.
 Sin sesión docente, cuentas infantiles ni otra ingesta. Misma TG-01/perfil 1.1 y
