@@ -1,5 +1,21 @@
 # Integración con Kudlab · J-02
 
+## Registro → Play en la vista de pruebas
+
+La composición backend `tests/game-preview.ts` permite crear registros activos desde el frontend docente y probar asignación/código/Play sin sembrar cada ID. Solo datos ficticios en `NODE_ENV=test` y BD aislada `kudlab_j02_*test`; no consentimiento real ni cambio del arranque normal. No requiere cambios del runtime Play ni del contrato 1.2.0. Fuente: backend `65d0ad6` más corrección local, `docs/pruebas-estudiantes-play.md` y `tests/integration/game-preview.test.ts`.
+
+Regresión de navegador: `tests/integration/new-student.spec.ts`. Ejecutar con API/SPA/Play coherentes y runner recién preparado (curso A2 vacío):
+
+```sh
+KUDLAB_TEACHER_ORIGIN=http://localhost:5196 KUDLAB_API_ORIGIN=http://localhost:4326 KUDLAB_PLAY_ORIGIN=http://127.0.0.1:4196 npx playwright test --config=playwright.integration.config.ts tests/integration/new-student.spec.ts
+```
+
+Prueba registro activo, asignación/código, canje en otro perfil sin cookies docentes, inicio y cierre parcial con acuse, procesamiento y rechazo local tras inactivar. No acelera el juego ni inventa resultados. Sin trazas/capturas de códigos utilizables.
+
+Ejecutada localmente el 2026-10-28 UTC: **1 prueba Chromium correcta**, más typecheck/lint/build y **61 pruebas unitarias correctas**. Capturas revisadas del aviso local a 320/1440px; no hay desbordamiento general. BD exclusiva de navegador `kudlab_j02_habilitados_browser_test`. La nueva regresión termina explícitamente la actividad y verifica datos parciales; no acredita partida completa/offline ni habilitación real.
+
+## Contrato y puente existentes
+
 J-03 conserva este puente y añade [entrada pública por código](access-code.md).
 El artefacto actual fijado es 1.2.0; el 1.1.0 histórico se conserva sin sobrescribir.
 
