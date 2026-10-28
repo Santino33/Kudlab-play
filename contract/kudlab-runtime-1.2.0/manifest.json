@@ -1,0 +1,15 @@
+{
+  "version": "1.2.0",
+  "contracts": [
+    "1.0",
+    "1.1"
+  ],
+  "producer": "Kudlab-backend",
+  "canonicalization": "RFC8785",
+  "files": {
+    "schemas.json": "13a8c69e11f1b2f897d4809e99c72fdf0f4549c9c3281d99072ca9378b968af2",
+    "context-1.1.synthetic.json": "fbd2ef5293358343fafa152ca0ffd87e26d464feedcbf2bf035fc4d73ca07c0d",
+    "canonical-vectors.json": "b1a983fb4a82fd00e0271962800ca8d577c783714ea7a7f9c126aa6339643a77",
+    "types.d.ts": "82e380a1978237dff673a0e008a95b65e984c80f9a6e84f49ecd84d35a89989f"
+  }
+}

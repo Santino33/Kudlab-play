@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { contextSchema, receiptSchema, secretSchema, startResponseSchema, uuid, uuidV4, type Receipt, type SessionContext } from '../contract/schema';
 import { hash } from '../contract/canonical';
+import { normalizeCode } from '../runtime/access-code';
 
 export class ApiError extends Error {
   constructor(readonly status: number, readonly code: string, readonly retryAfterMs = 0) { super(code); }
@@ -12,12 +13,12 @@ export class Api {
     if (url.origin !== origin || url.username || url.password || (url.protocol !== 'https:' && !['localhost', '127.0.0.1', '[::1]'].includes(url.hostname))) throw new Error('INVALID_API_ORIGIN');
     this.base = `${origin}/api/v1/game-runtime`;
   }
-  private async call(path: string, secret: string, body?: string): Promise<unknown> {
-    secretSchema.parse(secret);
+  private async call(path: string, secret: string | undefined, body?: string): Promise<unknown> {
+    if (secret !== undefined) secretSchema.parse(secret);
     let response: Response;
     try {
       response = await this.transport(`${this.base}${path}`, { method: body === undefined ? 'GET' : 'POST',
-        headers: { Authorization: `Bearer ${secret}`, ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
+        headers: { ...(secret === undefined ? {} : { Authorization: `Bearer ${secret}` }), ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
         credentials: 'omit', cache: 'no-store', redirect: 'error', referrerPolicy: 'no-referrer',
         signal: AbortSignal.timeout(8000), ...(body === undefined ? {} : { body }) });
     } catch { throw new ApiError(0, 'NETWORK_UNCERTAIN'); }
@@ -41,6 +42,11 @@ export class Api {
   async claim(grant: string, claimId: string, runtimeSecret: string): Promise<SessionContext> {
     uuidV4.parse(claimId); secretSchema.parse(runtimeSecret);
     return this.verifiedContext(await this.call('/launches/claim', grant, JSON.stringify({ claimId, runtimeSecret })));
+  }
+  async access(code: string, claimId: string, runtimeSecret: string, recovery?: { sessionId: string; submissionId: string }): Promise<SessionContext> {
+    uuidV4.parse(claimId); secretSchema.parse(runtimeSecret);
+    if (recovery) { uuid.parse(recovery.sessionId); uuidV4.parse(recovery.submissionId); }
+    return this.verifiedContext(await this.call(recovery ? '/access/recover' : '/access/claim', undefined, JSON.stringify({ code: normalizeCode(code), claimId, runtimeSecret, ...recovery })));
   }
   async context(sessionId: string, secret: string): Promise<SessionContext> {
     uuid.parse(sessionId);

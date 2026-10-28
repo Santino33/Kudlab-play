@@ -7,7 +7,7 @@ const globalHeaders = Object.fromEntries(headerText.split('/assets/*')[0].trim()
 const mime = { html: 'text/html', txt: 'text/plain', js: 'text/javascript', css: 'text/css', svg: 'image/svg+xml', woff: 'font/woff', woff2: 'font/woff2' };
 createServer(async (req, res) => {
   const path = new URL(req.url, 'http://localhost').pathname;
-  const file = path === '/' ? '/index.html' : path;
+  const file = path === '/' || path === '/pendientes' ? '/index.html' : path;
   for (const [key, value] of Object.entries(globalHeaders)) res.setHeader(key, value);
   // Fixture of a previous static worker, served only by this development verification server.
   if (file === '/legacy-sw.js') {

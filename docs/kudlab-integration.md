@@ -1,9 +1,12 @@
 # Integración con Kudlab · J-02
 
+J-03 conserva este puente y añade [entrada pública por código](access-code.md).
+El artefacto actual fijado es 1.2.0; el 1.1.0 histórico se conserva sin sobrescribir.
+
 Nuevas autorizaciones: perfil 1.1 existente. 1.0 sigue legible/entregable sin convertir
 evidencia histórica. No se añaden mecánicas, cuentas, indicadores en cliente ni códigos.
 
-`contract/kudlab-runtime-1.1.0` es un artefacto generado y mantenido por backend:
+`contract/kudlab-runtime-1.2.0` es el artefacto actual generado y mantenido por backend:
 JSON Schema, tipos estructurales, fixture, vectores y manifiesto SHA-256. Envelope y
 Receipt consumen sus tipos; `tests/unit/kudlab-contract.test.ts` verifica hashes y
 compatibilidad. Validaciones cruzadas siguen en el adaptador local. No hay imports
