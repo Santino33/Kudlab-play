@@ -68,6 +68,8 @@ export class Api {
   }
   async receipt(sessionId: string, secret: string, submissionId: string): Promise<Receipt | null> {
     uuid.parse(sessionId); uuidV4.parse(submissionId);
-    return z.strictObject({ receipt: receiptSchema.nullable() }).parse(await this.call(`/sessions/${sessionId}/receipt?submissionId=${submissionId}`, secret)).receipt;
+    const result = z.strictObject({ receipt: receiptSchema.nullable() }).safeParse(await this.call(`/sessions/${sessionId}/receipt?submissionId=${submissionId}`, secret));
+    if (!result.success) throw new ApiError(0, 'INVALID_RECEIPT');
+    return result.data.receipt;
   }
 }

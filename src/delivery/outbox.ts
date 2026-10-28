@@ -18,25 +18,46 @@ export class Delivery {
       heartbeat = setInterval(() => { void this.db.lease(`delivery:${sessionId}`, this.owner, this.now(), 15000).catch(() => undefined); }, 3000);
       const out = await this.db.get<Outbox>('outbox', sessionId);
       if (!out) return await this.db.get('receipts', sessionId) ? 'SAVED' : 'BLOCKED';
-      if (out.status === 'AUTH_REQUIRED' || out.status === 'BLOCKED') return out.status;
+      // Older builds may have stopped at expiry after the server already committed the package.
+      const receiptOnly = out.status === 'AUTH_REQUIRED' && out.lastErrorCode === 'RUNTIME_UNAUTHENTICATED';
+      if (out.status === 'BLOCKED' || out.status === 'AUTH_REQUIRED' && !receiptOnly) return out.status;
       // A user retry/online event may expedite backoff, but never Retry-After.
       if (out.nextAttemptAt > this.now() && (!force || out.lastErrorCode === 'RATE_LIMITED')) return 'PENDING';
       const c = await this.db.get<Credential>('credentials', sessionId);
       const execution = await this.db.get<Execution>('executions', sessionId);
-      if (!c || !execution) { await this.db.put('outbox', { ...out, status: 'AUTH_REQUIRED' }); return 'AUTH_REQUIRED'; }
+      if (!c || !execution) { await this.db.put('outbox', { ...out, status: 'AUTH_REQUIRED', lastErrorCode: 'LOCAL_CREDENTIAL_UNAVAILABLE' }); return 'AUTH_REQUIRED'; }
       try {
         const envelope = envelopeSchema.parse(JSON.parse(out.body));
         if (envelope.sessionId !== sessionId || await hash(envelope) !== out.hash) throw new ApiError(409, 'LOCAL_EVIDENCE_MISMATCH');
         const state = await this.db.transaction(['outbox'], async tx => {
           const latest = await request<Outbox | undefined>(tx.objectStore('outbox').get(sessionId));
           if (!latest || latest.hash !== out.hash) return 'BLOCKED' as const;
-          if (latest.status === 'AUTH_REQUIRED' || latest.status === 'BLOCKED') return latest.status;
+          if (latest.status === 'BLOCKED' || latest.status === 'AUTH_REQUIRED' && !receiptOnly) return latest.status;
           await request(tx.objectStore('outbox').put({ ...latest, status: 'SENDING', lastAttemptAt: this.now() }));
           return 'SENDING' as const;
         });
         if (state !== 'SENDING') return state;
         const saved = await this.db.get<{ receipt: Receipt }>('receipts', sessionId);
-        const receipt = saved ? receiptSchema.parse(saved.receipt) : await this.api.submit(sessionId, c.runtimeSecret, out.body);
+        const readReceipt = async () => {
+          let receipt: Receipt | null;
+          try { receipt = await this.api.receipt(sessionId, c.runtimeSecret, out.envelope.submissionId); }
+          catch (error) {
+            if (error instanceof ApiError && error.status === 401) throw new ApiError(401, 'RECEIPT_AUTH_UNAVAILABLE');
+            throw error;
+          }
+          if (!receipt) throw new ApiError(401, 'RECEIPT_NOT_FOUND');
+          return receipt;
+        };
+        let receipt: Receipt;
+        if (saved) receipt = receiptSchema.parse(saved.receipt);
+        else if (receiptOnly) receipt = await readReceipt();
+        else {
+          try { receipt = await this.api.submit(sessionId, c.runtimeSecret, out.body); }
+          catch (error) {
+            if (!(error instanceof ApiError) || error.status !== 401) throw error;
+            receipt = await readReceipt();
+          }
+        }
         if (receipt.sessionId !== sessionId || receipt.submissionId !== out.envelope.submissionId || receipt.evidenceHash !== out.hash) throw new ApiError(409, 'RECEIPT_MISMATCH');
         // Persist verified remote commit before cleanup. Failure to clean is not loss of remote data.
         await this.db.put('receipts', { key: sessionId, receipt, expiresAt: this.now() + 86400000 });

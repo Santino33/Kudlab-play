@@ -71,6 +71,47 @@ async function pending() {
   return { db, out };
 }
 describe('bandeja y acuses', () => {
+  it('automatically confirms a lost ACK after submission permission expires, without renewing credentials', async () => {
+    const { db, out } = await pending(), calls: { method?: string; body?: unknown }[] = [];
+    const credential = await db.get('credentials', sessionId);
+    const receipt = { receiptId: crypto.randomUUID(), sessionId, submissionId: out.envelope.submissionId, evidenceHash: out.hash, receivedAt: new Date().toISOString(), processingStatusAtReceipt: 'PENDING' };
+    const d = new Delivery(db, new Api('http://localhost', async (_url, init) => {
+      calls.push({ method: init?.method, body: init?.body });
+      return init?.method === 'POST' ? Response.json({ code: 'RUNTIME_UNAUTHENTICATED' }, { status: 401 }) : Response.json({ receipt });
+    }), 'owner');
+    expect(await d.send(sessionId)).toBe('SAVED');
+    expect(calls.map(c => c.method)).toEqual(['POST', 'GET']); expect(calls[0].body).toBe(out.body);
+    expect(await db.get('outbox', sessionId)).toBeUndefined();
+    expect(await db.get('credentials', sessionId)).toBeUndefined();
+    expect(credential).toBeDefined(); expect((await db.get<{ receipt: unknown }>('receipts', sessionId))?.receipt).toEqual(receipt);
+  });
+  it('upgrades an old AUTH_REQUIRED pending package with a read-only check, without another POST', async () => {
+    const { db, out } = await pending();
+    await db.put('outbox', { ...out, status: 'AUTH_REQUIRED', lastErrorCode: 'RUNTIME_UNAUTHENTICATED' });
+    const d = new Delivery(db, new Api('http://localhost', async (_url, init) => {
+      expect(init?.method).toBe('GET');
+      return Response.json({ receipt: { receiptId: crypto.randomUUID(), sessionId, submissionId: out.envelope.submissionId, evidenceHash: out.hash, receivedAt: new Date().toISOString(), processingStatusAtReceipt: 'PENDING' } });
+    }), 'owner');
+    expect(await d.send(sessionId)).toBe('SAVED');
+  });
+  it.each(['absent', 'revoked', 'mismatch', 'malformed', 'rate_limit'])('automatic receipt check preserves evidence on %s and never renews authorization', async scenario => {
+    const { db, out } = await pending(); let calls = 0;
+    const d = new Delivery(db, new Api('http://localhost', async (_url, init) => {
+      calls++;
+      if (init?.method === 'POST') return Response.json({ code: 'RUNTIME_UNAUTHENTICATED' }, { status: 401 });
+      if (scenario === 'revoked') return Response.json({ code: 'RUNTIME_UNAUTHENTICATED' }, { status: 401 });
+      if (scenario === 'absent') return Response.json({ receipt: null });
+      if (scenario === 'malformed') return Response.json({ ok: true });
+      if (scenario === 'rate_limit') return Response.json({ code: 'RATE_LIMITED' }, { status: 429, headers: { 'Retry-After': '90' } });
+      return Response.json({ receipt: { receiptId: crypto.randomUUID(), sessionId, submissionId: out.envelope.submissionId, evidenceHash: 'f'.repeat(64), receivedAt: new Date().toISOString(), processingStatusAtReceipt: 'PENDING' } });
+    }), 'owner', () => 1000, () => .5);
+    const expected = scenario === 'mismatch' ? 'BLOCKED' : scenario === 'malformed' || scenario === 'rate_limit' ? 'PENDING' : 'AUTH_REQUIRED';
+    expect(await d.send(sessionId)).toBe(expected);
+    expect((await db.get<Outbox>('outbox', sessionId))?.body).toBe(out.body);
+    expect(await db.get('receipts', sessionId)).toBeUndefined();
+    await d.send(sessionId); expect(calls).toBe(2);
+    if (scenario === 'rate_limit') expect((await db.get<Outbox>('outbox', sessionId))?.nextAttemptAt).toBe(91000);
+  });
   it('recovery replaces only the matching local capability and unblocks identical evidence', async () => {
     const { db, out } = await pending();
     await db.put('outbox', { ...out, status: 'AUTH_REQUIRED' });

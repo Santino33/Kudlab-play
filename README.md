@@ -5,6 +5,7 @@ sintético `ERD34`, y `/pendientes` para enviar evidencia desde el navegador ori
 Sin sesión docente, cuentas infantiles ni otra ingesta. Misma TG-01/perfil 1.1 y
 compatibilidad histórica 1.0. [Acceso, almacenamiento y límites](docs/access-code.md).
 Uso real continúa bloqueado; las exclusiones J-03 históricas inferiores ya no describen esta ampliación.
+El acuse perdido se comprueba automáticamente, incluso después de caducar el permiso de envío, sin renovar permisos. [Corrección de CI y evidencia](docs/ci-verification.md).
 
 **Integración J-02:** cliente conectado al contrato canónico versionado de Kudlab,
 recuperación supervisada de entrega con capacidad renovada (sin volver a jugar) y

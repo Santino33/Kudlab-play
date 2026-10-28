@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { demoOrigin, teacherOrigin } from './origins';
 
 for (const viewport of [{ width: 320, height: 568 }, { width: 390, height: 844 }, { width: 844, height: 390 }, { width: 1440, height: 900 }]) {
   test(`${viewport.width}×${viewport.height}: demo limpia, cuenta en el botón y escenario de borde a borde`, async ({ page }) => {
@@ -56,4 +57,3 @@ test('laboratorio separado: herramientas cerradas y errores explicados en españ
   await page.getByRole('combobox').selectOption('401');
   await expect(page.getByRole('status')).toContainText('La autorización de envío ya no sirve');
 });
-import { demoOrigin, teacherOrigin } from './origins';

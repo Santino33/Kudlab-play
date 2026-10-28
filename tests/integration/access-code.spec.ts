@@ -44,14 +44,16 @@ test('J03: código docente → perfil público independiente → desconexión/AC
   const localDate = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
   await teacher.getByLabel('Disponible desde').fill(localDate(new Date(Date.now() - 60000))); await teacher.getByLabel('Disponible hasta').fill(localDate(new Date(Date.now() + 3600000))); await teacher.getByLabel('Máximo de intentos').fill('3');
   await teacher.getByRole('button', { name: 'Guardar asignación', exact: true }).click();
-  await teacher.getByLabel(/Participante Sintético A/).check(); await teacher.getByLabel(/Participante Sintético B/).check();
-  await teacher.getByRole('button', { name: 'Generar accesos', exact: true }).click(); await teacher.getByRole('button', { name: 'Confirmar generación', exact: true }).click();
+  await expect(teacher.getByRole('heading', { name: 'Estudiantes y códigos', exact: true })).toBeVisible();
   const rowA = teacher.locator('.access-code-row').filter({ hasText: 'Participante Sintético A' }), rowB = teacher.locator('.access-code-row').filter({ hasText: 'Participante Sintético B' });
+  await expect(rowA.locator('.classroom-code')).toHaveText(/^[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{5}$/);
+  await expect(rowB.locator('.classroom-code')).toHaveText(/^[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{5}$/);
+  const codeB = (await rowB.locator('.classroom-code').textContent())!;
+  await rowA.getByText('Gestionar acceso y sesiones', { exact: true }).click();
   await rowA.getByRole('button', { name: 'Copiar mensaje', exact: true }).click(); await expect(teacher.getByText(/Copiado. Compártelo/)).toBeVisible();
   const message = await teacher.evaluate(() => navigator.clipboard.readText()); expect(message.includes(`${playOrigin}/`)).toBe(true);
   const codeA = /código: ([23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{5})/.exec(message)?.[1]; expect(Boolean(codeA)).toBe(true);
-  await rowB.getByRole('button', { name: 'Mostrar código', exact: true }).click(); const codeB = (await rowB.locator('strong').textContent())!;
-  expect(await rowA.locator('strong').count()).toBe(0); await rowB.getByRole('button', { name: 'Ocultar código', exact: true }).click();
+  await rowA.getByRole('button', { name: 'Ocultar código', exact: true }).click();
   const assignmentUrl = teacher.url();
   const profile = await mkdtemp('/tmp/opencode/kudlab-j03-public-');
   const launch = () => chromium.launchPersistentContext(profile, { executablePath: process.env.CHROME_PATH ?? '/usr/bin/google-chrome', headless: true, args: ['--no-sandbox'], viewport: { width: 1100, height: 850 } });
@@ -70,19 +72,26 @@ test('J03: código docente → perfil público independiente → desconexión/AC
     await student.reload(); await student.getByRole('link', { name: 'Enviar una actividad pendiente', exact: true }).click(); await expect(student.getByRole('heading', { name: 'Actividades pendientes', exact: true })).toBeVisible();
     expect((await outbox(student))[0]!.body === original.body).toBe(true);
     await child.close(); child = await launch(); student = child.pages()[0]!;
-    let lost = false; const bodies: string[] = [];
+    let lost = false, receiptChecks = 0; const bodies: string[] = [];
+    child.on('request', req => { if (req.method() === 'GET' && req.url().includes('/receipt?')) receiptChecks++; });
     await child.route('**/game-runtime/sessions/*/results', async route => {
       bodies.push(route.request().postData()!);
       const response = await route.fetch();
-      if (!lost && response.ok()) { lost = true; await route.abort('failed'); } else await route.fulfill({ response });
+      if (!lost && response.ok()) {
+        lost = true;
+        execFileSync(process.execPath, ['--import', 'tsx', 'tests/game-expire-capability.ts', original.sessionId], { cwd: backend, env: { ...process.env, DATABASE_URL: database } });
+        await route.abort('failed');
+      } else await route.fulfill({ response });
     });
     await student.goto(`${playOrigin}/pendientes`);
     await expect.poll(async () => (await outbox(student)).length, { timeout: 25000 }).toBe(0);
-    expect(lost).toBe(true); expect(bodies.length).toBeGreaterThanOrEqual(2); expect(bodies.every(body => body === original.body)).toBe(true); expect(cookieSent).toBe(false);
-    await teacher.bringToFront(); await teacher.goto(assignmentUrl); await teacher.locator('.activity-roster > li').filter({ hasText: 'Participante Sintético A' }).getByRole('link', { name: 'Ver sesiones', exact: true }).click();
+    expect(lost).toBe(true); expect(receiptChecks).toBeGreaterThan(0); expect(bodies.length).toBeGreaterThanOrEqual(2); expect(bodies.every(body => body === original.body)).toBe(true); expect(cookieSent).toBe(false);
+    await teacher.bringToFront(); await teacher.goto(assignmentUrl); await rowA.getByText('Gestionar acceso y sesiones', { exact: true }).click(); await rowA.getByRole('link', { name: 'Ver sesiones', exact: true }).click();
     await teacher.getByRole('link', { name: 'Ver sesión', exact: true }).first().click();
     await expect.poll(async () => { const r = await teacher.request.get(`${apiOrigin}/api/v1/task-sessions/${original.sessionId}`); return (await r.json()).processingStatus; }, { timeout: 15000 }).toBe('COMPLETED');
     await teacher.getByRole('button', { name: 'Actualizar sesión', exact: true }).click(); await expect(teacher.getByText('Procesamiento completado', { exact: true })).toBeVisible();
+    await expect(teacher.getByText('Envío desde Kudlab Play', { exact: true })).toHaveCount(0);
+    await expect(teacher.getByRole('button', { name: 'Generar código para reconciliar acuse', exact: true })).toHaveCount(0);
     const evidence = await (await teacher.request.get(`${apiOrigin}/api/v1/task-sessions/${original.sessionId}/evidence?kind=trials&limit=100`)).json();
     const results = new Set(evidence.items.map((t: { result: string }) => t.result)); for (const result of ['hit', 'false_alarm', 'miss', 'correct_rejection']) expect(results.has(result), `Resultado clásico ${result}`).toBe(true);
     // Another activity is an explicit action, never a way to send A's results under B.
@@ -93,9 +102,10 @@ test('J03: código docente → perfil público independiente → desconexión/AC
     execFileSync(process.execPath, ['--import', 'tsx', 'tests/game-expire-capability.ts', partial.sessionId], { cwd: backend, env: { ...process.env, DATABASE_URL: database } });
     await child.unroute('**/game-runtime/sessions/*/results'); await student.evaluate(() => window.dispatchEvent(new Event('online')));
     await expect(student.getByText('Necesitamos ayuda de tu profesor para enviar los resultados', { exact: true })).toBeVisible();
-    await teacher.goto(assignmentUrl); await teacher.locator('.activity-roster > li').filter({ hasText: 'Participante Sintético B' }).getByRole('link', { name: 'Ver sesiones', exact: true }).click(); await teacher.getByRole('link', { name: 'Ver sesión', exact: true }).first().click();
+    await teacher.goto(assignmentUrl); await rowB.getByText('Gestionar acceso y sesiones', { exact: true }).click(); await rowB.getByRole('link', { name: 'Ver sesiones', exact: true }).click(); await teacher.getByRole('link', { name: 'Ver sesión', exact: true }).first().click();
+    await teacher.getByText('Resolver un envío pendiente', { exact: true }).click();
     await teacher.getByRole('button', { name: 'Generar código de recuperación', exact: true }).click(); await teacher.getByRole('button', { name: 'Confirmar código de recuperación', exact: true }).click();
-    const recoverySection = teacher.getByRole('heading', { name: 'Envío desde Kudlab Play', exact: true }).locator('..');
+    const recoverySection = teacher.getByRole('heading', { name: 'Resultados aún no recibidos', exact: true }).locator('..');
     await recoverySection.getByRole('button', { name: 'Mostrar código', exact: true }).click(); const recoveryCode = (await recoverySection.locator('strong').textContent())!; await recoverySection.getByRole('button', { name: 'Ocultar código', exact: true }).click();
     await student.goto(`${playOrigin}/pendientes`); await student.getByLabel('Código para enviar', { exact: true }).fill(recoveryCode); await student.getByRole('button', { name: 'Enviar pendiente', exact: true }).click();
     await expect.poll(async () => (await outbox(student)).length).toBe(0);
@@ -103,11 +113,11 @@ test('J03: código docente → perfil público independiente → desconexión/AC
     for (const width of [1440, 768, 390, 320]) {
       await student.setViewportSize({ width, height: 950 }); await student.goto(playOrigin); expect(await student.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await student.screenshot({ path: `test-results/kudlab-integration/j03-public-${width}.png`, fullPage: true });
-      await teacher.setViewportSize({ width, height: 950 }); await teacher.goto(assignmentUrl); await expect(teacher.getByRole('heading', { name: 'Accesos por código', exact: true })).toBeVisible(); await expect(teacher.locator('.access-code-row').first()).toBeVisible(); expect(await teacher.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-      await teacher.screenshot({ path: `test-results/kudlab-integration/j03-teacher-${width}.png`, fullPage: true });
+      await teacher.setViewportSize({ width, height: 950 }); await teacher.goto(assignmentUrl); await expect(teacher.getByRole('heading', { name: 'Códigos de actividad', exact: true })).toBeVisible(); await expect(teacher.locator('.access-code-row').first()).toBeVisible(); expect(await teacher.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      await teacher.screenshot({ path: `test-results/kudlab-integration/j03-teacher-${width}.png`, fullPage: true, mask: [teacher.locator('.classroom-code')] });
     }
     await teacher.setViewportSize({ width: 1440, height: 1000 }); await teacher.goto(assignmentUrl);
-    const oldRow = teacher.locator('.access-code-row').filter({ hasText: 'Participante Sintético A' }); await oldRow.getByRole('button', { name: 'Reemplazar', exact: true }).click(); await teacher.getByRole('button', { name: 'Reemplazar acceso', exact: true }).click();
+    const oldRow = teacher.locator('.access-code-row').filter({ hasText: 'Participante Sintético A' }); await oldRow.getByText('Gestionar acceso y sesiones', { exact: true }).click(); await oldRow.getByRole('button', { name: 'Reemplazar', exact: true }).click(); await teacher.getByRole('button', { name: 'Reemplazar acceso', exact: true }).click();
     await student.goto(playOrigin); await student.getByLabel('Código de actividad', { exact: true }).fill(codeA!); await student.getByRole('button', { name: 'Continuar', exact: true }).click(); await expect(student.getByText(/No podemos abrir una actividad con este código/)).toBeVisible();
     await student.getByLabel('Código de actividad', { exact: true }).fill('');
   } finally { await child.close(); }

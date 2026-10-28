@@ -1,4 +1,5 @@
 import { test, expect, type Frame, type Page } from '@playwright/test';
+import { demoOrigin, teacherOrigin } from './origins';
 
 async function launch(page: Page, mode = 'normal') {
   await page.goto(`${teacherOrigin}/laboratorio.html`);
@@ -197,4 +198,3 @@ test('bloqueo de render superior a 250 ms interrumpe sin fabricar omisiones', as
   const out = (await rows<{ envelope: { terminationReason: string } }>(child(page), 'outbox'))[0];
   expect(out.envelope.terminationReason).toBe('frame_gap');
 });
-import { demoOrigin, teacherOrigin } from './origins';
