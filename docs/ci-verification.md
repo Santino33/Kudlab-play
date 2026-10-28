@@ -13,4 +13,6 @@ Se actualizan las expectativas, sin skips, reintentos de test ni eliminar contro
 
 Los puertos de laboratorio/producción son parametrizables con `KUDLAB_DEMO_PORT` y `KUDLAB_PRODUCTION_PORT` (defaults 4173/4174, CI sin cambios) para no reutilizar procesos ajenos locales.
 
-Verificación local aislada: `npm run typecheck`, `npm run lint` y `KUDLAB_DEMO_PORT=4193 KUDLAB_PRODUCTION_PORT=4194 CI=true npm run test:e2e`: **31 correctas, 2,4 min**, con servidores levantados desde este checkout y sin reutilizar otros. El resultado remoto de CI se informa por separado después del push.
+Verificación local aislada: `npm run typecheck`, `npm run lint` y `KUDLAB_DEMO_PORT=4193 KUDLAB_PRODUCTION_PORT=4194 CI=true npm run test:e2e`: **31 correctas, 2,4 min**, con servidores levantados desde este checkout y sin reutilizar otros.
+
+Después del push de `9d9da8f`, ambos jobs remotos terminaron en **success**: [push 40615727303](https://github.com/Santino33/Kudlab-play/actions/runs/40615727303) y [pull_request 40615733078](https://github.com/Santino33/Kudlab-play/actions/runs/40615733078). Son resultados de ese commit; los cambios posteriores de acuse vuelven a verificarse por separado.

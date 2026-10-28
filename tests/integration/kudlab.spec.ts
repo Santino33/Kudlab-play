@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 const teacherOrigin = process.env.KUDLAB_TEACHER_ORIGIN ?? 'http://localhost:5173';
 const apiOrigin = process.env.KUDLAB_API_ORIGIN ?? 'http://localhost:4300';
 const playOrigin = process.env.KUDLAB_PLAY_ORIGIN ?? 'http://127.0.0.1:4178';
+test.use({ trace: 'off', screenshot: 'off', video: 'off' });
 test('J02: profesor asigna, juega offline, recupera y consulta evidencia real en PostgreSQL', async ({ page, context }) => {
   await expect.poll(async () => { try { return (await page.request.get(`${apiOrigin}/api/auth/jwks`)).status(); } catch { return 0; } }, { timeout: 15000 }).toBe(200);
   await page.goto(teacherOrigin);
@@ -20,8 +21,9 @@ test('J02: profesor asigna, juega offline, recupera y consulta evidencia real en
   await page.getByLabel('Disponible hasta').fill(localDate(new Date(Date.now() + 3600000)));
   await page.getByLabel('Máximo de intentos').fill('2');
   await page.getByRole('button', { name: 'Guardar asignación', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Detalle de asignación' })).toBeVisible();
-  await page.screenshot({ path: 'test-results/kudlab-integration/assignment-1440.png', fullPage: true });
+  await expect(page.getByRole('heading', { name: 'Estudiantes y códigos' })).toBeVisible();
+  await page.screenshot({ path: 'test-results/kudlab-integration/assignment-1440.png', fullPage: true, mask: [page.locator('.classroom-code')] });
+  await page.getByText('Gestionar acceso y sesiones', { exact: true }).click();
   await page.getByRole('link', { name: 'Iniciar actividad supervisada', exact: true }).click();
   const frame = page.frameLocator('iframe[title="Kudlab Play · Lluvia de estrellas"]');
   await expect(frame.getByRole('button', { name: 'Comenzar', exact: true })).toBeEnabled({ timeout: 20000 });
@@ -55,6 +57,7 @@ test('J02: profesor asigna, juega offline, recupera y consulta evidencia real en
   if (backend && database) {
     await page.setViewportSize({ width: 1440, height: 1000 });
     await page.getByRole('link', { name: 'Ver asignación', exact: true }).click();
+    await page.getByText('Gestionar acceso y sesiones', { exact: true }).click();
     await page.getByRole('link', { name: 'Iniciar actividad supervisada', exact: true }).click();
     const secondFrame = page.frameLocator('iframe[title="Kudlab Play · Lluvia de estrellas"]');
     await secondFrame.getByRole('button', { name: 'Comenzar', exact: true }).click();

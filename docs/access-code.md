@@ -8,6 +8,8 @@ Tras canjear se usa el mismo preflight/ejemplo/inicio TG-01 y entrega de J-02. E
 
 `/pendientes` lista únicamente tarea/fecha local informativa/estado técnico del respaldo original. Cada envío conserva su propia capacidad, aunque después otra persona use otro código. Si necesita autorización, ingresar código vigente del destinatario o SUBMIT_ONLY de esa sesión. No muestra respuestas/nombres/indicadores ni busca IDs alternativos; sin copia local informa y no reconstruye resultados. Acuse validado antes de limpiar.
 
+**Refinamiento aprobado:** el acuse perdido ya no requiere un código docente. Ante caducidad de entrega (401), Play consulta automáticamente el acuse con la capacidad original; el backend permite solo esa lectura aun expirada, nunca revocada. Se valida sesión/submission/hash antes de limpiar, sin renovar permisos ni iniciar otro intento. También comprueba pendientes AUTH_REQUIRED compatibles conservados por builds anteriores. Null/denegación/conflicto conservan la evidencia y detienen el bucle de autorización; red y 429 mantienen backoff/Retry-After. Los resultados que **nunca llegaron** siguen necesitando autorización válida para enviarse; eso no es un acuse perdido.
+
 La recuperación exige **mismo origen, sitio, perfil y partición**. El iframe supervisado no garantiza compartir IndexedDB con la página pública. No transportar evidencia entre ambos ni pedir cookie docente. Se conserva el puente RECOVERY_REQUESTED/RECOVERY_UNAVAILABLE sin secretos en URL.
 
 Hosting debe resolver directamente `/pendientes` al index. SW resuelve esa navegación al shell cacheado; solo cachea recursos estáticos propios, no API ni evidencia. Recursos J-01 de laboratorio/simulador no se incluyen en producción.
