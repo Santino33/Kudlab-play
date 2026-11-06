@@ -96,4 +96,4 @@ tests/           Unitarias, simulador y recorridos de navegador
 scripts/         Build de SW/cabeceras, escaneo, contrato y capturas
 ```
 
-Las specs fuente se encuentran en `especificaciones-juegos/`. Backend/frontend Kudlab y otros archivos ajenos del workspace **no fueron modificados**. No se crearon repositorios ni commits automáticamente.
+Los contratos operativos permanecen versionados en `contract/`; las guías técnicas están en `docs/`. La planificación personal y las instrucciones para agentes no se distribuyen ni son necesarias para ejecutar, compilar o probar este repositorio.
