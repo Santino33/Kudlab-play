@@ -11,6 +11,15 @@ import { registry, supported } from '../games/registry';
 import { button, el, shape } from './dom';
 import { countdown } from './countdown';
 
+function offlineIcon(): SVGSVGElement {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('aria-hidden', 'true'); svg.classList.add('net-icon');
+  for (const d of ['M12 2a10 10 0 1 0 0 20a10 10 0 1 0 0-20', 'M12 7v6', 'M12 16.5v.5']) {
+    const path = document.createElementNS(svg.namespaceURI, 'path'); path.setAttribute('d', d); svg.append(path);
+  }
+  return svg;
+}
+
 type Screen = 'access' | 'pending' | 'instructions' | 'example' | 'running' | 'finish';
 export class App {
   private db?: Database;
@@ -58,6 +67,10 @@ export class App {
   private pendingItems: Outbox[] = [];
   private pendingSignature = '';
   private retryCodeAt = 0;
+  private netNode?: HTMLElement;
+  private offlineDialog?: HTMLDialogElement;
+  private playedSessionId?: string;
+  private savedNotified?: string;
 
   constructor(private root: HTMLElement) {}
   async init(): Promise<void> {
@@ -71,7 +84,7 @@ export class App {
     footer.append(el('span', '', 'Un momento para mirar y tocar.'), el('span', '', 'Actividad acompañada'));
     this.root.replaceChildren(header, this.main, footer, this.live);
     this.render();
-    window.addEventListener('online', () => { this.refreshAvailability(); void this.maintain(true); });
+    window.addEventListener('online', () => { this.refreshAvailability(); this.offlineSaving(); void this.maintain(true); });
     window.addEventListener('offline', () => this.refreshAvailability());
     window.addEventListener('resize', () => this.refreshAvailability());
     window.addEventListener('runtime-update-available', () => {
@@ -360,6 +373,7 @@ export class App {
       }
       // The measured 120 seconds begin after 0, never during authorization or the countdown.
       meta.startedAtMs = performance.now();
+      this.playedSessionId = this.context.sessionId;
       this.engine = registry[this.context.taskId].create(resolveConfig(this.context.config, effective.width, effective.height), meta);
       await this.journal.create(this.engine.snapshot());
       if (stopReason || document.hidden || innerWidth !== meta.device.viewportWidth || innerHeight !== meta.device.viewportHeight) {
@@ -409,7 +423,9 @@ export class App {
       top.classList.add('confirming-exit');
       const question = el('span', '', '¿Terminar?');
       exitSlot.replaceChildren(question, button('Seguir', () => { top.classList.remove('confirming-exit'); exitSlot.replaceChildren(exit); }), button('Sí, terminar', () => this.interrupt('user_exit'), 'button primary'));
-    }, 'button quiet'); exit.setAttribute('aria-label', 'Terminar actividad'); exitSlot.append(exit); top.append(exitSlot);
+    }, 'button quiet'); exit.setAttribute('aria-label', 'Terminar actividad'); exitSlot.append(exit);
+    this.netNode = el('p', 'net-status'); this.netNode.append(offlineIcon(), el('span', '', 'Sin internet')); this.setNetwork();
+    top.append(this.netNode, exitSlot);
     const wrap = el('div', 'stage-wrap'); const canvas = el('canvas', 'stage');
     canvas.style.visibility = 'hidden';
     canvas.setAttribute('aria-label', 'Toca las estrellas que caen. No toques las lunas. Esta actividad requiere apuntar.');
@@ -434,8 +450,8 @@ export class App {
     document.addEventListener('visibilitychange', visibility, { signal: abort.signal });
     on('pagehide', () => this.interrupt('visibility_lost'));
     on('blur', () => { this.engine?.incident('focus_lost', 'MEASUREMENT_AFFECTED', performance.now()); this.capture(); });
-    on('offline', () => { this.engine?.incident('network_lost', 'CONTEXT_ONLY', performance.now()); this.capture(); });
-    on('online', () => { this.engine?.incident('network_restored', 'CONTEXT_ONLY', performance.now()); this.capture(); });
+    on('offline', () => { this.engine?.incident('network_lost', 'CONTEXT_ONLY', performance.now()); this.capture(); this.setNetwork(); });
+    on('online', () => { this.engine?.incident('network_restored', 'CONTEXT_ONLY', performance.now()); this.capture(); this.setNetwork(); });
     on('error', () => this.interrupt('script_error'));
     on('unhandledrejection', () => this.interrupt('script_error'));
     on('resize', () => { if (innerWidth !== this.engine!.meta.device.viewportWidth || innerHeight !== this.engine!.meta.device.viewportHeight) this.interrupt('layout_changed'); });
@@ -478,12 +494,15 @@ export class App {
       this.bridge?.notify('DELIVERY_PENDING', this.lastOut.sessionId, this.lastOut.envelope.submissionId);
       this.status = ''; this.render();
       if (navigator.onLine) this.updateDelivery(await this.delivery!.send(this.lastOut.sessionId, true));
+      else this.offlinePrompt();
     } catch {
       this.memoryOnly = true; this.status = '';
       this.say('El almacenamiento falló. No podemos confirmar un respaldo completo en este navegador.'); this.render();
     } finally {
       if (this.context) await this.db?.release(`execution:${this.context.sessionId}`, this.owner).catch(() => undefined);
       this.closing = false;
+      // An online event during finalize was skipped by maintain(); retry now with the same immutable package.
+      if (navigator.onLine && this.lastOut && this.deliveryState !== 'SAVED' && !this.memoryOnly) void this.maintain(true);
     }
   }
   private updateDelivery(state: DeliveryState): void {
@@ -491,6 +510,11 @@ export class App {
     const changed = this.deliveryState !== state;
     this.deliveryState = state;
     if (state === 'SAVED' && this.lastOut) this.bridge?.notify('RESULTS_SAVED', this.lastOut.sessionId, this.lastOut.envelope.submissionId);
+    if (state !== 'PENDING') this.offlineDialog?.close();
+    // Only a verified receipt of the session played on this page, once; never for older outbox entries.
+    if (state === 'SAVED' && this.lastOut && this.lastOut.sessionId === this.playedSessionId && this.savedNotified !== this.playedSessionId) {
+      this.savedNotified = this.playedSessionId; this.toast('Tu partida se guardó.');
+    }
     if (this.screen === 'finish' && changed) { this.render(); this.say(state === 'SAVED' ? 'Tus resultados se guardaron.' : 'El envío necesita atención.'); }
   }
   private finishScreen(): void {
@@ -515,6 +539,25 @@ export class App {
     if (this.lastOut && !this.memoryOnly && this.deliveryState === 'PENDING') delivery.append(button('Reintentar envío', () => { void this.maintain(true); }));
     section.append(delivery); this.main.append(section);
     if (this.publicEntry) this.main.append(this.publicLink('/pendientes', 'Enviar una actividad pendiente'), this.publicLink('/', 'Ingresar otro código'));
+  }
+  private setNetwork(): void { if (this.netNode) this.netNode.dataset.offline = String(!navigator.onLine); }
+  private offlinePrompt(): void {
+    // Shown only after measurement stopped and the result is stored locally. Closing it cancels nothing.
+    const dialog = this.offlineDialog = el('dialog', 'help-dialog offline-dialog'); dialog.setAttribute('aria-labelledby', 'offline-title');
+    const heading = el('h2', '', 'No tienes internet'); heading.id = 'offline-title';
+    dialog.append(heading, el('p', 'offline-text', 'Conéctate para guardar tu partida. Mientras tanto, la conservamos en este navegador; no lo cierres.'),
+      button('Entendido', () => dialog.close(), 'button primary'));
+    this.root.append(dialog); dialog.addEventListener('close', () => { dialog.remove(); if (this.offlineDialog === dialog) this.offlineDialog = undefined; }, { once: true }); dialog.showModal();
+  }
+  private offlineSaving(): void {
+    const text = this.offlineDialog?.querySelector('.offline-text'); if (!text) return;
+    this.offlineDialog!.querySelector('h2')!.textContent = 'Ya tienes internet';
+    text.textContent = 'Guardando tu partida…';
+  }
+  private toast(message: string): void {
+    this.root.querySelector('.save-toast')?.remove();
+    const node = el('p', 'save-toast', message); node.setAttribute('role', 'status');
+    this.root.append(node); setTimeout(() => node.remove(), 6000);
   }
   private help(): void {
     // Never place a modal over a measured stimulus. Help is available only outside execution.

@@ -198,3 +198,58 @@ test('bloqueo de render superior a 250 ms interrumpe sin fabricar omisiones', as
   const out = (await rows<{ envelope: { terminationReason: string } }>(child(page), 'outbox'))[0];
   expect(out.envelope.terminationReason).toBe('frame_gap');
 });
+// CA-08 (corregir-tg01-y-detalle-de-sesion): play continues offline; popup only when finishing offline; toast only after a verified receipt.
+async function running(page: Page, mode = 'normal') {
+  const f = await launch(page, mode);
+  await f.getByRole('button', { name: 'Comenzar', exact: true }).click();
+  await expect(f.locator('canvas')).toBeVisible();
+  await expect.poll(async () => (await rows<{ checkpointAtMs: number; startedAtMs: number }>(child(page), 'executions')).some(r => r.checkpointAtMs >= r.startedAtMs + 500)).toBe(true);
+  return f;
+}
+test('CA-08 corte hasta el final: indicador sin mover el escenario, aviso al terminar y guardado tras reconectar', async ({ page, context }) => {
+  const f = await running(page);
+  const submissions: string[] = []; page.on('request', r => { if (r.url().endsWith('/results')) submissions.push(r.postData()!); });
+  const before = await f.locator('canvas').boundingBox();
+  await expect(f.getByText('Sin internet', { exact: true })).toBeHidden();
+  await context.setOffline(true);
+  await expect(f.getByText('Sin internet', { exact: true })).toBeVisible();
+  expect(await f.locator('canvas').boundingBox()).toEqual(before);
+  const checkpoint = (await rows<{ checkpointAtMs: number }>(child(page), 'executions'))[0].checkpointAtMs;
+  await expect.poll(async () => (await rows<{ checkpointAtMs: number }>(child(page), 'executions'))[0].checkpointAtMs).toBeGreaterThan(checkpoint);
+  await expect(f.getByRole('button', { name: 'Terminar actividad' })).toBeVisible();
+  await finish(page);
+  const dialog = f.getByRole('dialog', { name: 'No tienes internet' });
+  await expect(dialog).toContainText('Conéctate para guardar tu partida.');
+  await expect(f.getByText('Tu partida se guardó.', { exact: true })).toHaveCount(0);
+  await context.setOffline(false);
+  await expect(f.getByText('Tu partida se guardó.', { exact: true })).toBeVisible();
+  await expect(f.getByRole('dialog')).toHaveCount(0);
+  await expect(f.getByRole('heading', { name: 'Tus resultados se guardaron' })).toBeVisible();
+  expect(new Set(submissions).size).toBe(1);
+  expect(await rows(child(page), 'outbox')).toEqual([]); expect(await rows(child(page), 'receipts')).toHaveLength(1);
+});
+test('CA-08 reconexión antes del final: sin aviso de desconexión y notificación tras el acuse', async ({ page, context }) => {
+  const f = await running(page);
+  await context.setOffline(true); await expect(f.getByText('Sin internet', { exact: true })).toBeVisible();
+  await context.setOffline(false); await expect(f.getByText('Sin internet', { exact: true })).toBeHidden();
+  await context.setOffline(true); await expect(f.getByText('Sin internet', { exact: true })).toBeVisible();
+  await context.setOffline(false); await expect(f.getByText('Sin internet', { exact: true })).toBeHidden();
+  await finish(page);
+  await expect(f.getByText('Tu partida se guardó.', { exact: true })).toBeVisible();
+  await expect(f.getByRole('dialog')).toHaveCount(0);
+  expect(await rows(child(page), 'outbox')).toEqual([]);
+});
+test('CA-08 online con API caída: «Guardando…» sin éxito falso; guarda al responder el servidor', async ({ page, context, request }) => {
+  const f = await running(page, 'network');
+  await context.setOffline(true); await finish(page);
+  await expect(f.getByRole('dialog', { name: 'No tienes internet' })).toBeVisible();
+  await context.setOffline(false);
+  await expect(f.getByRole('dialog', { name: 'Ya tienes internet' })).toContainText('Guardando tu partida…');
+  await expect.poll(async () => (await rows<{ attemptCount: number }>(child(page), 'outbox'))[0]?.attemptCount ?? 0).toBeGreaterThan(0);
+  await expect(f.getByText('Tu partida se guardó.', { exact: true })).toHaveCount(0);
+  await expect(f.getByRole('heading', { name: 'Tus resultados se guardaron' })).toHaveCount(0);
+  await request.post('/__simulator/mode', { data: { mode: 'normal' } });
+  await expect(f.getByText('Tu partida se guardó.', { exact: true })).toBeVisible({ timeout: 20000 });
+  await expect(f.getByRole('dialog')).toHaveCount(0);
+  expect(await rows(child(page), 'receipts')).toHaveLength(1);
+});
