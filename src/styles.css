@@ -153,3 +153,10 @@ a.button { display: inline-flex; align-items: center; justify-content: center; t
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .example-moon { top: 125px; }
 }
+
+/* CA-08: small network indicator in the fixed-height top bar, outside the stimulus area; toggling it never resizes the stage. */
+.net-status { display: inline-flex; flex: none; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; background: var(--surface); color: var(--text); font-size: .9375rem; font-weight: 700; white-space: nowrap; }
+.net-status[data-offline='false'], .confirming-exit .net-status { display: none; }
+@media (max-width: 480px) { .viewport-running .game-top:has(.net-status[data-offline='true']) h1 { display: none; } }
+.net-icon { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; }
+.save-toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); width: max-content; max-width: calc(100% - 32px); padding: 12px 20px; border-radius: 16px; background: var(--accent); color: var(--surface); font-weight: 700; z-index: 10; }
