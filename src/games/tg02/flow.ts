@@ -44,14 +44,6 @@ export class Flow {
       this.engine.tap(card ? Number(card.dataset.pos) : null, { atMs, pointerType, x: (e.clientX - rect.left) / rect.width * 1920, y: (e.clientY - rect.top) / rect.height * 1080 });
       this.checkItem(); this.checkpoint();
     }, { signal });
-    this.view.root.addEventListener('keydown', e => {
-      const card = (e.target as Element).closest<HTMLElement>('[data-pos]');
-      if (!card || !['Enter', ' '].includes(e.key) || e.repeat) return;
-      e.preventDefault(); const rect = card.getBoundingClientRect(), stage = this.view.root.getBoundingClientRect();
-      this.engine.tap(Number(card.dataset.pos), { atMs: performance.now(), pointerType: null,
-        x: (rect.left + rect.width / 2 - stage.left) / stage.width * 1920, y: (rect.top + rect.height / 2 - stage.top) / stage.height * 1080 });
-      this.checkItem(); this.checkpoint();
-    }, { signal });
   }
   private focus() {
     if (this.sealed) return;

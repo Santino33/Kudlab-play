@@ -11,6 +11,10 @@ test('active practice closes on exit, and destroy removes media and controls', a
   await page.getByRole('button', { name: '¡Hola, Kud!' }).click();
   await page.getByRole('button', { name: '¡Vamos!' }).click({ timeout: 20000 });
   await page.waitForFunction(() => !!(window as unknown as { tg02Snapshot?: { evidence: { active: unknown } } }).tg02Snapshot?.evidence.active);
+  await page.locator('[data-pos="0"]').focus();
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Space');
+  expect(await page.evaluate(() => !!(window as unknown as { tg02Snapshot: { evidence: { active: unknown } } }).tg02Snapshot.evidence.active)).toBe(true);
   await page.evaluate(() => (window as unknown as { tg02Flow: { stop(): void } }).tg02Flow.stop());
   const data = await page.evaluate(() => { const w = window as unknown as { tg02Result: unknown; tg02Error?: string }; return { result: w.tg02Result, error: w.tg02Error }; });
   expect(data.error).toBeUndefined(); expect(data.result).toMatchObject({ state: 'interrupted', events: [], preparation: { practice: [{ items: [{ closureReason: 'interruption', valid: false }] }] } });
