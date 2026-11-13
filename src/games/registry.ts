@@ -2,12 +2,16 @@ import { BUILD_ID, VIEWPORT_BUILD_ID } from '../contract/schema';
 import { contextSchema, type SessionContext } from '../contract/profiles';
 import { MentalistaEngine } from './tg03/engine';
 import { Engine } from './tg01/engine';
+import { Engine as KudDiceEngine } from './tg07/engine';
 function create(...args: ConstructorParameters<typeof Engine>): Engine {
   const config = structuredClone(args[0]);
   Object.freeze(config.segmentBoundariesMs); Object.freeze(config.spawnIntervalMs); Object.freeze(config.stimulusSizeUnits);
   return new Engine(Object.freeze(config), args[1], args[2]);
 }
 export const registry = Object.freeze({
+  'TG-07': Object.freeze({ taskId: 'TG-07', buildIds: ['tg07-kud-dice-1'], contractVersions: ['2.0'],
+    requiredResources: ['local-font', 'kud-dice-scene'] as const, create: () => new KudDiceEngine(),
+    destroy: (game: KudDiceEngine) => game.interrupt('interrupted', performance.now()) }),
   'TG-03': Object.freeze({ taskId: 'TG-03', buildIds: ['tg03-mentalista-1'], contractVersions: ['2.0'], requiredResources: ['local-font', 'mentalista-scene'] as const,
     create: (...args: ConstructorParameters<typeof MentalistaEngine>) => new MentalistaEngine(...args), destroy: (game: MentalistaEngine) => game.finish('user_exit', game.at) }),
   'TG-01': Object.freeze({ taskId: 'TG-01', buildIds: [BUILD_ID, VIEWPORT_BUILD_ID], contractVersions: ['1.0', '1.1'],

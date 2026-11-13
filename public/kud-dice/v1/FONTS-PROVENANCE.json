@@ -1,0 +1,10 @@
+{
+  "purpose": "Local copies of the original Fredoka 500/600 Google Fonts request; no external font requests at runtime",
+  "retrieved": "2026-11-13",
+  "license": "SIL Open Font License 1.1; FREDOKA-OFL.txt",
+  "files": [
+    { "file": "fredoka-500.ttf", "url": "https://fonts.gstatic.com/s/fredoka/v17/X7nP4b87HvSqjb_WIi2yDCRwoQ_k7367_B-i2yQag0-mac3OwyLMFg.ttf", "sha256": "69dd373c3a195748b359f4dedd3152bae62807e6815e993fbf5df7938b696b40" },
+    { "file": "fredoka-600.ttf", "url": "https://fonts.gstatic.com/s/fredoka/v17/X7nP4b87HvSqjb_WIi2yDCRwoQ_k7367_B-i2yQag0-mac3OLyXMFg.ttf", "sha256": "594cd6463e8eccef94423fba8e0114c137492f6415af4b414b21b73abcb644a8" },
+    { "file": "FREDOKA-OFL.txt", "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/fredoka/OFL.txt", "sha256": "5c9e7eee5c6b25f4b05b8d53b2e470ea4962f9ced742d044a98f7d95d1375bab" }
+  ]
+}
