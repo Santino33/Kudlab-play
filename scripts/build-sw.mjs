@@ -11,21 +11,28 @@ for (const value of [api, teacher]) {
 await mkdir('dist/licenses', { recursive: true });
 await writeFile('dist/licenses/nunito.txt', await readFile('node_modules/@fontsource/nunito/LICENSE'));
 for (const name of ['zod', 'canonicalize']) await writeFile(`dist/licenses/${name}.txt`, await readFile(`node_modules/${name}/LICENSE`));
-const files = ['/index.html', '/favicon.svg', ...['nunito', 'zod', 'canonicalize'].map(n => `/licenses/${n}.txt`), ...(await readdir('dist/assets')).map(f => `/assets/${f}`)];
+const files = ['/', '/favicon.svg', ...['nunito', 'zod', 'canonicalize'].map(n => `/licenses/${n}.txt`), ...(await readdir('dist/assets')).map(f => `/assets/${f}`)];
 const digest = createHash('sha256');
-for (const file of files) digest.update(await readFile(`dist${file}`));
+for (const file of files) digest.update(await readFile(file === '/' ? 'dist/index.html' : `dist${file}`));
 const version = digest.digest('hex').slice(0, 20);
 const worker = `/* Static resources only. No skipWaiting, API caching, evidence or cache deletion. */
-const CACHE = 'tg01-static-${version}';
+// New policy must not reuse HTML cached through the Pages /index.html redirect.
+const CACHE = 'tg01-static-v2-${version}';
 const FILES = ${JSON.stringify(files)};
 self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(FILES))));
 self.addEventListener('activate', event => event.waitUntil(self.clients.claim()));
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
   if (event.request.method !== 'GET' || url.origin !== self.location.origin) return;
-  const path = (event.request.mode === 'navigate' && ['/', '/index.html', '/pendientes'].includes(url.pathname)) ? '/index.html' : url.pathname;
-  if (!FILES.includes(path) || (url.search && path !== '/index.html')) return;
-  event.respondWith(caches.open(CACHE).then(async cache => (await cache.match(path)) || fetch(new Request(path, { credentials: 'omit', cache: 'no-store' }))));
+  const path = (event.request.mode === 'navigate' && ['/', '/index.html', '/pendientes'].includes(url.pathname)) ? '/' : url.pathname;
+  if (!FILES.includes(path) || (url.search && path !== '/')) return;
+  event.respondWith((async () => {
+    try {
+      const cached = await (await caches.open(CACHE)).match(path);
+      if (cached) return cached;
+    } catch { /* A local cache failure must not block an available network. */ }
+    return fetch(event.request, { credentials: 'omit', cache: 'no-store' });
+  })());
 });
 `;
 await writeFile('dist/sw.js', worker);

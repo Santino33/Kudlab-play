@@ -4,6 +4,7 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { once } from 'node:events';
+import { productionOrigin } from './origins';
 
 // A separate origin per test permits a real /sw.js update without touching another suite's build.
 async function stagedServer(source: string) {
@@ -49,4 +50,29 @@ test('CA-01: la política anterior reproduce ERR_FAILED al devolver HTML redirig
     })).toBe(true);
     await expect(page.goto(`${server.origin}/`)).rejects.toThrow(/ERR_FAILED/);
   } finally { await server.close(); }
+});
+
+test('CA-01: el shell canónico carga tras recarga y reapertura bajo redirección Pages', async ({ page, context, request }) => {
+  const redirect = await request.get(`${productionOrigin}/index.html`, { maxRedirects: 0 });
+  expect(redirect.status()).toBe(308);
+  expect(redirect.headers().location).toBe('/');
+  await page.goto(`${productionOrigin}/`);
+  await page.evaluate(() => navigator.serviceWorker.ready);
+  await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
+  expect(await page.evaluate(async () => {
+    const name = (await caches.keys()).find(name => name.startsWith('tg01-static-v2-'))!;
+    const cache = await caches.open(name);
+    const shell = await cache.match('/');
+    return { redirected: shell?.redirected, oldKey: Boolean(await cache.match('/index.html')) };
+  })).toEqual({ redirected: false, oldKey: false });
+  await page.reload();
+  await expect(page.getByRole('heading', { name: 'Tu actividad empieza aquí', exact: true })).toBeVisible();
+  await page.close();
+  const reopened = await context.newPage();
+  await reopened.goto(`${productionOrigin}/`);
+  await expect(reopened.getByRole('heading', { name: 'Tu actividad empieza aquí', exact: true })).toBeVisible();
+  await reopened.goto(`${productionOrigin}/index.html`);
+  await expect(reopened.getByRole('heading', { name: 'Tu actividad empieza aquí', exact: true })).toBeVisible();
+  await reopened.goto(`${productionOrigin}/pendientes`);
+  await expect(reopened.getByRole('heading', { name: 'Actividades pendientes', exact: true })).toBeVisible();
 });
