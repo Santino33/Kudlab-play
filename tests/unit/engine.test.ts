@@ -10,9 +10,9 @@ function engine(rng = () => 0) {
 }
 function advance(e: Engine, end: number) { for (let t = e.at + 10; t < end; t += 10) e.frame(t); e.frame(end); }
 describe('TG-01 determinista', () => {
-  it('registro solo TG-01: configuración inmutable y destrucción terminal', () => {
+  it('registro TG-01 y TG-03: configuración TG-01 inmutable y destrucción terminal', () => {
     const e = envelopeFixture(); const game = registry['TG-01'].create(PROFILE, { clock: e.clock, device: e.device, startedAtMs: 1000 });
-    expect(Object.keys(registry)).toEqual(['TG-01']); expect(supported(contextFixture())).toBe(true);
+    expect(Object.keys(registry).sort()).toEqual(['TG-01', 'TG-03']); expect(supported(contextFixture())).toBe(true);
     expect(Object.isFrozen(game.config)).toBe(true); expect(Object.isFrozen(game.config.spawnIntervalMs)).toBe(true);
     registry['TG-01'].destroy(game); expect(game.running).toBe(false); expect(game.snapshot().terminationReason).toBe('user_exit');
   });

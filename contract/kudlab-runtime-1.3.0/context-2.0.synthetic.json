@@ -1,0 +1,428 @@
+{
+  "sessionId": "10000000-0000-4000-8000-000000000001",
+  "taskId": "TG-03",
+  "publishedVersionId": "30000000-0000-4000-8000-000000000001",
+  "configVersion": 1,
+  "configurationHash": "dc5fdbf88e36753f9c4f7df3fd6a3c39a75b9ad77c2780cf041643b5160efdfd",
+  "gameBuildId": "tg03-mentalista-1",
+  "contractVersion": "2.0",
+  "config": {
+    "profile": "TG03_MENTALISTA_V1",
+    "instructionMs": 2500,
+    "gapMs": 500,
+    "preItemMs": 1000,
+    "answerTimeoutMs": 30000,
+    "anticipatoryMs": 400,
+    "pressedMs": 300,
+    "nOptions": 4,
+    "seed": 30303,
+    "practiceMaxRounds": 2,
+    "maxFrameGapMs": 250,
+    "layoutRule": "ADAPTIVE_DOM_V1",
+    "bank": {
+      "itemBankVersion": "1.0.0",
+      "generatorSeed": 3031,
+      "practice": [
+        {
+          "id": "P1",
+          "load": 1,
+          "start": 5,
+          "ops": [
+            {
+              "op": "resta",
+              "n": 3
+            }
+          ],
+          "intermediates": [],
+          "answer": 2,
+          "options": [
+            0,
+            1,
+            2,
+            4
+          ],
+          "correctIdx": 2
+        },
+        {
+          "id": "P2",
+          "load": 2,
+          "start": 8,
+          "ops": [
+            {
+              "op": "suma",
+              "n": 1
+            },
+            {
+              "op": "resta",
+              "n": 3
+            }
+          ],
+          "intermediates": [
+            9
+          ],
+          "answer": 6,
+          "options": [
+            3,
+            6,
+            8,
+            9
+          ],
+          "correctIdx": 1
+        }
+      ],
+      "items": [
+        {
+          "id": "M1-1",
+          "load": 1,
+          "start": 7,
+          "ops": [
+            {
+              "op": "suma",
+              "n": 3
+            }
+          ],
+          "intermediates": [],
+          "answer": 10,
+          "options": [
+            7,
+            8,
+            9,
+            10
+          ],
+          "correctIdx": 3
+        },
+        {
+          "id": "M1-2",
+          "load": 1,
+          "start": 8,
+          "ops": [
+            {
+              "op": "resta",
+              "n": 6
+            }
+          ],
+          "intermediates": [],
+          "answer": 2,
+          "options": [
+            0,
+            2,
+            3,
+            4
+          ],
+          "correctIdx": 1
+        },
+        {
+          "id": "M1-3",
+          "load": 1,
+          "start": 9,
+          "ops": [
+            {
+              "op": "suma",
+              "n": 5
+            }
+          ],
+          "intermediates": [],
+          "answer": 14,
+          "options": [
+            12,
+            13,
+            14,
+            16
+          ],
+          "correctIdx": 2
+        },
+        {
+          "id": "M2-1",
+          "load": 2,
+          "start": 1,
+          "ops": [
+            {
+              "op": "suma",
+              "n": 6
+            },
+            {
+              "op": "resta",
+              "n": 5
+            }
+          ],
+          "intermediates": [
+            7
+          ],
+          "answer": 2,
+          "options": [
+            0,
+            2,
+            3,
+            4
+          ],
+          "correctIdx": 1
+        },
+        {
+          "id": "M2-2",
+          "load": 2,
+          "start": 9,
+          "ops": [
+            {
+              "op": "suma",
+              "n": 6
+            },
+            {
+              "op": "resta",
+              "n": 1
+            }
+          ],
+          "intermediates": [
+            15
+          ],
+          "answer": 14,
+          "options": [
+            14,
+            15,
+            16,
+            17
+          ],
+          "correctIdx": 0
+        },
+        {
+          "id": "M2-3",
+          "load": 2,
+          "start": 5,
+          "ops": [
+            {
+              "op": "resta",
+              "n": 3
+            },
+            {
+              "op": "suma",
+              "n": 4
+            }
+          ],
+          "intermediates": [
+            2
+          ],
+          "answer": 6,
+          "options": [
+            3,
+            4,
+            5,
+            6
+          ],
+          "correctIdx": 3
+        },
+        {
+          "id": "M3-1",
+          "load": 3,
+          "start": 2,
+          "ops": [
+            {
+              "op": "suma",
+              "n": 1
+            },
+            {
+              "op": "suma",
+              "n": 6
+            },
+            {
+              "op": "resta",
+              "n": 3
+            }
+          ],
+          "intermediates": [
+            3,
+            9
+          ],
+          "answer": 6,
+          "options": [
+            6,
+            7,
+            8,
+            9
+          ],
+          "correctIdx": 0
+        },
+        {
+          "id": "M3-2",
+          "load": 3,
+          "start": 7,
+          "ops": [
+            {
+              "op": "resta",
+              "n": 2
+            },
+            {
+              "op": "resta",
+              "n": 5
+            },
+            {
+              "op": "suma",
+              "n": 2
+            }
+          ],
+          "intermediates": [
+            5,
+            0
+          ],
+          "answer": 2,
+          "options": [
+            0,
+            1,
+            2,
+            4
+          ],
+          "correctIdx": 2
+        },
+        {
+          "id": "M3-3",
+          "load": 3,
+          "start": 5,
+          "ops": [
+            {
+              "op": "suma",
+              "n": 4
+            },
+            {
+              "op": "suma",
+              "n": 3
+            },
+            {
+              "op": "resta",
+              "n": 2
+            }
+          ],
+          "intermediates": [
+            9,
+            12
+          ],
+          "answer": 10,
+          "options": [
+            7,
+            8,
+            9,
+            10
+          ],
+          "correctIdx": 3
+        },
+        {
+          "id": "M4-1",
+          "load": 4,
+          "start": 7,
+          "ops": [
+            {
+              "op": "resta",
+              "n": 2
+            },
+            {
+              "op": "suma",
+              "n": 5
+            },
+            {
+              "op": "suma",
+              "n": 4
+            },
+            {
+              "op": "suma",
+              "n": 4
+            }
+          ],
+          "intermediates": [
+            5,
+            10,
+            14
+          ],
+          "answer": 18,
+          "options": [
+            16,
+            17,
+            18,
+            20
+          ],
+          "correctIdx": 2
+        },
+        {
+          "id": "M4-2",
+          "load": 4,
+          "start": 3,
+          "ops": [
+            {
+              "op": "suma",
+              "n": 2
+            },
+            {
+              "op": "resta",
+              "n": 3
+            },
+            {
+              "op": "resta",
+              "n": 2
+            },
+            {
+              "op": "suma",
+              "n": 6
+            }
+          ],
+          "intermediates": [
+            5,
+            2,
+            0
+          ],
+          "answer": 6,
+          "options": [
+            6,
+            7,
+            8,
+            9
+          ],
+          "correctIdx": 0
+        },
+        {
+          "id": "M4-3",
+          "load": 4,
+          "start": 6,
+          "ops": [
+            {
+              "op": "resta",
+              "n": 3
+            },
+            {
+              "op": "suma",
+              "n": 6
+            },
+            {
+              "op": "suma",
+              "n": 2
+            },
+            {
+              "op": "suma",
+              "n": 3
+            }
+          ],
+          "intermediates": [
+            3,
+            9,
+            11
+          ],
+          "answer": 14,
+          "options": [
+            12,
+            14,
+            15,
+            16
+          ],
+          "correctIdx": 1
+        }
+      ]
+    },
+    "bankHash": "01bd098dcd250b95469d80fc9ba87536932f8f967a64587776a4acc1509fa7d9",
+    "sequenceHash": "832ae5bfeb1658e492ae881a7abc773bedb3a00f94d4837402df97da792cd1cc"
+  },
+  "executionStatus": "READY",
+  "attemptNumber": null,
+  "startAllowedUntil": "2026-10-27T12:15:00Z",
+  "uploadAllowedUntil": null,
+  "serverTime": "2026-10-27T12:00:00Z",
+  "capabilities": {
+    "canStart": true,
+    "canSubmit": false,
+    "canReadReceipt": true
+  }
+}

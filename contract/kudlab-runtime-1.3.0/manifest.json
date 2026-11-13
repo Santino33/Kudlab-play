@@ -1,0 +1,22 @@
+{
+  "version": "1.3.0",
+  "contracts": [
+    "1.0",
+    "1.1",
+    "2.0"
+  ],
+  "producer": "Kudlab-backend",
+  "canonicalization": "RFC8785",
+  "files": {
+    "schemas.json": "2ff333dffd21ee528c606b52746d67b22185439acf85fc6be0e4013cc2305a83",
+    "context-1.1.synthetic.json": "fbd2ef5293358343fafa152ca0ffd87e26d464feedcbf2bf035fc4d73ca07c0d",
+    "canonical-vectors.json": "b1a983fb4a82fd00e0271962800ca8d577c783714ea7a7f9c126aa6339643a77",
+    "types.d.ts": "231488d53d52e901c3f20c2b7435185fa76575c939e532b9616dda1530b77161",
+    "mentalista-bank.ts": "2d96d5aec999e6689775cd26355d3b6d032a0c0d1dea930e4383a33f8ca767df",
+    "mentalista-profile.json": "11966e4a4feb89cc513e5d45b817a26a5c1b615acc91783260bb56245b094cc2",
+    "context-2.0.synthetic.json": "1e99fcac5815dfabd277e89d9d3722c83926faba8581398bfe9ed80512323a33",
+    "envelope-2.0.synthetic.json": "e24cb1b21c1d65a16f0680e992ec33ed9a4accd29148857f2d1451a81a63b684",
+    "envelope-2.0.partial-0.synthetic.json": "39e06b13ab0e9c1098141dfbc13b46469a103223ed4d8c1510d341cc37cd8b64",
+    "envelope-2.0.partial-3.synthetic.json": "d3a78890be4d5d959023feadaa291522aff296e5780fe0f63b79b3557f76cc24"
+  }
+}

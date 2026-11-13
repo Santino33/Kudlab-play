@@ -1,0 +1,175 @@
+{
+  "sessionId": "10000000-0000-4000-8000-000000000001",
+  "taskId": "TG-03",
+  "publishedVersionId": "30000000-0000-4000-8000-000000000001",
+  "configVersion": 1,
+  "configurationHash": "dc5fdbf88e36753f9c4f7df3fd6a3c39a75b9ad77c2780cf041643b5160efdfd",
+  "gameBuildId": "tg03-mentalista-1",
+  "contractVersion": "2.0",
+  "submissionId": "40000000-0000-4000-8000-000000000001",
+  "state": "interrupted",
+  "terminationReason": "user_exit",
+  "clock": {
+    "id": "50000000-0000-4000-8000-000000000001",
+    "timeOriginUnixMs": 1794528000000
+  },
+  "timing": {
+    "startedAtMs": 0,
+    "finishedAtMs": 35100,
+    "lastCheckpointAtMs": 35100
+  },
+  "device": {
+    "viewportWidth": 390,
+    "viewportHeight": 844,
+    "stageWidthCss": 390,
+    "stageHeightCss": 772,
+    "touchCapable": true,
+    "layoutPreset": "portrait"
+  },
+  "preparation": {
+    "instructionRepeats": 0,
+    "practice": [
+      {
+        "round": 1,
+        "items": [
+          {
+            "itemId": "P1",
+            "selectedIdx": 2,
+            "result": "correct",
+            "rtMs": 500
+          },
+          {
+            "itemId": "P2",
+            "selectedIdx": 1,
+            "result": "correct",
+            "rtMs": 500
+          }
+        ]
+      }
+    ],
+    "resourceIncidents": []
+  },
+  "events": [
+    {
+      "trial": 1,
+      "itemId": "M4-3",
+      "load": 4,
+      "plannedBlock": 1,
+      "start": 6,
+      "ops": [
+        {
+          "op": "resta",
+          "n": 3
+        },
+        {
+          "op": "suma",
+          "n": 6
+        },
+        {
+          "op": "suma",
+          "n": 2
+        },
+        {
+          "op": "suma",
+          "n": 3
+        }
+      ],
+      "intermediates": [
+        3,
+        9,
+        11
+      ],
+      "optionValues": [
+        12,
+        14,
+        15,
+        16
+      ],
+      "startedAtMs": 0,
+      "instructionShownAtMs": [
+        1000,
+        4000,
+        7000,
+        10000,
+        13000
+      ],
+      "optionsShownAtMs": 16000,
+      "selectedIdx": 1,
+      "selectedAtMs": 16500,
+      "closedAtMs": 16500,
+      "responseDevice": "touch",
+      "closureReason": "response"
+    },
+    {
+      "trial": 2,
+      "itemId": "M2-1",
+      "load": 2,
+      "plannedBlock": 1,
+      "start": 1,
+      "ops": [
+        {
+          "op": "suma",
+          "n": 6
+        },
+        {
+          "op": "resta",
+          "n": 5
+        }
+      ],
+      "intermediates": [
+        7
+      ],
+      "optionValues": [
+        0,
+        2,
+        3,
+        4
+      ],
+      "startedAtMs": 16800,
+      "instructionShownAtMs": [
+        17800,
+        20800,
+        23800
+      ],
+      "optionsShownAtMs": 26800,
+      "selectedIdx": 1,
+      "selectedAtMs": 27300,
+      "closedAtMs": 27300,
+      "responseDevice": "touch",
+      "closureReason": "response"
+    },
+    {
+      "trial": 3,
+      "itemId": "M1-3",
+      "load": 1,
+      "plannedBlock": 1,
+      "start": 9,
+      "ops": [
+        {
+          "op": "suma",
+          "n": 5
+        }
+      ],
+      "intermediates": [],
+      "optionValues": [
+        12,
+        13,
+        14,
+        16
+      ],
+      "startedAtMs": 27600,
+      "instructionShownAtMs": [
+        28600,
+        31600
+      ],
+      "optionsShownAtMs": 34600,
+      "selectedIdx": 2,
+      "selectedAtMs": 35100,
+      "closedAtMs": 35100,
+      "responseDevice": "touch",
+      "closureReason": "response"
+    }
+  ],
+  "incidents": [],
+  "extraResponses": []
+}

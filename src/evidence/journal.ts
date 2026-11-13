@@ -1,4 +1,7 @@
-import { envelopeSchema, receiptSchema, type Envelope, type Incident, type Receipt, type SessionContext, type TerminationReason, type Trial } from '../contract/schema';
+import { envelopeSchema, receiptSchema, type Envelope as Tg01Envelope, type Incident, type Receipt, type TerminationReason, type Trial } from '../contract/schema';
+import type { Envelope, SessionContext } from '../contract/profiles';
+import { mentalistaEnvelopeSchema } from '../contract/mentalista';
+import type { MentalistaSnapshot } from '../games/tg03/engine';
 import { hash } from '../contract/canonical';
 import { Database, request } from '../storage/database';
 
@@ -6,12 +9,14 @@ export type DraftTrial = Omit<Trial, 'closedAtMs' | 'result' | 'closureReason'> 
   closedAtMs: number | null; result: Trial['result'] | null; closureReason: Trial['closureReason'] | null;
 };
 export interface Snapshot {
-  clock: Envelope['clock']; device: Envelope['device']; startedAtMs: number; checkpointAtMs: number;
+  clock: Tg01Envelope['clock']; device: Tg01Envelope['device']; startedAtMs: number; checkpointAtMs: number;
   events: DraftTrial[]; incidents: Incident[]; terminationReason: TerminationReason | null;
 }
 export interface Execution extends Omit<Snapshot, 'events' | 'incidents'> {
   key: string; context: SessionContext; submissionId: string; status: 'RUNNING' | 'TERMINAL';
 }
+export type AnySnapshot = Snapshot | MentalistaSnapshot;
+type MentalistaExecution = MentalistaSnapshot & { key: string; context: SessionContext; submissionId: string; status: 'RUNNING' | 'TERMINAL' };
 export interface Outbox {
   key: string; sessionId: string; envelope: Envelope; hash: string; body: string;
   status: 'PENDING' | 'SENDING' | 'AUTH_REQUIRED' | 'BLOCKED'; attemptCount: number;
@@ -19,7 +24,17 @@ export interface Outbox {
 }
 export class Journal {
   constructor(readonly db: Database, readonly context: SessionContext) {}
-  async create(snapshot: Snapshot): Promise<void> {
+  async create(snapshot: AnySnapshot): Promise<void> {
+    if ((this.context.taskId === 'TG-03') !== ('taskId' in snapshot)) throw new Error('PROFILE_MISMATCH');
+    if ('taskId' in snapshot) {
+      if (this.context.taskId !== snapshot.taskId) throw new Error('PROFILE_MISMATCH');
+      await this.db.transaction(['executions'], async tx => {
+        const store = tx.objectStore('executions');
+        if (await request(store.get(this.context.sessionId))) throw new Error('EXECUTION_EXISTS');
+        await request(store.put({ ...snapshot, key: this.context.sessionId, context: this.context, submissionId: crypto.randomUUID(), status: 'RUNNING' }));
+      });
+      return;
+    }
     await this.db.transaction(['executions', 'trials', 'incidents'], async tx => {
       if (await request(tx.objectStore('executions').get(this.context.sessionId))) throw new Error('EXECUTION_EXISTS');
       const { events, incidents, ...meta } = snapshot;
@@ -28,7 +43,18 @@ export class Journal {
       for (const incident of incidents) await request(tx.objectStore('incidents').put({ key: `${this.context.sessionId}:${incident.sequence}`, sessionId: this.context.sessionId, value: incident }));
     });
   }
-  async checkpoint(snapshot: Snapshot): Promise<void> {
+  async checkpoint(snapshot: AnySnapshot): Promise<void> {
+    if ((this.context.taskId === 'TG-03') !== ('taskId' in snapshot)) throw new Error('PROFILE_MISMATCH');
+    if ('taskId' in snapshot) {
+      await this.db.transaction(['executions'], async tx => {
+        const store = tx.objectStore('executions'), old = await request<MentalistaExecution | undefined>(store.get(this.context.sessionId));
+        if (!old || old.status !== 'RUNNING' || old.taskId !== 'TG-03') throw new Error('EXECUTION_TERMINAL');
+        if (old.clock.id !== snapshot.clock.id || old.clock.timeOriginUnixMs !== snapshot.clock.timeOriginUnixMs || old.startedAtMs !== snapshot.startedAtMs) throw new Error('CLOCK_MISMATCH');
+        if (snapshot.checkpointAtMs < old.checkpointAtMs || old.terminationReason && snapshot.terminationReason !== old.terminationReason) throw new Error('CHECKPOINT_REGRESSION');
+        await request(store.put({ ...old, ...snapshot }));
+      });
+      return;
+    }
     await this.db.transaction(['executions', 'trials', 'incidents'], async tx => {
       const store = tx.objectStore('executions');
       const e = await request<Execution | undefined>(store.get(this.context.sessionId));
@@ -54,10 +80,11 @@ export class Journal {
         terminationReason: execution.terminationReason, events, incidents } };
     }, 'readonly');
   }
-  async finalize(snapshot?: Snapshot): Promise<Outbox> {
+  async finalize(snapshot?: AnySnapshot): Promise<Outbox> {
     const existing = await this.db.get<Outbox>('outbox', this.context.sessionId);
     if (existing) return existing;
     if (snapshot) await this.checkpoint(snapshot);
+    if (this.context.taskId === 'TG-03') return this.finalizeMentalista(snapshot === undefined);
     const { execution, snapshot: s } = await this.read();
     const reason = s.terminationReason ?? 'recovered_after_reload';
     const incidents = [...s.incidents];
@@ -83,6 +110,28 @@ export class Journal {
     });
   }
   recover(): Promise<Outbox> { return this.finalize(); }
+  private async finalizeMentalista(recovered: boolean): Promise<Outbox> {
+    const s = await this.db.get<MentalistaExecution>('executions', this.context.sessionId);
+    if (!s || s.taskId !== 'TG-03') throw new Error('EXECUTION_MISSING');
+    const reason = s.terminationReason ?? 'recovered_after_reload';
+    const incidents = [...s.incidents], preparation = structuredClone(s.preparation);
+    if (reason === 'recovered_after_reload') incidents.push({ sequence: (incidents.at(-1)?.sequence ?? 0) + 1,
+      type: 'recovered_after_reload', clockId: null, atMs: null, endedAtMs: null, recordedAtClient: new Date().toISOString(), category: 'EXECUTION_INTERRUPTED' });
+    if (recovered && reason === 'items_completed') preparation.resourceIncidents.push({ phase: 'closing', type: 'transition_skipped', reason: 'closing_recovered' });
+    const { sessionId, taskId, publishedVersionId, configVersion, configurationHash, gameBuildId, contractVersion } = this.context;
+    const envelope = mentalistaEnvelopeSchema.parse({ sessionId, taskId, publishedVersionId, configVersion, configurationHash, gameBuildId, contractVersion,
+      submissionId: s.submissionId, state: reason === 'items_completed' ? 'completed' : 'interrupted', terminationReason: reason,
+      clock: s.clock, device: s.device, timing: { startedAtMs: s.startedAtMs, finishedAtMs: s.checkpointAtMs, lastCheckpointAtMs: s.checkpointAtMs },
+      events: s.events.map(t => t.closureReason === 'interruption' ? { ...t, closedAtMs: s.checkpointAtMs } : t), incidents, preparation, extraResponses: s.extraResponses });
+    const out: Outbox = { key: sessionId, sessionId, envelope, hash: await hash(envelope), body: JSON.stringify(envelope), status: 'PENDING', attemptCount: 0, nextAttemptAt: 0, lastAttemptAt: null, lastErrorCode: null };
+    return this.db.transaction(['executions', 'outbox'], async tx => {
+      const old = await request<Outbox | undefined>(tx.objectStore('outbox').get(sessionId)); if (old) return old;
+      const latest = await request<MentalistaExecution>(tx.objectStore('executions').get(sessionId));
+      if (latest.checkpointAtMs !== s.checkpointAtMs || latest.status !== 'RUNNING') throw new Error('FINALIZATION_RACE');
+      await request(tx.objectStore('executions').put({ ...latest, status: 'TERMINAL', terminationReason: reason }));
+      await request(tx.objectStore('outbox').put(out)); return out;
+    });
+  }
   async acknowledge(input: Receipt): Promise<void> {
     const receipt = receiptSchema.parse(input);
     await this.db.transaction(['outbox', 'executions', 'trials', 'incidents', 'credentials', 'receipts', 'leases'], async tx => {

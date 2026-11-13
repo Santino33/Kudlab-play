@@ -1,8 +1,9 @@
 import { Api, ApiError } from '../delivery/api';
 import { newSecret } from '../contract/canonical';
-import { secretSchema, type SessionContext } from '../contract/schema';
+import { secretSchema } from '../contract/schema';
+import type { SessionContext } from '../contract/profiles';
 import { Database, request } from '../storage/database';
-import { Journal, type Snapshot, type Execution, type Outbox } from '../evidence/journal';
+import { Journal, type AnySnapshot as Snapshot, type Execution, type Outbox } from '../evidence/journal';
 import { normalizeCode } from './access-code';
 
 export interface Credential {

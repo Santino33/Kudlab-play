@@ -12,6 +12,8 @@ await mkdir('dist/licenses', { recursive: true });
 await writeFile('dist/licenses/nunito.txt', await readFile('node_modules/@fontsource/nunito/LICENSE'));
 for (const name of ['zod', 'canonicalize']) await writeFile(`dist/licenses/${name}.txt`, await readFile(`node_modules/${name}/LICENSE`));
 const files = ['/', '/favicon.svg', ...['nunito', 'zod', 'canonicalize'].map(n => `/licenses/${n}.txt`), ...(await readdir('dist/assets')).map(f => `/assets/${f}`)];
+// Videos are optional and never block installation. Essential scene files are available offline.
+files.push(...['escenario-matematico-sin-globo.webp', 'kud-quieto.png', 'nave-frente.png', 'poster-transicion-inicio.webp'].map(name => `/mentalista/v1/${name}`));
 const digest = createHash('sha256');
 for (const file of files) digest.update(await readFile(file === '/' ? 'dist/index.html' : `dist${file}`));
 const version = digest.digest('hex').slice(0, 20);
@@ -37,7 +39,7 @@ self.addEventListener('fetch', event => {
 `;
 await writeFile('dist/sw.js', worker);
 await writeFile('dist/_headers', `/*
-  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self' ${api}; worker-src 'self'; manifest-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; frame-ancestors ${teacher}
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; media-src 'self'; font-src 'self'; connect-src 'self' ${api}; worker-src 'self'; manifest-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; frame-ancestors ${teacher}
   Referrer-Policy: no-referrer
   X-Content-Type-Options: nosniff
   Permissions-Policy: camera=(), microphone=(), geolocation=()
