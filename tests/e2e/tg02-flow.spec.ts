@@ -1,4 +1,12 @@
 import { test, expect } from '@playwright/test';
+test('bounded focus evidence closes without silently truncating or completing', async ({ page }) => {
+  await page.goto('/tests/tg02-flow-harness.html');
+  await expect(page.getByRole('button', { name: '¡Hola, Kud!' })).toBeVisible();
+  await page.evaluate(() => { for (let i = 0; i < 600; i++) { window.dispatchEvent(new Event('blur')); window.dispatchEvent(new Event('focus')); } });
+  const data = await page.evaluate(() => { const w = window as unknown as { tg02Result: { incidents: unknown[]; terminationReason: string; state: string }; tg02Error?: string }; return { result: w.tg02Result, error: w.tg02Error }; });
+  expect(data.error).toBeUndefined(); expect(data.result.state).toBe('interrupted');
+  expect(data.result.terminationReason).toBe('evidence_limit'); expect(data.result.incidents.length).toBe(999);
+});
 test('essential image failure interrupts without invented measurements', async ({ page }) => {
   await page.route('**/games/tg02/escenario-biblioteca.webp', route => route.abort());
   await page.goto('/tests/tg02-flow-harness.html');

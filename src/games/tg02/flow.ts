@@ -66,7 +66,15 @@ export class Flow {
       device: { viewportWidth: window.innerWidth, viewportHeight: window.innerHeight, stageWidthCss: rect.width, stageHeightCss: rect.height,
         devicePixelRatio: window.devicePixelRatio, touchCapable: navigator.maxTouchPoints > 0, pointerTypes: [...this.pointerTypes] } };
   }
-  private checkpoint() { if (!this.view.signal.aborted && !this.sealed) this.changed(this.snapshot()); }
+  private checkpoint() {
+    if (this.view.signal.aborted || this.sealed) return;
+    const snapshot = this.snapshot();
+    // Leave room for the recovery incident if the document closes before finalization.
+    if (snapshot.incidents.length >= 999 || snapshot.evidence.pauses.length >= 999 || snapshot.evidence.emptyResponses.length >= 1000 || this.instruction.repeats >= 1000) {
+      this.stop('evidence_limit'); return;
+    }
+    this.changed(snapshot);
+  }
   private checkItem() {
     const s = this.engine.snapshot(performance.now());
     if (this.itemDone && !s.active) { const last = s.measurementStartedAtMs === null ? s.practice.at(-1)?.items.at(-1) : s.events.at(-1);
