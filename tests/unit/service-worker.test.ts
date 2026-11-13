@@ -8,7 +8,7 @@ import { createHash } from 'node:crypto';
 
 // Exercise the actual generated handler without requiring a pre-existing dist build.
 const dir = await mkdtemp(join(tmpdir(), 'play-sw-build-'));
-for (const name of ['dist/assets', 'dist/mentalista/v1', 'node_modules/@fontsource/nunito', 'node_modules/zod', 'node_modules/canonicalize']) {
+for (const name of ['dist/assets', 'dist/mentalista/v1', 'dist/kud-dice/v1', 'node_modules/@fontsource/nunito', 'node_modules/zod', 'node_modules/canonicalize']) {
   await mkdir(join(dir, name), { recursive: true });
 }
 const contents = new Map([
@@ -22,18 +22,19 @@ execFileSync(process.execPath, [resolve('scripts/build-sw.mjs')], { cwd: dir });
 const source = await readFile(join(dir, 'dist/sw.js'), 'utf8');
 afterAll(() => rm(dir, { recursive: true, force: true }));
 
-type FetchRequest = Pick<Request, 'url' | 'method' | 'mode'>;
+type FetchRequest = Pick<Request, 'url' | 'method' | 'mode'> & { headers?: Headers };
 type FetchEvent = { request: FetchRequest; respondWith: (response: Promise<Response>) => void };
 function handler(open: () => Promise<{ match: (path: string) => Promise<Response | undefined> }>, fetch = vi.fn(async () => new Response('network'))) {
   const listeners: Record<string, (event: FetchEvent) => void> = {};
   runInNewContext(source, {
     self: { location: { origin: 'https://play.example' }, addEventListener: (type: string, listener: (event: FetchEvent) => void) => { listeners[type] = listener; } },
-    caches: { open }, URL, fetch,
+    caches: { open }, URL, fetch, Headers, Response,
   });
   return {
     fetch,
     dispatch(request: FetchRequest = { url: 'https://play.example/', method: 'GET', mode: 'navigate' }) {
       const respondWith = vi.fn<(response: Promise<Response>) => void>();
+      request.headers ??= new Headers();
       listeners.fetch({ request, respondWith });
       return { respondWith, response: respondWith.mock.calls[0]?.[0] };
     },
