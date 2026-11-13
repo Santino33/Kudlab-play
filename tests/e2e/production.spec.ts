@@ -38,6 +38,8 @@ test('SW solo cachea estáticos propios; shell offline no autoriza partida nueva
   await expect(page.locator('canvas')).toHaveCount(0);
   await page.getByRole('link', { name: 'Enviar una actividad pendiente', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Actividades pendientes', exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('heading', { name: 'Actividades pendientes', exact: true })).toBeVisible();
   await context.setOffline(false);
 });
 test('migración aditiva v1→v2 y actualización SW conservan outbox antiguo inmutable', async ({ page }) => {

@@ -5,6 +5,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { once } from 'node:events';
 import { productionOrigin } from './origins';
+import { envelopeFixture } from '../fixtures/context';
+import { hash } from '../../src/contract/canonical';
 
 // A separate origin per test permits a real /sw.js update without touching another suite's build.
 async function stagedServer(source: string) {
@@ -75,4 +77,62 @@ test('CA-01: el shell canónico carga tras recarga y reapertura bajo redirecció
   await expect(reopened.getByRole('heading', { name: 'Tu actividad empieza aquí', exact: true })).toBeVisible();
   await reopened.goto(`${productionOrigin}/pendientes`);
   await expect(reopened.getByRole('heading', { name: 'Actividades pendientes', exact: true })).toBeVisible();
+});
+
+test('CA-02: navegación fallida actualiza el mismo registro sin borrar pendientes ni forzar clientes', async ({ page, context }) => {
+  test.setTimeout(60000);
+  const server = await stagedServer(await readFile('tests/fixtures/redirected-sw.js', 'utf8'));
+  const envelope = envelopeFixture();
+  const pending = { key: envelope.sessionId, sessionId: envelope.sessionId, envelope, body: JSON.stringify(envelope),
+    hash: await hash(envelope), status: 'PENDING', attemptCount: 0, nextAttemptAt: Number.MAX_SAFE_INTEGER, lastErrorCode: 'RATE_LIMITED' };
+  try {
+    // An old client stays open while the browser checks /sw.js through a failed navigation.
+    await page.goto(`${server.origin}/empty`);
+    await page.evaluate(async pending => {
+      const db = await new Promise<IDBDatabase>((resolve, reject) => {
+        const r = indexedDB.open('kudlab-play-runtime', 2);
+        r.onupgradeneeded = () => {
+          for (const name of ['executions', 'trials', 'incidents', 'outbox', 'credentials', 'leases', 'receipts']) r.result.createObjectStore(name, { keyPath: 'key' });
+        };
+        r.onsuccess = () => resolve(r.result); r.onerror = () => reject(r.error);
+      });
+      await new Promise<void>((resolve, reject) => {
+        const tx = db.transaction('outbox', 'readwrite');
+        tx.objectStore('outbox').put(pending);
+        tx.oncomplete = () => resolve(); tx.onabort = () => reject(tx.error);
+      });
+      db.close();
+      await navigator.serviceWorker.register('/sw.js');
+      await navigator.serviceWorker.ready;
+    }, pending);
+    await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
+    let forcedNavigations = 0;
+    page.on('framenavigated', () => { forcedNavigations++; });
+    await server.publish(await readFile('dist/sw.js', 'utf8'));
+    const failed = await context.newPage();
+    await expect(failed.goto(`${server.origin}/`)).rejects.toThrow(/ERR_FAILED/);
+    // No app code, register(), update(), bypass, skipWaiting or unregister after publication.
+    await expect.poll(() => page.evaluate(async () => (await navigator.serviceWorker.getRegistration())?.waiting?.state), { timeout: 20000 }).toBe('installed');
+    expect(forcedNavigations).toBe(0);
+    expect(page.url()).toBe(`${server.origin}/empty`);
+    await failed.close();
+    await page.close();
+    const reopened = await context.newPage();
+    await reopened.goto(`${server.origin}/pendientes`);
+    await expect(reopened.getByRole('heading', { name: 'Actividades pendientes', exact: true })).toBeVisible();
+    const stored = await reopened.evaluate(async key => {
+      const db = await new Promise<IDBDatabase>(resolve => {
+        const r = indexedDB.open('kudlab-play-runtime', 2); r.onsuccess = () => resolve(r.result);
+      });
+      const out = await new Promise(resolve => {
+        const r = db.transaction('outbox').objectStore('outbox').get(key); r.onsuccess = () => resolve(r.result);
+      });
+      db.close();
+      return { out, caches: await caches.keys(), registrations: (await navigator.serviceWorker.getRegistrations()).map(r => ({ scope: r.scope, url: r.active?.scriptURL })) };
+    }, pending.key);
+    expect(stored.out).toEqual(pending);
+    expect(stored.caches).toContain('tg01-static-redirected-fixture');
+    expect(stored.caches.some(name => name.startsWith('tg01-static-v2-'))).toBe(true);
+    expect(stored.registrations).toEqual([{ scope: `${server.origin}/`, url: `${server.origin}/sw.js` }]);
+  } finally { await server.close(); }
 });
