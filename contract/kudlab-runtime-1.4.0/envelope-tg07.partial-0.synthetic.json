@@ -1,0 +1,51 @@
+{
+  "sessionId": "10000000-0000-4000-8000-000000000001",
+  "taskId": "TG-07",
+  "publishedVersionId": "30000000-0000-4000-8000-000000000001",
+  "configVersion": 1,
+  "configurationHash": "db6bb3e58c0a4223a2d6beef54f995965b7c47dbfcc008a0a9505a3b08be8164",
+  "gameBuildId": "tg07-kud-dice-1",
+  "contractVersion": "2.0",
+  "submissionId": "40000000-0000-4000-8000-000000000007",
+  "state": "interrupted",
+  "terminationReason": "user_exit",
+  "phaseReached": "intro",
+  "clock": {
+    "id": "50000000-0000-4000-8000-000000000007",
+    "timeOriginUnixMs": 1794528000000
+  },
+  "timing": {
+    "startedAtMs": 0,
+    "finishedAtMs": 100,
+    "lastCheckpointAtMs": 100,
+    "measurementStartedAtMs": null,
+    "measurementFinishedAtMs": null
+  },
+  "device": {
+    "viewportWidth": 1920,
+    "viewportHeight": 1080,
+    "stageWidthCss": 1920,
+    "stageHeightCss": 1080,
+    "devicePixelRatio": 1,
+    "touchCapable": false,
+    "pointerTypes": [
+      "mouse"
+    ]
+  },
+  "audio": {
+    "source": "files",
+    "missingFiles": []
+  },
+  "preparation": {
+    "instruction": {
+      "shownAtMs": 10,
+      "acceptedAtMs": null,
+      "repeats": 0
+    },
+    "demoShown": false,
+    "practiceCompleted": false,
+    "practice": []
+  },
+  "events": [],
+  "incidents": []
+}

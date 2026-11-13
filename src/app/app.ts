@@ -290,7 +290,7 @@ export class App {
     const list = el('ul', 'pending-list');
     for (const out of this.pendingItems) {
       const row = el('li', 'pending-row');
-      row.append(el('h2', '', out.envelope.taskId === 'TG-03' ? 'Mentalista' : 'Lluvia de estrellas'), el('p', '', `Fecha informativa del dispositivo: ${new Date(out.envelope.clock.timeOriginUnixMs).toLocaleString('es-CO')}`));
+      row.append(el('h2', '', out.envelope.taskId === 'TG-07' ? 'Kud Dice' : out.envelope.taskId === 'TG-03' ? 'Mentalista' : 'Lluvia de estrellas'), el('p', '', `Fecha informativa del dispositivo: ${new Date(out.envelope.clock.timeOriginUnixMs).toLocaleString('es-CO')}`));
       row.append(el('p', '', out.status === 'AUTH_REQUIRED' || out.status === 'BLOCKED' ? 'El envío necesita una autorización de tu profesor.' : 'Hay un respaldo local; falta confirmar la recepción.'));
       if (out.status === 'AUTH_REQUIRED' || out.status === 'BLOCKED') row.append(this.accessForm(out));
       else row.append(button('Reintentar envío', () => { void this.maintain(true); }));

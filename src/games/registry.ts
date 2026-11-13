@@ -16,5 +16,5 @@ export const registry = Object.freeze({
     destroy: (game: Engine) => game.finish('user_exit', game.at) }),
 });
 export function supported(context: SessionContext): boolean {
-  return contextSchema.safeParse(context).success;
+  return Object.hasOwn(registry, context.taskId) && contextSchema.safeParse(context).success;
 }
