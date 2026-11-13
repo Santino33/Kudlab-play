@@ -8,13 +8,15 @@ import { createHash } from 'node:crypto';
 
 // Exercise the actual generated handler without requiring a pre-existing dist build.
 const dir = await mkdtemp(join(tmpdir(), 'play-sw-build-'));
-for (const name of ['dist/assets', 'node_modules/@fontsource/nunito', 'node_modules/zod', 'node_modules/canonicalize']) {
+for (const name of ['dist/assets', 'dist/mentalista/v1', 'node_modules/@fontsource/nunito', 'node_modules/zod', 'node_modules/canonicalize']) {
   await mkdir(join(dir, name), { recursive: true });
 }
 const contents = new Map([
   ['dist/index.html', '<html>synthetic</html>'], ['dist/favicon.svg', '<svg/>'], ['dist/assets/test.js', '/* synthetic */'],
   ['node_modules/@fontsource/nunito/LICENSE', 'nunito'], ['node_modules/zod/LICENSE', 'zod'], ['node_modules/canonicalize/LICENSE', 'canonicalize'],
 ]);
+const sceneFiles = ['escenario-matematico-sin-globo.webp', 'kud-quieto.png', 'nave-frente.png', 'poster-transicion-inicio.webp'].map(name => `dist/mentalista/v1/${name}`);
+for (const file of sceneFiles) contents.set(file, `synthetic scene ${file}`);
 for (const [file, text] of contents) await writeFile(join(dir, file), text);
 execFileSync(process.execPath, [resolve('scripts/build-sw.mjs')], { cwd: dir });
 const source = await readFile(join(dir, 'dist/sw.js'), 'utf8');
@@ -41,7 +43,7 @@ function handler(open: () => Promise<{ match: (path: string) => Promise<Response
 describe('generated static worker', () => {
   it('CA-01/02: changes cache policy even with identical static bytes', () => {
     const digest = createHash('sha256');
-    for (const file of ['dist/index.html', 'dist/favicon.svg', 'node_modules/@fontsource/nunito/LICENSE', 'node_modules/zod/LICENSE', 'node_modules/canonicalize/LICENSE', 'dist/assets/test.js']) digest.update(contents.get(file)!);
+    for (const file of ['dist/index.html', 'dist/favicon.svg', 'node_modules/@fontsource/nunito/LICENSE', 'node_modules/zod/LICENSE', 'node_modules/canonicalize/LICENSE', 'dist/assets/test.js', ...sceneFiles]) digest.update(contents.get(file)!);
     const oldVersion = digest.digest('hex').slice(0, 20);
     expect(source).toContain(`const CACHE = 'tg01-static-v2-${oldVersion}'`);
     expect(source).not.toContain(`const CACHE = 'tg01-static-${oldVersion}'`);

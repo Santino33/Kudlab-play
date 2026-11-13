@@ -1,7 +1,8 @@
 import { Api, ApiError } from './api';
 import { Database, request } from '../storage/database';
 import { Journal, type Execution, type Outbox } from '../evidence/journal';
-import { envelopeSchema, receiptSchema, type Receipt } from '../contract/schema';
+import { receiptSchema, type Receipt } from '../contract/schema';
+import { envelopeSchema } from '../contract/profiles';
 import { hash } from '../contract/canonical';
 import type { Credential } from '../runtime/session';
 

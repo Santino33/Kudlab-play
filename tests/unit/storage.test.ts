@@ -21,6 +21,7 @@ describe('diario transaccional', () => {
     expect(first.envelope.terminationReason).toBe('recovered_after_reload');
     expect(first.envelope.timing.finishedAtMs).toBe(8000);
     expect(first.envelope.clock.id).toBe(snapshot().clock.id);
+    if (first.envelope.taskId !== 'TG-01') throw new Error('Wrong task');
     expect(first.envelope.events[0].result).toBe('hit');
     expect(first.envelope.incidents[0].atMs).toBeNull();
   });
@@ -42,6 +43,7 @@ describe('diario transaccional', () => {
     const j = new Journal(db, contextFixture());
     await j.create(s);
     const out = await j.recover();
+    if (out.envelope.taskId !== 'TG-01') throw new Error('Wrong task');
     expect(out.envelope.events[0].result).toBe('not_evaluated');
     expect(out.envelope.events[0].closureReason).toBe('interruption');
   });
