@@ -6,6 +6,7 @@ import { Journal, type Outbox, type Snapshot } from '../evidence/journal';
 import { type TerminationReason, uuidV4, VIEWPORT_PROFILE, isViewportConfig } from '../contract/schema';
 import type { SessionContext } from '../contract/profiles';
 import { MentalistaFlow } from '../games/tg03/flow';
+import { KudDiceFlow } from '../games/tg07/flow';
 import { Engine, resolveConfig, stageLayout } from '../games/tg01/engine';
 import { CanvasView } from '../games/tg01/canvas';
 import { SupervisedBridge } from '../bridge/supervised';
@@ -30,7 +31,7 @@ export class App {
   private bridge?: SupervisedBridge;
   private context?: SessionContext;
   private engine?: Engine;
-  private mentalista?: MentalistaFlow;
+  private activityFlow?: MentalistaFlow | KudDiceFlow;
   private journal?: Journal;
   private screen: Screen = 'instructions';
   private ready = false;
@@ -92,7 +93,7 @@ export class App {
     window.addEventListener('resize', () => this.refreshAvailability());
     window.addEventListener('runtime-update-available', () => {
       this.updateAvailable = true;
-      if (this.screen !== 'running' && !this.starting && !this.mentalista) this.render();
+      if (this.screen !== 'running' && !this.starting && !this.activityFlow) this.render();
     });
     try {
       if (!isSecureContext || !crypto.subtle) throw new Error('SECURE_CONTEXT_REQUIRED');
@@ -175,7 +176,7 @@ export class App {
     } finally { this.claiming = false; this.refreshAvailability(); }
   }
   private async maintain(force = false): Promise<void> {
-    if (!this.db || !this.session || !this.delivery || this.maintenanceBusy || this.engine?.running || this.mentalista?.busy || this.starting || this.claiming || this.closing) return;
+    if (!this.db || !this.session || !this.delivery || this.maintenanceBusy || this.engine?.running || this.activityFlow?.busy || this.starting || this.claiming || this.closing) return;
     this.maintenanceBusy = true;
     try {
       if (navigator.onLine) await this.session.reconcileClaims().catch(() => undefined);
@@ -215,7 +216,7 @@ export class App {
     } finally { this.maintenanceBusy = false; }
   }
   private render(focus = false): void {
-    if (this.mentalista && this.screen === 'instructions') return;
+    if (this.activityFlow && this.screen === 'instructions') return;
     for (const timer of this.exampleTimers) clearTimeout(timer);
     this.exampleTimers = [];
     this.main.replaceChildren(); this.startButton = undefined; this.reasonNode = undefined;
@@ -290,7 +291,7 @@ export class App {
     const list = el('ul', 'pending-list');
     for (const out of this.pendingItems) {
       const row = el('li', 'pending-row');
-      row.append(el('h2', '', out.envelope.taskId === 'TG-03' ? 'Mentalista' : 'Lluvia de estrellas'), el('p', '', `Fecha informativa del dispositivo: ${new Date(out.envelope.clock.timeOriginUnixMs).toLocaleString('es-CO')}`));
+      row.append(el('h2', '', out.envelope.taskId === 'TG-07' ? 'Kud Dice' : out.envelope.taskId === 'TG-03' ? 'Mentalista' : 'Lluvia de estrellas'), el('p', '', `Fecha informativa del dispositivo: ${new Date(out.envelope.clock.timeOriginUnixMs).toLocaleString('es-CO')}`));
       row.append(el('p', '', out.status === 'AUTH_REQUIRED' || out.status === 'BLOCKED' ? 'El envío necesita una autorización de tu profesor.' : 'Hay un respaldo local; falta confirmar la recepción.'));
       if (out.status === 'AUTH_REQUIRED' || out.status === 'BLOCKED') row.append(this.accessForm(out));
       else row.append(button('Reintentar envío', () => { void this.maintain(true); }));
@@ -299,19 +300,23 @@ export class App {
     this.main.append(list, el('p', 'access-help', 'No borres los datos del sitio. Si no corresponde el código, no seleccionaremos otra actividad automáticamente.'));
   }
   private instructions(): void {
-    if (this.context?.taskId === 'TG-03' && this.session && this.db) {
-      this.mentalista = new MentalistaFlow(this.main, this.context, this.session, this.db, this.owner, async out => {
+    if ((this.context?.taskId === 'TG-03' || this.context?.taskId === 'TG-07') && this.session && this.db) {
+      const done = async (out: Outbox) => {
         this.lastOut = out; this.playedSessionId = out.sessionId; this.screen = 'finish'; this.status = '';
         this.bridge?.notify('EXECUTION_FINISHED', out.sessionId, out.envelope.submissionId);
         this.bridge?.notify('DELIVERY_PENDING', out.sessionId, out.envelope.submissionId);
         this.render(true);
         if (navigator.onLine) this.updateDelivery(await this.delivery!.send(out.sessionId, true)); else this.offlinePrompt();
-      }, started => {
+      };
+      const failed = (started: boolean) => {
         this.screen = 'finish'; this.memoryOnly = started;
         this.status = started ? 'No podemos confirmar el respaldo completo.' : 'No se confirmó el inicio. Comprobaremos el mismo intento; conserva este navegador.';
         this.render();
-      });
-      void this.mentalista.prepare(); return;
+      };
+      this.activityFlow = this.context.taskId === 'TG-07'
+        ? new KudDiceFlow(this.main, this.context, this.session, this.db, this.owner, done, failed)
+        : new MentalistaFlow(this.main, this.context, this.session, this.db, this.owner, done, failed);
+      void this.activityFlow.prepare(); return;
     }
     const intro = el('div', 'intro');
     intro.append(el('h1', '', 'Lluvia de estrellas'), el('p', 'intro-copy', 'Antes de empezar, mira lo que vamos a hacer.'));
@@ -579,17 +584,17 @@ export class App {
   }
   private help(): void {
     // Never place a modal over a measured stimulus. Help is available only outside execution.
-    if (this.starting || this.engine?.running || this.mentalista?.busy) { this.say('La actividad está por comenzar o ya está en marcha.'); return; }
+    if (this.starting || this.engine?.running || this.activityFlow?.busy) { this.say('La actividad está por comenzar o ya está en marcha.'); return; }
     const dialog = el('dialog', 'help-dialog'); dialog.setAttribute('aria-labelledby', 'help-title');
     const heading = el('h2', '', 'Estamos para ayudarte'); heading.id = 'help-title';
-    dialog.append(heading, el('p', '', this.context?.taskId === 'TG-03' ? 'Recuerda el número inicial, aplica cada suma o resta y elige una de las cuatro opciones. Practica antes de comenzar.' : 'Toca las estrellas una sola vez y deja pasar las lunas. Puedes repetir el ejemplo antes de comenzar.'),
+    dialog.append(heading, el('p', '', this.context?.taskId === 'TG-07' ? 'Mira y escucha los tambores. Después tócalos en el mismo orden. Kud muestra una demostración y puedes practicar antes del concierto.' : this.context?.taskId === 'TG-03' ? 'Recuerda el número inicial, aplica cada suma o resta y elige una de las cuatro opciones. Practica antes de comenzar.' : 'Toca las estrellas una sola vez y deja pasar las lunas. Puedes repetir el ejemplo antes de comenzar.'),
       el('p', '', 'Si no puedes comenzar o enviar el registro, avisa a tu profesor. No borres los datos del navegador.'),
       el('p', '', this.context?.taskId === 'TG-03' ? 'Puedes elegir con ratón, dedo, lápiz o las teclas 1, 2, 3 y 4. Cambiar de ventana o de orientación durante la actividad la interrumpe.' : 'Esta versión requiere apuntar con ratón, dedo o lápiz; no ofrece una medición equivalente por teclado o lector de pantalla.'),
       button('Entendido', () => { dialog.close(); dialog.remove(); }, 'button primary'));
     this.root.append(dialog); dialog.addEventListener('close', () => dialog.remove(), { once: true }); dialog.showModal();
   }
   destroy(): void {
-    this.mentalista?.destroy();
+    this.activityFlow?.destroy();
     if (this.countdownAbort) { this.countdownStopReason = 'user_exit'; this.countdownAbort.abort(); }
     if (this.engine?.running) { registry['TG-01'].destroy(this.engine); void this.closeExecution(); }
     cancelAnimationFrame(this.raf); this.gameAbort?.abort(); this.bridge?.destroy(); clearInterval(this.maintenanceTimer); clearInterval(this.leaseTimer);

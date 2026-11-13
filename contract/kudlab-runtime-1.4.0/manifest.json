@@ -1,0 +1,28 @@
+{
+  "version": "1.4.0",
+  "contracts": [
+    "1.0",
+    "1.1",
+    "2.0"
+  ],
+  "producer": "Kudlab-backend",
+  "canonicalization": "RFC8785",
+  "files": {
+    "schemas.json": "02ec003ac321a0c42768bb45eaffeb072fd2653136ddfeaf90a83a8ba9b0d000",
+    "context-1.1.synthetic.json": "fbd2ef5293358343fafa152ca0ffd87e26d464feedcbf2bf035fc4d73ca07c0d",
+    "canonical-vectors.json": "b1a983fb4a82fd00e0271962800ca8d577c783714ea7a7f9c126aa6339643a77",
+    "types.d.ts": "18c1c08b44b286c4b43241c9a0d0cf01427564375a9cdabc24280e2082479c5d",
+    "mentalista-bank.ts": "2d96d5aec999e6689775cd26355d3b6d032a0c0d1dea930e4383a33f8ca767df",
+    "mentalista-profile.json": "11966e4a4feb89cc513e5d45b817a26a5c1b615acc91783260bb56245b094cc2",
+    "context-2.0.synthetic.json": "1e99fcac5815dfabd277e89d9d3722c83926faba8581398bfe9ed80512323a33",
+    "envelope-2.0.synthetic.json": "e24cb1b21c1d65a16f0680e992ec33ed9a4accd29148857f2d1451a81a63b684",
+    "envelope-2.0.partial-0.synthetic.json": "39e06b13ab0e9c1098141dfbc13b46469a103223ed4d8c1510d341cc37cd8b64",
+    "envelope-2.0.partial-3.synthetic.json": "d3a78890be4d5d959023feadaa291522aff296e5780fe0f63b79b3557f76cc24",
+    "kud-dice-profile.json": "8a63c687a6c286586e94de0041ef3bcd0ec83f72921c8447c388f5e7e521bf0e",
+    "kud-dice-sequence.ts": "fbe65d6fec993a9f762566f7ea6f27717ab136b7a67a95c1ba3c00fab805115e",
+    "kud-dice-validation.ts": "33ebf3f424765a6e667174b1d073afcbd06d33e782c2e48945cd4f4f59ce2a6e",
+    "context-tg07.synthetic.json": "96f43f7a53ed84b777389d1798042304f4069c3779aa35d89514ee83fe84923a",
+    "envelope-tg07.synthetic.json": "7aa48fdb8839a3b6ce7f35cadfeaf3577e461c0fff3d51dd6cffcfc357687b6b",
+    "envelope-tg07.partial-0.synthetic.json": "ed33a90934391447ce17955291fce738af9d31e6167bbd3b1a30030f7bbbdb68"
+  }
+}

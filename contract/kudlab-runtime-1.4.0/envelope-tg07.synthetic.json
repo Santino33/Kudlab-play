@@ -1,0 +1,127 @@
+{
+  "sessionId": "10000000-0000-4000-8000-000000000001",
+  "taskId": "TG-07",
+  "publishedVersionId": "30000000-0000-4000-8000-000000000001",
+  "configVersion": 1,
+  "configurationHash": "db6bb3e58c0a4223a2d6beef54f995965b7c47dbfcc008a0a9505a3b08be8164",
+  "gameBuildId": "tg07-kud-dice-1",
+  "contractVersion": "2.0",
+  "submissionId": "40000000-0000-4000-8000-000000000007",
+  "state": "completed",
+  "terminationReason": "all_trials_incorrect_at_length",
+  "phaseReached": "done",
+  "clock": {
+    "id": "50000000-0000-4000-8000-000000000007",
+    "timeOriginUnixMs": 1794528000000
+  },
+  "timing": {
+    "startedAtMs": 0,
+    "finishedAtMs": 30400,
+    "lastCheckpointAtMs": 30400,
+    "measurementStartedAtMs": 6000,
+    "measurementFinishedAtMs": 30400
+  },
+  "device": {
+    "viewportWidth": 1920,
+    "viewportHeight": 1080,
+    "stageWidthCss": 1920,
+    "stageHeightCss": 1080,
+    "devicePixelRatio": 1,
+    "touchCapable": false,
+    "pointerTypes": [
+      "mouse"
+    ]
+  },
+  "audio": {
+    "source": "files",
+    "missingFiles": []
+  },
+  "preparation": {
+    "instruction": {
+      "shownAtMs": 10,
+      "acceptedAtMs": 20,
+      "repeats": 0
+    },
+    "demoShown": true,
+    "practiceCompleted": true,
+    "practice": [
+      {
+        "round": 1,
+        "evidence": {
+          "trial": 1,
+          "length": 2,
+          "sequence": [
+            2,
+            0
+          ],
+          "sequenceIndex": 0,
+          "attemptAtLength": 1,
+          "isReplacement": false,
+          "startedAtMs": 100,
+          "presentationStartMs": 1000,
+          "responseOpenedAtMs": 2800,
+          "closedAtMs": 4050,
+          "responses": [
+            {
+              "drum": 2,
+              "atMs": 3300,
+              "pointerType": "mouse"
+            },
+            {
+              "drum": 0,
+              "atMs": 3800,
+              "pointerType": "mouse"
+            }
+          ],
+          "earlyTaps": [],
+          "valid": true,
+          "invalidReason": null,
+          "closureReason": "response"
+        }
+      }
+    ]
+  },
+  "events": [
+    {
+      "trial": 1,
+      "length": 2,
+      "sequence": [
+        1,
+        2
+      ],
+      "sequenceIndex": 0,
+      "attemptAtLength": 1,
+      "isReplacement": false,
+      "startedAtMs": 6000,
+      "presentationStartMs": 6900,
+      "responseOpenedAtMs": 8700,
+      "closedAtMs": 16700,
+      "responses": [],
+      "earlyTaps": [],
+      "valid": true,
+      "invalidReason": null,
+      "closureReason": "timeout"
+    },
+    {
+      "trial": 2,
+      "length": 2,
+      "sequence": [
+        3,
+        2
+      ],
+      "sequenceIndex": 1,
+      "attemptAtLength": 2,
+      "isReplacement": false,
+      "startedAtMs": 18200,
+      "presentationStartMs": 19100,
+      "responseOpenedAtMs": 20900,
+      "closedAtMs": 28900,
+      "responses": [],
+      "earlyTaps": [],
+      "valid": true,
+      "invalidReason": null,
+      "closureReason": "timeout"
+    }
+  ],
+  "incidents": []
+}

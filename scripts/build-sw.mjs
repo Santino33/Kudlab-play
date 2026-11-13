@@ -14,6 +14,8 @@ for (const name of ['zod', 'canonicalize']) await writeFile(`dist/licenses/${nam
 const files = ['/', '/favicon.svg', ...['nunito', 'zod', 'canonicalize'].map(n => `/licenses/${n}.txt`), ...(await readdir('dist/assets')).map(f => `/assets/${f}`)];
 // Videos are optional and never block installation. Essential scene files are available offline.
 files.push(...['escenario-matematico-sin-globo.webp', 'kud-quieto.png', 'nave-frente.png', 'poster-transicion-inicio.webp'].map(name => `/mentalista/v1/${name}`));
+// TG07's pinned scene includes its original video/audio and local font files.
+files.push(...(await readdir('dist/kud-dice/v1')).filter(name => !name.endsWith('.json')).map(name => `/kud-dice/v1/${name}`));
 const digest = createHash('sha256');
 for (const file of files) digest.update(await readFile(file === '/' ? 'dist/index.html' : `dist${file}`));
 const version = digest.digest('hex').slice(0, 20);
@@ -31,7 +33,20 @@ self.addEventListener('fetch', event => {
   event.respondWith((async () => {
     try {
       const cached = await (await caches.open(CACHE)).match(path);
-      if (cached) return cached;
+       if (cached) {
+         const range = event.request.headers.get('range');
+         if (!range) return cached;
+         const match = /^bytes=(\\d*)-(\\d*)$/.exec(range);
+         if (!match || !match[1] && !match[2]) return fetch(event.request, { credentials: 'omit', cache: 'no-store' });
+         const bytes = await cached.arrayBuffer(), size = bytes.byteLength;
+         const start = match[1] ? Number(match[1]) : Math.max(0, size - Number(match[2]));
+         const end = match[1] && match[2] ? Math.min(Number(match[2]), size - 1) : size - 1;
+         if (start >= size || start > end) return new Response(null, { status: 416, headers: { 'Content-Range': 'bytes */' + size } });
+         const headers = new Headers(cached.headers);
+         headers.set('Content-Range', 'bytes ' + start + '-' + end + '/' + size);
+         headers.set('Content-Length', String(end - start + 1)); headers.set('Accept-Ranges', 'bytes');
+         return new Response(bytes.slice(start, end + 1), { status: 206, headers });
+       }
     } catch { /* A local cache failure must not block an available network. */ }
     return fetch(event.request, { credentials: 'omit', cache: 'no-store' });
   })());
@@ -39,7 +54,7 @@ self.addEventListener('fetch', event => {
 `;
 await writeFile('dist/sw.js', worker);
 await writeFile('dist/_headers', `/*
-  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; media-src 'self'; font-src 'self'; connect-src 'self' ${api}; worker-src 'self'; manifest-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; frame-ancestors ${teacher}
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self' ${api}; worker-src 'self'; manifest-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; frame-ancestors ${teacher}
   Referrer-Policy: no-referrer
   X-Content-Type-Options: nosniff
   Permissions-Policy: camera=(), microphone=(), geolocation=()

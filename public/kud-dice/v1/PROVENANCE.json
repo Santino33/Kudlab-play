@@ -1,0 +1,158 @@
+{
+  "repository": "https://github.com/AlexanderNino97/TD-KUD-DICE",
+  "commit": "e213cda8dad707d82188ba1f5d3cf1172a063f31",
+  "permission": "Responsable autorizó incorporar y adaptar código y activos; no licencia propia encontrada en repositorio de referencia.",
+  "kaboom": "3000.1.17; bytes idénticos a npm, licencia MIT adjunta.",
+  "files": [
+    {
+      "source": "frontend/assets/background.jpeg",
+      "file": "background.jpeg",
+      "sha256": "43b7ad052a50bdac90704073a79449bc35e13f4480357468bcae41fa559d4ee3",
+      "bytes": 153459
+    },
+    {
+      "source": "frontend/assets/do.mp3",
+      "file": "do.mp3",
+      "sha256": "f7532a14cef69f07f887fba5496fc81a732881e6b813e04c58a4f81211ae6016",
+      "bytes": 67200
+    },
+    {
+      "source": "frontend/assets/error.mp3",
+      "file": "error.mp3",
+      "sha256": "08a1519175c18d8b9248ba40856011e481198a81fb087ab2d4fc85766ae0e50d",
+      "bytes": 34560
+    },
+    {
+      "source": "frontend/assets/escenario-laboratorio.webp",
+      "file": "escenario-laboratorio.webp",
+      "sha256": "7405ddc5528f55049c56d21b5fa10dd143fa4e7b2e33048306d688af0c2c2ad0",
+      "bytes": 197816
+    },
+    {
+      "source": "frontend/assets/escenario-musical.webp",
+      "file": "escenario-musical.webp",
+      "sha256": "ce94e961c3560552f77a427b0c9d9fabd4cabebc21542a9d0bc61bb95b43ddff",
+      "bytes": 140076
+    },
+    {
+      "source": "frontend/assets/fa.mp3",
+      "file": "fa.mp3",
+      "sha256": "6915d9afb60e7897ab30943c92dfa1659e178cabbad8e8567a0a4f403af4ffb4",
+      "bytes": 56640
+    },
+    {
+      "source": "frontend/assets/kud-hablando.webm",
+      "file": "kud-hablando.webm",
+      "sha256": "2d386c848dd45dd85ddf8352a6122b0f7dd1547e4de14b0b6cecae9219add9cd",
+      "bytes": 2529075
+    },
+    {
+      "source": "frontend/assets/kud-hablando.webp",
+      "file": "kud-hablando.webp",
+      "sha256": "8d473487b368d2bbc9c454e81f6f532ed8679e647d2f0da1bca27b58c433e892",
+      "bytes": 3046914
+    },
+    {
+      "source": "frontend/assets/kud-quieto.png",
+      "file": "kud-quieto.png",
+      "sha256": "7d11d6344ac97766f8897138c92e94de6c18b3e3fe5dd3ef8dd7705086d8336e",
+      "bytes": 201850
+    },
+    {
+      "source": "frontend/assets/mi.mp3",
+      "file": "mi.mp3",
+      "sha256": "d852a3b1b90b3ffc64d725a645c00c55f547be3e6fc0cc071a0f3724b1565bbc",
+      "bytes": 45120
+    },
+    {
+      "source": "frontend/assets/nave-frente-musical.png",
+      "file": "nave-frente-musical.png",
+      "sha256": "bb92a5de486d97db54240bb874091f11f222c3d16953b27271f9402d8eaea93c",
+      "bytes": 57237
+    },
+    {
+      "source": "frontend/assets/nota-1.png",
+      "file": "nota-1.png",
+      "sha256": "01e71b81f4bcd02aedda5c8c38cddeca88527c42dc10cbf99b56abc40d58db3b",
+      "bytes": 4844
+    },
+    {
+      "source": "frontend/assets/nota-2.png",
+      "file": "nota-2.png",
+      "sha256": "7bce09c22593e629a158f8ffec1905e45a24ab012afe41fa5bd9f8e9e48dff81",
+      "bytes": 5760
+    },
+    {
+      "source": "frontend/assets/nota-3.png",
+      "file": "nota-3.png",
+      "sha256": "175f678e0ebba05861e2b2ba7c778e7fb8f5ad91dcf229aff46a3cac645c3cc5",
+      "bytes": 5003
+    },
+    {
+      "source": "frontend/assets/nota-4.png",
+      "file": "nota-4.png",
+      "sha256": "4f3084fe7bce0af9efdb53a31ee15e0ce3b6eb6e2e049983e3854ab0379ce3cd",
+      "bytes": 5801
+    },
+    {
+      "source": "frontend/assets/re.mp3",
+      "file": "re.mp3",
+      "sha256": "5b2a1628de1968baa8bb2bb15ed118915e3ea91a2a773d2efbcb76e5d567fe52",
+      "bytes": 62400
+    },
+    {
+      "source": "frontend/assets/tambor-amarillo.png",
+      "file": "tambor-amarillo.png",
+      "sha256": "f9be45b61c739f224acd439f688acf9f650e4f1207b3f7f806709f737dcb82b1",
+      "bytes": 37389
+    },
+    {
+      "source": "frontend/assets/tambor-azul.png",
+      "file": "tambor-azul.png",
+      "sha256": "4ad1ead3e9eff51a9a8c09501c6a0c60816e10624ae96040307a802c2bf6d733",
+      "bytes": 46214
+    },
+    {
+      "source": "frontend/assets/tambor-rojo.png",
+      "file": "tambor-rojo.png",
+      "sha256": "e44f58ece9e5dcde90b24fb8ef90997efd371a7204932998928e37bb6c196d70",
+      "bytes": 44679
+    },
+    {
+      "source": "frontend/assets/tambor-verde.png",
+      "file": "tambor-verde.png",
+      "sha256": "25bbc5483deed7109d7f37ccfb3d0df3128e525d384c826dcdfe94368c36594f",
+      "bytes": 43337
+    },
+    {
+      "source": "frontend/assets/transicion-lab-a-musica.mp4",
+      "file": "transicion-lab-a-musica.mp4",
+      "sha256": "d4009166d92a88dba118b9a3591b42b0c5f0d85d2511d1f16f1fdec4045c1426",
+      "bytes": 4772620
+    },
+    {
+      "source": "frontend/assets/transicion-lab-a-musica.webm",
+      "file": "transicion-lab-a-musica.webm",
+      "sha256": "f9b15bcfbd08d7cd1b2ecd8bb6a29dbbc8fa05a9330afa13ed9ae5d9f680bcc3",
+      "bytes": 3326286
+    },
+    {
+      "source": "frontend/assets/transicion-musica-a-lab.mp4",
+      "file": "transicion-musica-a-lab.mp4",
+      "sha256": "cdfee3aa913e30ddbe6dafbfdcbd74935d19cb4dbce01192324a751edf5e9c3f",
+      "bytes": 3230537
+    },
+    {
+      "source": "frontend/assets/transicion-musica-a-lab.webm",
+      "file": "transicion-musica-a-lab.webm",
+      "sha256": "0fa5e705f0319310be726c8ac465f7abb800c4d575bc155c3bd050ab57f3db5a",
+      "bytes": 2490437
+    },
+    {
+      "source": "frontend/libs/kaboom.js",
+      "file": "kaboom.js",
+      "sha256": "dfc50e51fe63af273fc4d7531442e1c1483a3e2854de784b029ebbb695cfedd8",
+      "bytes": 132007
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+@font-face { font-family: Fredoka; src: url('/kud-dice/v1/fredoka-500.ttf') format('truetype'); font-weight: 500; font-display: swap; }
+@font-face { font-family: Fredoka; src: url('/kud-dice/v1/fredoka-600.ttf') format('truetype'); font-weight: 600; font-display: swap; }
+:host { display: grid; width: 100%; min-width: 0; place-items: center; background: #14264d; font-family: 'Fredoka', 'Trebuchet MS', system-ui, sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
+#stage { position: relative; width: 100%; max-width: 177.78vh; aspect-ratio: 16 / 9; overflow: hidden; container-type: inline-size; background: #14264d; touch-action: none; }
+.layer { position: absolute; display: block; pointer-events: none; }
+.full { inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hidden { display: none !important; }
+.fade { transition: opacity .35s ease; } .off { opacity: 0; }
+#kud { aspect-ratio: 1 / 1; }
+#kud img, #kud video { position: absolute; inset: 0; width: 100%; height: 100%; display: block; background: transparent; }
+#kud.lab { left: 34.01%; top: 37.04%; width: 31.25%; }
+#kud.music { left: 37.19%; top: 30.19%; width: 25%; }
+#shipFront { left: 32.943%; top: 56.852%; width: 30.964%; }
+.drum { position: absolute; display: block; pointer-events: auto; cursor: pointer; transform-origin: 50% 70%; transition: transform .12s ease, filter .12s ease; }
+.drum.disabled { cursor: default; }
+#drum0 { left: 9.271%; top: 57.222%; width: 15.677%; }
+#drum1 { left: 25.417%; top: 72.083%; width: 15.677%; }
+#drum2 { left: 58.75%; top: 72.037%; width: 15.677%; }
+#drum3 { left: 74.896%; top: 54.63%; width: 15.677%; }
+.drum.on { transform: scale(1.08) translateY(-3%); }
+#drum0.on { filter: drop-shadow(0 0 1.5cqw #ff5a5a) brightness(1.12); }
+#drum1.on { filter: drop-shadow(0 0 1.5cqw #5aa8ff) brightness(1.12); }
+#drum2.on { filter: drop-shadow(0 0 1.5cqw #ffd84a) brightness(1.12); }
+#drum3.on { filter: drop-shadow(0 0 1.5cqw #6fe06a) brightness(1.12); }
+.bubbleText { position: absolute; display: flex; align-items: center; justify-content: center; text-align: center; color: #1d2b52; font-weight: 500; line-height: 1.25; }
+#labText { left: 58.6%; top: 27.9%; width: 17.3%; height: 18.2%; font-size: 1.45cqw; }
+#musicText { left: 59.3%; top: 31.4%; width: 17.8%; height: 16%; font-size: 1.45cqw; }
+#taps { position: absolute; left: 0; right: 0; bottom: 3.4%; display: flex; gap: .9cqw; justify-content: center; }
+#taps i { width: 1.7cqw; height: 1.7cqw; border-radius: 50%; background: rgba(255, 250, 240, .55); border: .22cqw solid #1d2b52; }
+#taps i.c0 { background: #e8474f; } #taps i.c1 { background: #4a8fe0; } #taps i.c2 { background: #ffcc33; } #taps i.c3 { background: #5fbf5a; }
+#buttons { position: absolute; left: 0; right: 0; bottom: 3.2%; display: flex; gap: 1.4cqw; justify-content: center; pointer-events: auto; }
+.btn { font: 600 1.45cqw 'Fredoka', 'Trebuchet MS', sans-serif; color: #fffaf0; background: #ff9a4c; border: .25cqw solid #1d2b52; border-radius: 2.2cqw; padding: .7cqw 2.2cqw; cursor: pointer; box-shadow: 0 .35cqw 0 #1d2b52; }
+.btn.alt { background: #2ec4b6; }
+.btn:active { transform: translateY(.25cqw); box-shadow: 0 .1cqw 0 #1d2b52; }
+#fx { position: absolute; inset: 0; width: 100% !important; height: 100% !important; pointer-events: none; }
+#transition, #transitionBack { z-index: 20; background: #14264d; }
+#loading { position: absolute; inset: 0; display: grid; place-items: center; color: #fffaf0; font-size: 1.6cqw; z-index: 30; background: #14264d; }
