@@ -26,7 +26,8 @@ export class Flow {
   private itemDone: ((trial: Trial | null) => void) | null = null;
   private focusCount = 0;
   private blurred = false;
-  constructor(host: HTMLElement, private readonly changed: (snapshot: PalabraSnapshot) => void, private readonly finished: (snapshot: PalabraSnapshot) => void) {
+  constructor(host: HTMLElement, private readonly changed: (snapshot: PalabraSnapshot) => void, private readonly finished: (snapshot: PalabraSnapshot) => void,
+    private readonly authorize: () => Promise<void> = () => Promise.resolve(), private readonly visualComplete: () => void = () => {}) {
     this.view = new View(host);
     const signal = this.view.signal;
     document.addEventListener('visibilitychange', () => this.focus(), { signal });
@@ -102,6 +103,7 @@ export class Flow {
       if (this.view.root.getBoundingClientRect().width < 700) this.incident('small_stage');
       this.phase = 'intro'; this.checkpoint(); this.view.say('¡Hola! Soy Kud.', 1400);
       await this.view.buttons(['¡Hola, Kud!']); if (this.view.signal.aborted) return;
+      await this.authorize(); if (this.view.signal.aborted) return;
       this.instruction.shownAtMs = r1(performance.now());
       do {
         for (const [text, talk, wait] of [['Vamos a mi biblioteca.', 2000, 2400], ['Te voy a mostrar cuatro palabras.', 2200, 2600], ['Tres son del mismo grupo y una no.', 2400, 2800], ['Toca la palabra que no pertenece al grupo.', 2600, 2800]] as const) {
@@ -140,7 +142,7 @@ export class Flow {
       if (this.view.signal.aborted) return;
       this.view.part('progress').classList.add('hidden'); this.view.part('cards').classList.add('hidden');
       this.view.say('¡Terminamos!', 1800); await this.view.wait(2200); if (this.view.signal.aborted) return;
-      await this.view.transition(true); if (!this.view.signal.aborted) this.view.say('¡Gracias por leer conmigo!', 2600);
+      await this.view.transition(true); if (!this.view.signal.aborted) { this.view.say('¡Gracias por leer conmigo!', 2600); await this.view.wait(2600); this.visualComplete(); }
     } catch { if (!this.view.signal.aborted) { this.incident(this.phase === 'loading' ? 'resource_load_error' : 'script_error'); this.stop(this.phase === 'loading' ? 'resource_load_error' : 'script_error'); } }
   }
   stop(reason: PalabraEnvelope['terminationReason'] = 'user_exit') {

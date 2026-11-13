@@ -1,4 +1,7 @@
+import 'fake-indexeddb/auto';
 import { describe, expect, it } from 'vitest';
+import { Database } from '../../src/storage/database';
+import { Journal } from '../../src/evidence/journal';
 import { Engine } from '../../src/games/tg02/engine';
 import { finalizePalabra } from '../../src/games/tg02/snapshot';
 import type { PalabraSnapshot } from '../../src/games/tg02/flow';
@@ -17,6 +20,20 @@ function practice(e: Engine) {
   for (let i = 0; i < 3; i++) { const at = e.nextPresentationAt, item = e.nextItem()!; e.presented(at); e.tap(item.targetIdx, { atMs: at + 500, pointerType: 'mouse', x: 400, y: 300 }); }
 }
 describe('TG02 durable finalization / CA-08,09', () => {
+  it('reopens the journal, finalizes concurrently once and preserves evidence until matching receipt', async () => {
+    const db = await Database.open(`tg02-${crypto.randomUUID()}`), first = new Journal(db, reference), engine = new Engine();
+    engine.startPractice(100); engine.presented(2000); const s = snapshot(engine, 2200, 'practice');
+    await first.create(s);
+    const reopened = new Journal(db, reference), [a, b] = await Promise.all([reopened.recover(), reopened.recover()]);
+    expect(a.body).toBe(b.body); expect(a.hash).toBe(b.hash); expect(a.envelope.state).toBe('interrupted');
+    await expect(first.checkpoint(s)).rejects.toThrow('EXECUTION_TERMINAL');
+    const receipt = { sessionId: reference.sessionId, submissionId: a.envelope.submissionId, evidenceHash: '0'.repeat(64),
+      receiptId: crypto.randomUUID(), receivedAt: new Date().toISOString(), processingStatusAtReceipt: 'PENDING' as const };
+    await expect(reopened.acknowledge(receipt)).rejects.toThrow('RECEIPT_MISMATCH');
+    expect(await db.get('outbox', reference.sessionId)).toBeDefined();
+    await reopened.acknowledge({ ...receipt, evidenceHash: a.hash });
+    expect(await db.get('outbox', reference.sessionId)).toBeUndefined();
+  });
   it('recovers an active practice item without inventing measurement or resuming', () => {
     const e = new Engine(); e.startPractice(100); e.presented(2000);
     const s = snapshot(e, 2200, 'practice'), before = structuredClone(s);

@@ -3,12 +3,16 @@ import { contextSchema, type SessionContext } from '../contract/profiles';
 import { MentalistaEngine } from './tg03/engine';
 import { Engine } from './tg01/engine';
 import { Engine as KudDiceEngine } from './tg07/engine';
+import { Engine as PalabraEngine } from './tg02/engine';
 function create(...args: ConstructorParameters<typeof Engine>): Engine {
   const config = structuredClone(args[0]);
   Object.freeze(config.segmentBoundariesMs); Object.freeze(config.spawnIntervalMs); Object.freeze(config.stimulusSizeUnits);
   return new Engine(Object.freeze(config), args[1], args[2]);
 }
 export const registry = Object.freeze({
+  'TG-02': Object.freeze({ taskId: 'TG-02', buildIds: ['tg02-palabra-intrusa-1'], contractVersions: ['2.0'],
+    requiredResources: ['local-font', 'palabra-intrusa-scene'] as const, create: () => new PalabraEngine(),
+    destroy: (game: PalabraEngine) => game.interrupt('interruption', performance.now()) }),
   'TG-07': Object.freeze({ taskId: 'TG-07', buildIds: ['tg07-kud-dice-1'], contractVersions: ['2.0'],
     requiredResources: ['local-font', 'kud-dice-scene'] as const, create: () => new KudDiceEngine(),
     destroy: (game: KudDiceEngine) => game.interrupt('interrupted', performance.now()) }),

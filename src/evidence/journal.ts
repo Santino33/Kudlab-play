@@ -4,6 +4,8 @@ import { mentalistaEnvelopeSchema } from '../contract/mentalista';
 import type { MentalistaSnapshot } from '../games/tg03/engine';
 import { kudDiceEnvelopeSchema } from '../contract/kud-dice';
 import { closeSnapshot, type KudDiceSnapshot } from '../games/tg07/snapshot';
+import { finalizePalabra } from '../games/tg02/snapshot';
+import type { PalabraSnapshot } from '../games/tg02/flow';
 import { hash } from '../contract/canonical';
 import { Database, request } from '../storage/database';
 
@@ -17,7 +19,8 @@ export interface Snapshot {
 export interface Execution extends Omit<Snapshot, 'events' | 'incidents'> {
   key: string; context: SessionContext; submissionId: string; status: 'RUNNING' | 'TERMINAL';
 }
-export type AnySnapshot = Snapshot | MentalistaSnapshot | KudDiceSnapshot;
+export type AnySnapshot = Snapshot | MentalistaSnapshot | KudDiceSnapshot | PalabraSnapshot;
+type PalabraExecution = PalabraSnapshot & { key: string; context: SessionContext; submissionId: string; status: 'RUNNING' | 'TERMINAL' };
 type MentalistaExecution = MentalistaSnapshot & { key: string; context: SessionContext; submissionId: string; status: 'RUNNING' | 'TERMINAL' };
 type KudDiceExecution = KudDiceSnapshot & { key: string; context: SessionContext; submissionId: string; status: 'RUNNING' | 'TERMINAL' };
 export interface Outbox {
@@ -50,7 +53,7 @@ export class Journal {
     if (this.context.taskId !== ('taskId' in snapshot ? snapshot.taskId : 'TG-01')) throw new Error('PROFILE_MISMATCH');
     if ('taskId' in snapshot) {
       await this.db.transaction(['executions'], async tx => {
-        const store = tx.objectStore('executions'), old = await request<MentalistaExecution | KudDiceExecution | undefined>(store.get(this.context.sessionId));
+        const store = tx.objectStore('executions'), old = await request<MentalistaExecution | KudDiceExecution | PalabraExecution | undefined>(store.get(this.context.sessionId));
         if (!old || old.status !== 'RUNNING' || old.taskId !== snapshot.taskId) throw new Error('EXECUTION_TERMINAL');
         if (old.clock.id !== snapshot.clock.id || old.clock.timeOriginUnixMs !== snapshot.clock.timeOriginUnixMs || old.startedAtMs !== snapshot.startedAtMs) throw new Error('CLOCK_MISMATCH');
         if (snapshot.checkpointAtMs < old.checkpointAtMs || old.terminationReason && snapshot.terminationReason !== old.terminationReason) throw new Error('CHECKPOINT_REGRESSION');
@@ -89,6 +92,7 @@ export class Journal {
     if (snapshot) await this.checkpoint(snapshot);
     if (this.context.taskId === 'TG-03') return this.finalizeMentalista(snapshot === undefined);
     if (this.context.taskId === 'TG-07') return this.finalizeKudDice();
+    if (this.context.taskId === 'TG-02') return this.finalizePalabra(snapshot === undefined);
     const { execution, snapshot: s } = await this.read();
     const reason = s.terminationReason ?? 'recovered_after_reload';
     const incidents = [...s.incidents];
@@ -114,6 +118,21 @@ export class Journal {
     });
   }
   recover(): Promise<Outbox> { return this.finalize(); }
+  private async finalizePalabra(recovered: boolean): Promise<Outbox> {
+    const s = await this.db.get<PalabraExecution>('executions', this.context.sessionId);
+    if (!s || s.taskId !== 'TG-02' || this.context.taskId !== 'TG-02') throw new Error('EXECUTION_MISSING');
+    const envelope = finalizePalabra(this.context, s, s.submissionId, recovered);
+    const sessionId = this.context.sessionId;
+    const out: Outbox = { key: sessionId, sessionId, envelope, hash: await hash(envelope), body: JSON.stringify(envelope),
+      status: 'PENDING', attemptCount: 0, nextAttemptAt: 0, lastAttemptAt: null, lastErrorCode: null };
+    return this.db.transaction(['executions', 'outbox'], async tx => {
+      const old = await request<Outbox | undefined>(tx.objectStore('outbox').get(sessionId)); if (old) return old;
+      const latest = await request<PalabraExecution>(tx.objectStore('executions').get(sessionId));
+      if (latest.checkpointAtMs !== s.checkpointAtMs || latest.status !== 'RUNNING') throw new Error('FINALIZATION_RACE');
+      await request(tx.objectStore('executions').put({ ...latest, status: 'TERMINAL', terminationReason: envelope.terminationReason }));
+      await request(tx.objectStore('outbox').put(out)); return out;
+    });
+  }
   private async finalizeKudDice(): Promise<Outbox> {
     const s = await this.db.get<KudDiceExecution>('executions', this.context.sessionId);
     if (!s || s.taskId !== 'TG-07') throw new Error('EXECUTION_MISSING');

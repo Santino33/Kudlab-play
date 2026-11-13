@@ -16,6 +16,7 @@ const files = ['/', '/favicon.svg', ...['nunito', 'zod', 'canonicalize'].map(n =
 files.push(...['escenario-matematico-sin-globo.webp', 'kud-quieto.png', 'nave-frente.png', 'poster-transicion-inicio.webp'].map(name => `/mentalista/v1/${name}`));
 // TG07's pinned scene includes its original video/audio and local font files.
 files.push(...(await readdir('dist/kud-dice/v1')).filter(name => !name.endsWith('.json')).map(name => `/kud-dice/v1/${name}`));
+files.push(...['escenario-laboratorio.webp', 'escenario-biblioteca.webp', 'kud-quieto.png', 'kud-hablando.webp', 'fredoka-500.ttf', 'fredoka-600.ttf', 'OFL.txt'].map(name => `/games/tg02/${name}`));
 const digest = createHash('sha256');
 for (const file of files) digest.update(await readFile(file === '/' ? 'dist/index.html' : `dist${file}`));
 const version = digest.digest('hex').slice(0, 20);
