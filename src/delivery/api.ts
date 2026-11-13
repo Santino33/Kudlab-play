@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { contextSchema, receiptSchema, secretSchema, startResponseSchema, uuid, uuidV4, type Receipt, type SessionContext } from '../contract/schema';
+import { receiptSchema, secretSchema, startResponseSchema, uuid, uuidV4, type Receipt } from '../contract/schema';
+import { contextSchema, type SessionContext } from '../contract/profiles';
 import { hash } from '../contract/canonical';
 import { normalizeCode } from '../runtime/access-code';
 

@@ -3,7 +3,9 @@ import { Delivery, type DeliveryState } from '../delivery/outbox';
 import { Session, type Credential } from '../runtime/session';
 import { Database } from '../storage/database';
 import { Journal, type Outbox, type Snapshot } from '../evidence/journal';
-import { type SessionContext, type TerminationReason, uuidV4, VIEWPORT_PROFILE, isViewportConfig } from '../contract/schema';
+import { type TerminationReason, uuidV4, VIEWPORT_PROFILE, isViewportConfig } from '../contract/schema';
+import type { SessionContext } from '../contract/profiles';
+import { MentalistaFlow } from '../games/tg03/flow';
 import { Engine, resolveConfig, stageLayout } from '../games/tg01/engine';
 import { CanvasView } from '../games/tg01/canvas';
 import { SupervisedBridge } from '../bridge/supervised';
@@ -28,6 +30,7 @@ export class App {
   private bridge?: SupervisedBridge;
   private context?: SessionContext;
   private engine?: Engine;
+  private mentalista?: MentalistaFlow;
   private journal?: Journal;
   private screen: Screen = 'instructions';
   private ready = false;
@@ -89,7 +92,7 @@ export class App {
     window.addEventListener('resize', () => this.refreshAvailability());
     window.addEventListener('runtime-update-available', () => {
       this.updateAvailable = true;
-      if (this.screen !== 'running' && !this.starting) this.render();
+      if (this.screen !== 'running' && !this.starting && !this.mentalista) this.render();
     });
     try {
       if (!isSecureContext || !crypto.subtle) throw new Error('SECURE_CONTEXT_REQUIRED');
@@ -126,14 +129,14 @@ export class App {
   }
   private say(message: string): void { this.live.textContent = message; }
   private layout() {
-    const config = this.context?.config ?? VIEWPORT_PROFILE;
+    const config = this.context?.taskId === 'TG-01' ? this.context.config : VIEWPORT_PROFILE;
     return isViewportConfig(config) ? stageLayout(innerWidth, Math.max(0, innerHeight - 72), config)
       : stageLayout(Math.max(0, innerWidth - (innerWidth < 640 ? 32 : 64)), Math.max(0, innerHeight - 180), config);
   }
   private unavailable(): string {
     if (!this.ready) return this.problem || 'Estamos comprobando los recursos y el respaldo local.';
     if (this.starting) return this.countdownValue === null ? 'Confirmando el inicio con tu profesor…' : 'Prepárate. La actividad está por comenzar.';
-    if (!this.layout().supported) return isViewportConfig(this.context?.config ?? VIEWPORT_PROFILE)
+    if (!this.layout().supported) return isViewportConfig(this.context?.taskId === 'TG-01' ? this.context.config : VIEWPORT_PROFILE)
       ? 'Necesitamos al menos 288 × 240 píxeles para mostrar las formas. Amplía la ventana o pide ayuda a tu profesor.'
       : 'Esta autorización usa el perfil anterior de pantalla grande. Pide a tu profesor una actividad adaptable al teléfono.';
     if (!navigator.onLine) return 'Para comenzar necesitamos conexión a internet.';
@@ -172,7 +175,7 @@ export class App {
     } finally { this.claiming = false; this.refreshAvailability(); }
   }
   private async maintain(force = false): Promise<void> {
-    if (!this.db || !this.session || !this.delivery || this.maintenanceBusy || this.engine?.running || this.starting || this.claiming || this.closing) return;
+    if (!this.db || !this.session || !this.delivery || this.maintenanceBusy || this.engine?.running || this.mentalista?.busy || this.starting || this.claiming || this.closing) return;
     this.maintenanceBusy = true;
     try {
       if (navigator.onLine) await this.session.reconcileClaims().catch(() => undefined);
@@ -212,6 +215,7 @@ export class App {
     } finally { this.maintenanceBusy = false; }
   }
   private render(focus = false): void {
+    if (this.mentalista && this.screen === 'instructions') return;
     for (const timer of this.exampleTimers) clearTimeout(timer);
     this.exampleTimers = [];
     this.main.replaceChildren(); this.startButton = undefined; this.reasonNode = undefined;
@@ -286,7 +290,7 @@ export class App {
     const list = el('ul', 'pending-list');
     for (const out of this.pendingItems) {
       const row = el('li', 'pending-row');
-      row.append(el('h2', '', 'Lluvia de estrellas'), el('p', '', `Fecha informativa del dispositivo: ${new Date(out.envelope.clock.timeOriginUnixMs).toLocaleString('es-CO')}`));
+      row.append(el('h2', '', out.envelope.taskId === 'TG-03' ? 'Mentalista' : 'Lluvia de estrellas'), el('p', '', `Fecha informativa del dispositivo: ${new Date(out.envelope.clock.timeOriginUnixMs).toLocaleString('es-CO')}`));
       row.append(el('p', '', out.status === 'AUTH_REQUIRED' || out.status === 'BLOCKED' ? 'El envío necesita una autorización de tu profesor.' : 'Hay un respaldo local; falta confirmar la recepción.'));
       if (out.status === 'AUTH_REQUIRED' || out.status === 'BLOCKED') row.append(this.accessForm(out));
       else row.append(button('Reintentar envío', () => { void this.maintain(true); }));
@@ -295,6 +299,20 @@ export class App {
     this.main.append(list, el('p', 'access-help', 'No borres los datos del sitio. Si no corresponde el código, no seleccionaremos otra actividad automáticamente.'));
   }
   private instructions(): void {
+    if (this.context?.taskId === 'TG-03' && this.session && this.db) {
+      this.mentalista = new MentalistaFlow(this.main, this.context, this.session, this.db, this.owner, async out => {
+        this.lastOut = out; this.playedSessionId = out.sessionId; this.screen = 'finish'; this.status = '';
+        this.bridge?.notify('EXECUTION_FINISHED', out.sessionId, out.envelope.submissionId);
+        this.bridge?.notify('DELIVERY_PENDING', out.sessionId, out.envelope.submissionId);
+        this.render(true);
+        if (navigator.onLine) this.updateDelivery(await this.delivery!.send(out.sessionId, true)); else this.offlinePrompt();
+      }, started => {
+        this.screen = 'finish'; this.memoryOnly = started;
+        this.status = started ? 'No podemos confirmar el respaldo completo.' : 'No se confirmó el inicio. Comprobaremos el mismo intento; conserva este navegador.';
+        this.render();
+      });
+      void this.mentalista.prepare(); return;
+    }
     const intro = el('div', 'intro');
     intro.append(el('h1', '', 'Lluvia de estrellas'), el('p', 'intro-copy', 'Antes de empezar, mira lo que vamos a hacer.'));
     const sheet = el('section', 'instruction-sheet'); sheet.setAttribute('aria-label', 'Instrucciones de la actividad');
@@ -338,7 +356,7 @@ export class App {
     this.main.append(area, actions);
   }
   private async begin(): Promise<void> {
-    if (this.unavailable() || !this.context || !this.session || !this.db) return;
+    if (this.unavailable() || !this.context || this.context.taskId !== 'TG-01' || !this.session || !this.db) return;
     this.starting = true; this.refreshAvailability();
     const layout = this.layout();
     const adaptive = isViewportConfig(this.context.config);
@@ -415,7 +433,7 @@ export class App {
   private mountStage(layout: ReturnType<typeof stageLayout>): HTMLCanvasElement {
     this.main.replaceChildren(); this.main.classList.add('main-running');
     this.startButton = undefined; this.reasonNode = undefined;
-    const adaptive = isViewportConfig(this.context!.config);
+    const adaptive = this.context?.taskId === 'TG-01' && isViewportConfig(this.context.config);
     this.main.classList.toggle('viewport-running', adaptive);
     const top = el('div', 'game-top'); top.append(el('h1', '', 'Lluvia de estrellas'));
     const exitSlot = el('div', 'exit-slot');
@@ -561,16 +579,17 @@ export class App {
   }
   private help(): void {
     // Never place a modal over a measured stimulus. Help is available only outside execution.
-    if (this.starting || this.engine?.running) { this.say('La actividad está por comenzar o ya está en marcha.'); return; }
+    if (this.starting || this.engine?.running || this.mentalista?.busy) { this.say('La actividad está por comenzar o ya está en marcha.'); return; }
     const dialog = el('dialog', 'help-dialog'); dialog.setAttribute('aria-labelledby', 'help-title');
     const heading = el('h2', '', 'Estamos para ayudarte'); heading.id = 'help-title';
-    dialog.append(heading, el('p', '', 'Toca las estrellas una sola vez y deja pasar las lunas. Puedes repetir el ejemplo antes de comenzar.'),
+    dialog.append(heading, el('p', '', this.context?.taskId === 'TG-03' ? 'Recuerda el número inicial, aplica cada suma o resta y elige una de las cuatro opciones. Practica antes de comenzar.' : 'Toca las estrellas una sola vez y deja pasar las lunas. Puedes repetir el ejemplo antes de comenzar.'),
       el('p', '', 'Si no puedes comenzar o enviar el registro, avisa a tu profesor. No borres los datos del navegador.'),
-      el('p', '', 'Esta versión requiere apuntar con ratón, dedo o lápiz; no ofrece una medición equivalente por teclado o lector de pantalla.'),
+      el('p', '', this.context?.taskId === 'TG-03' ? 'Puedes elegir con ratón, dedo, lápiz o las teclas 1, 2, 3 y 4. Cambiar de ventana o de orientación durante la actividad la interrumpe.' : 'Esta versión requiere apuntar con ratón, dedo o lápiz; no ofrece una medición equivalente por teclado o lector de pantalla.'),
       button('Entendido', () => { dialog.close(); dialog.remove(); }, 'button primary'));
     this.root.append(dialog); dialog.addEventListener('close', () => dialog.remove(), { once: true }); dialog.showModal();
   }
   destroy(): void {
+    this.mentalista?.destroy();
     if (this.countdownAbort) { this.countdownStopReason = 'user_exit'; this.countdownAbort.abort(); }
     if (this.engine?.running) { registry['TG-01'].destroy(this.engine); void this.closeExecution(); }
     cancelAnimationFrame(this.raf); this.gameAbort?.abort(); this.bridge?.destroy(); clearInterval(this.maintenanceTimer); clearInterval(this.leaseTimer);

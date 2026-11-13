@@ -1,0 +1,6 @@
+TG-03 Mentalista assets
+Source: https://github.com/AlexanderNino97/TD-MENTALISTA
+Pinned revision: 01e5433a79337882b9479f37829a660812bed9b3
+Original directory: frontend/assets
+Reuse and adaptation of code and all assets explicitly authorized by Kudlab's responsible owner for this integration.
+Assets copied without alteration. No external font or asset service is required.

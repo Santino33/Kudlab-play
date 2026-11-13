@@ -1,0 +1,47 @@
+.mentalista {
+  --math-ink: #1d2b52;
+  position: relative; width: 100%; min-height: 560px; aspect-ratio: 16 / 9;
+  background: #14264d url('/mentalista/v1/escenario-matematico-sin-globo.webp') center / 100% 100% no-repeat;
+  color: white; overflow: hidden; isolation: isolate;
+}
+.mentalista-title { position: absolute; top: 12px; left: 24px; font-size: 24px; margin: 0; }
+.mentalista-progress { position: absolute; right: 24px; top: 12px; margin: 0; padding: 6px 12px; background: var(--math-ink); border-radius: 8px; }
+.mentalista-board { position: absolute; left: 30%; top: 35%; width: 40%; height: 25%; display: grid; place-items: center; text-align: center; font-size: clamp(24px, 3.6vw, 52px); font-weight: 800; line-height: 1.15; color: #fff; }
+.mentalista-kud { position: absolute; left: 78%; top: 42.5%; width: 20.5%; }
+.mentalista-ship { position: absolute; left: 74.5%; top: 64.3%; width: 25.5%; }
+.mentalista-message { position: absolute; left: 8%; right: 8%; top: 7%; padding: 12px 20px; border-radius: 12px; background: #fff; color: var(--math-ink); font-size: clamp(16px, 1.7vw, 22px); line-height: 1.4; }
+.mentalista-message:empty { display: none; }
+.mentalista-options { position: absolute; left: 27%; top: 73%; width: 46%; height: 14%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.mentalista-option { min-width: 44px; min-height: 48px; border: 3px solid var(--math-ink); border-radius: 14px; background: #fffaf0; color: var(--math-ink); font: 800 clamp(24px, 3vw, 44px) Nunito, sans-serif; cursor: pointer; touch-action: manipulation; }
+.mentalista-option.pressed { background: #d9e6f5; }
+.mentalista button:focus-visible, .mentalista-board:focus-visible { outline: 4px solid #ffcc4d; outline-offset: 3px; }
+.mentalista-actions { position: absolute; bottom: 3%; left: 5%; right: 5%; display: flex; justify-content: center; gap: 12px; }
+.mentalista-actions .button { min-height: 44px; background: #fff; color: var(--math-ink); }
+.mentalista-actions .primary { background: #ffcc4d; }
+.mentalista-transition { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #14264d; z-index: 3; }
+.main:has(> .mentalista) { width: 100%; max-width: 1440px; padding: 0; height: calc(100svh - 48px); }
+body:has(.mentalista) .header { min-height: 48px; height: 48px; }
+body:has(.mentalista) .footer { display: none; }
+.main > .mentalista { height: 100%; min-height: 0; }
+.mentalista-progress:empty { display: none; }
+@media (max-aspect-ratio: 1/1) {
+  .mentalista { aspect-ratio: auto; background-size: auto 70%; background-position: center 50%; }
+  .mentalista-title { left: 16px; top: 12px; font-size: 22px; }
+  .mentalista-progress { right: 12px; top: 14px; font-size: 14px; }
+  .mentalista-board { left: 7%; width: 86%; top: 35%; height: 20%; background: #293d39; border: 8px solid #a06b43; border-radius: 8px; font-size: clamp(28px, 8vw, 40px); }
+  .mentalista-message { left: 4%; right: 4%; top: 8%; font-size: 16px; padding: 12px; }
+  .mentalista-options { left: 9%; width: 82%; top: 59%; height: 22%; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .mentalista-kud { left: 73%; top: 81%; width: 24%; }
+  .mentalista-ship { left: 70%; top: 88%; width: 30%; }
+  .mentalista-actions { bottom: 3%; right: 28%; left: 4%; flex-wrap: wrap; }
+}
+@media (max-height: 520px) and (min-aspect-ratio: 1/1) {
+  .mentalista { aspect-ratio: auto; }
+  .mentalista-title { font-size: 18px; top: 4px; }
+  .mentalista-progress { font-size: 14px; top: 4px; padding: 2px 8px; }
+  .mentalista-message { top: 6%; font-size: 14px; padding: 6px 12px; }
+  .mentalista-board { font-size: 28px; }
+  .mentalista-options { top: 66%; height: 17%; }
+  .mentalista-actions { bottom: 1%; }
+  .mentalista-actions .button { padding: 4px 16px; }
+}
