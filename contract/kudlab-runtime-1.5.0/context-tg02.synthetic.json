@@ -1,0 +1,43 @@
+{
+  "sessionId": "10000000-0000-4000-8000-000000000001",
+  "taskId": "TG-02",
+  "publishedVersionId": "30000000-0000-4000-8000-000000000001",
+  "configVersion": 1,
+  "configurationHash": "f98db3144d9ce0e367484ec56c7cd4b7bcbaddac70703750c0164e7ccb267617",
+  "gameBuildId": "tg02-palabra-intrusa-1",
+  "contractVersion": "2.0",
+  "config": {
+    "taskId": "TG-02",
+    "profile": "TG02_PALABRA_INTRUSA_V1",
+    "seed": 20262,
+    "itemTimeoutMs": 20000,
+    "anticipatoryMs": 400,
+    "segmentCount": 3,
+    "itemsPerSegment": 6,
+    "itemsPerLevelPerSegment": 2,
+    "maxRun": 2,
+    "minRtOverall": 5,
+    "minRtGroup": 3,
+    "selectionHoldMs": 250,
+    "transitionMs": 500,
+    "practiceMaxRounds": 2,
+    "gameBuildId": "tg02-palabra-intrusa-1",
+    "algorithmVersion": "original-5ce3bdc",
+    "referenceCommit": "5ce3bdcca0e2e1bb629b390ea3b6ec681cc23b69",
+    "itemBankVersion": "1.0.0-borrador",
+    "validationStatus": "PENDIENTE DE VALIDACIÓN DOCENTE: vocabulario, categorías y niveles generados para el prototipo; revisar antes del pilotaje.",
+    "bankHash": "5557498c374fb545989c0e005e0e0a10a4e12293f62e429cd9858d9a5fc5ef92",
+    "sequenceHash": "d4a295d35185aaeb5b6dafb0e8ac455bcba44bf708a43a97d3441d9745b41199",
+    "originalSequenceHash": "bf1dba14"
+  },
+  "executionStatus": "READY",
+  "attemptNumber": null,
+  "startAllowedUntil": "2026-10-27T12:15:00Z",
+  "uploadAllowedUntil": null,
+  "serverTime": "2026-10-27T12:00:00Z",
+  "capabilities": {
+    "canStart": true,
+    "canSubmit": false,
+    "canReadReceipt": true
+  }
+}

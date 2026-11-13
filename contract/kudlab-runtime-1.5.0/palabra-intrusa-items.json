@@ -1,0 +1,260 @@
+{
+ "itemBankVersion": "1.0.0-borrador",
+ "validationStatus": "PENDIENTE DE VALIDACIÓN DOCENTE: vocabulario, categorías y niveles generados para el prototipo; revisar antes del pilotaje.",
+ "practice": [
+  {
+   "id": "P01",
+   "category": "animales",
+   "level": 1,
+   "words": [
+    "perro",
+    "gato",
+    "vaca",
+    "galleta"
+   ],
+   "targetIdx": 3
+  },
+  {
+   "id": "P02",
+   "category": "colores",
+   "level": 1,
+   "words": [
+    "rojo",
+    "azul",
+    "amarillo",
+    "cuaderno"
+   ],
+   "targetIdx": 3
+  },
+  {
+   "id": "P03",
+   "category": "partes de la cara",
+   "level": 1,
+   "words": [
+    "nariz",
+    "boca",
+    "ojo",
+    "silla"
+   ],
+   "targetIdx": 3
+  }
+ ],
+ "items": [
+  {
+   "id": "I01",
+   "category": "animales salvajes",
+   "level": 1,
+   "words": [
+    "león",
+    "tigre",
+    "oso",
+    "tenedor"
+   ],
+   "targetIdx": 3
+  },
+  {
+   "id": "I02",
+   "category": "comidas",
+   "level": 1,
+   "words": [
+    "arroz",
+    "sopa",
+    "huevo",
+    "martillo"
+   ],
+   "targetIdx": 3
+  },
+  {
+   "id": "I03",
+   "category": "útiles escolares",
+   "level": 1,
+   "words": [
+    "lápiz",
+    "borrador",
+    "tijeras",
+    "caballo"
+   ],
+   "targetIdx": 3
+  },
+  {
+   "id": "I04",
+   "category": "ropa",
+   "level": 1,
+   "words": [
+    "camisa",
+    "pantalón",
+    "falda",
+    "nube"
+   ],
+   "targetIdx": 3
+  },
+  {
+   "id": "I05",
+   "category": "vehículos",
+   "level": 1,
+   "words": [
+    "bicicleta",
+    "carro",
+    "moto",
+    "uva"
+   ],
+   "targetIdx": 3
+  },
+  {
+   "id": "I06",
+   "category": "cosas del cielo",
+   "level": 1,
+   "words": [
+    "sol",
+    "luna",
+    "estrella",
+    "jabón"
+   ],
+   "targetIdx": 3
+  },
+  {
+   "id": "I07",
+   "category": "animales",
+   "level": 2,
+   "words": [
+    "conejo",
+    "tortuga",
+    "ardilla",
+    "girasol"
+   ],
+   "targetIdx": 3
+  },
+  {
+   "id": "I08",
+   "category": "muebles",
+   "level": 2,
+   "words": [
+    "mesa",
+    "sofá",
+    "cama",
+    "cuchara"
+   ],
+   "targetIdx": 3
+  },
+  {
+   "id": "I09",
+   "category": "juguetes",
+   "level": 2,
+   "words": [
+    "pelota",
+    "muñeca",
+    "peluche",
+    "escoba"
+   ],
+   "targetIdx": 3
+  },
+  {
+   "id": "I10",
+   "category": "agua",
+   "level": 2,
+   "words": [
+    "río",
+    "mar",
+    "lago",
+    "montaña"
+   ],
+   "targetIdx": 3
+  },
+  {
+   "id": "I11",
+   "category": "instrumentos musicales",
+   "level": 2,
+   "words": [
+    "guitarra",
+    "tambor",
+    "flauta",
+    "radio"
+   ],
+   "targetIdx": 3
+  },
+  {
+   "id": "I12",
+   "category": "oficios",
+   "level": 2,
+   "words": [
+    "médico",
+    "bombero",
+    "profesor",
+    "abuelo"
+   ],
+   "targetIdx": 3
+  },
+  {
+   "id": "I13",
+   "category": "frutas",
+   "level": 3,
+   "words": [
+    "manzana",
+    "pera",
+    "sandía",
+    "zanahoria"
+   ],
+   "targetIdx": 3
+  },
+  {
+   "id": "I14",
+   "category": "animales de granja",
+   "level": 3,
+   "words": [
+    "oveja",
+    "cerdo",
+    "burro",
+    "jirafa"
+   ],
+   "targetIdx": 3
+  },
+  {
+   "id": "I15",
+   "category": "aves",
+   "level": 3,
+   "words": [
+    "paloma",
+    "pato",
+    "loro",
+    "elefante"
+   ],
+   "targetIdx": 3
+  },
+  {
+   "id": "I16",
+   "category": "transportes aéreos",
+   "level": 3,
+   "words": [
+    "avión",
+    "helicóptero",
+    "cohete",
+    "tren"
+   ],
+   "targetIdx": 3
+  },
+  {
+   "id": "I17",
+   "category": "calzado",
+   "level": 3,
+   "words": [
+    "zapato",
+    "sandalia",
+    "pantufla",
+    "gorra"
+   ],
+   "targetIdx": 3
+  },
+  {
+   "id": "I18",
+   "category": "lácteos",
+   "level": 3,
+   "words": [
+    "leche",
+    "queso",
+    "yogur",
+    "pan"
+   ],
+   "targetIdx": 3
+  }
+ ]
+}

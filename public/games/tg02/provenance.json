@@ -1,0 +1,21 @@
+{
+  "reference": "https://github.com/AlexanderNino97/TD-PALABRA-INTRUSA",
+  "commit": "5ce3bdcca0e2e1bb629b390ea3b6ec681cc23b69",
+  "authorization": "Incorporation authorized by project owner, 2026-11-13; no public license inferred.",
+  "fontSource": "https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&display=swap",
+  "fontLicense": "OFL.txt",
+  "files": {
+    "OFL.txt": "5c9e7eee5c6b25f4b05b8d53b2e470ea4962f9ced742d044a98f7d95d1375bab",
+    "escenario-biblioteca.webp": "506ab26a1b043ae4773ddae52f991697f7d783f9bd96cb2b6591d6f550e0ae2d",
+    "escenario-laboratorio.webp": "7405ddc5528f55049c56d21b5fa10dd143fa4e7b2e33048306d688af0c2c2ad0",
+    "fredoka-500.ttf": "69dd373c3a195748b359f4dedd3152bae62807e6815e993fbf5df7938b696b40",
+    "fredoka-600.ttf": "594cd6463e8eccef94423fba8e0114c137492f6415af4b414b21b73abcb644a8",
+    "kud-hablando.webm": "2d386c848dd45dd85ddf8352a6122b0f7dd1547e4de14b0b6cecae9219add9cd",
+    "kud-hablando.webp": "8d473487b368d2bbc9c454e81f6f532ed8679e647d2f0da1bca27b58c433e892",
+    "kud-quieto.png": "7d11d6344ac97766f8897138c92e94de6c18b3e3fe5dd3ef8dd7705086d8336e",
+    "transicion-biblioteca-a-lab.mp4": "12b815432637d8a309f0b9c4bc120aabc2824f33616f9b3805c293aaa58e012f",
+    "transicion-biblioteca-a-lab.webm": "79fd64bf71a20b1493a1399f3f992cb0da05b14fe1bc051fa4c74071ca6e6f4e",
+    "transicion-lab-a-biblioteca.mp4": "776cc63da4b900ada1ef9c6fd4a965a34d05bce3dab5993217ae89052e89c0b2",
+    "transicion-lab-a-biblioteca.webm": "5e1b28e99c7e87fb3c236803889f0cc731d66f45d6891dff158afec40da35afe"
+  }
+}
