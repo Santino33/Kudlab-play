@@ -80,10 +80,11 @@ export class Engine {
     if (this.finished) return false;
     if (!Number.isFinite(pointer.atMs) || !Number.isFinite(pointer.x) || !Number.isFinite(pointer.y) ||
       position !== null && (!Number.isInteger(position) || position < 0 || position > 3)) return false;
-    this.clock.observe(pointer.atMs);
+    if (pointer.atMs < 0 || this.active && pointer.atMs < this.presentedRaw) return false;
+    const observedAt = this.clock.input(pointer.atMs);
     if (position === null || !this.active) {
       if (this.measurementStartedAt !== null) {
-        if (this.extras.length >= 1000) { this.interrupt('evidence_limit', pointer.atMs); return false; }
+        if (this.extras.length >= 1000) { this.interrupt('evidence_limit', observedAt); return false; }
         this.extras.push({ ...pointer, atMs: round(pointer.atMs), x: round(pointer.x), y: round(pointer.y),
           region: position === null ? 'outside_cards' : 'locked', segment: this.active?.segment ?? this.events.at(-1)?.segment ?? 1 });
         this.revision++;

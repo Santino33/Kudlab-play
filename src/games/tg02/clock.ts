@@ -8,6 +8,12 @@ export class Clock {
     if (!Number.isFinite(at) || at < this.latest) throw new Error('INVALID_TG02_CLOCK');
     this.latest = at;
   }
+  input(at: number) {
+    if (!Number.isFinite(at) || at < 0) throw new Error('INVALID_TG02_CLOCK');
+    // An input can be queued before the latest RAF/checkpoint but dispatched after it.
+    this.observe(Math.max(this.latest, at));
+    return this.latest;
+  }
   visibility(hidden: boolean, at: number) {
     this.observe(at);
     if (hidden && this.hiddenAt === null) {

@@ -71,6 +71,15 @@ describe('TG02 standalone engine — CA-05/06/07/08/10', () => {
     expect(engine.snapshot(engine.nextPresentationAt).active?.trial).toBe(2);
   });
 
+  it('preserves queued pointer timestamps without moving the checkpoint backwards', () => {
+    const engine = new Engine(), start = practice(engine);
+    const trial = engine.presented(start);
+    engine.tick(start + 600);
+    expect(engine.tap(trial.targetIdx, pointer(start - 1))).toBe(false);
+    expect(engine.tap(trial.targetIdx, pointer(start + 500))).toBe(true);
+    expect(engine.snapshot(start + 600).events[0]).toMatchObject({ rtMs: 500, respondedAtMs: start + 500 });
+  });
+
   it('blur does not pause; a valid timeout is omission, not an error', () => {
     const engine = new Engine(), start = practice(engine);
     engine.presented(start); engine.focus(false, true, start + 100);
