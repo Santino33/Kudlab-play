@@ -77,6 +77,14 @@ test('CA-01: el shell canónico carga tras recarga y reapertura bajo redirecció
   await expect(reopened.getByRole('heading', { name: 'Tu actividad empieza aquí', exact: true })).toBeVisible();
   await reopened.goto(`${productionOrigin}/pendientes`);
   await expect(reopened.getByRole('heading', { name: 'Actividades pendientes', exact: true })).toBeVisible();
+  // Remove only this test profile's shell to exercise real navigation requests through the network fallback.
+  await reopened.evaluate(async () => {
+    for (const name of await caches.keys()) await (await caches.open(name)).delete('/');
+  });
+  await reopened.goto(`${productionOrigin}/index.html`);
+  await expect(reopened.getByRole('heading', { name: 'Tu actividad empieza aquí', exact: true })).toBeVisible();
+  await reopened.goto(`${productionOrigin}/pendientes`);
+  await expect(reopened.getByRole('heading', { name: 'Actividades pendientes', exact: true })).toBeVisible();
 });
 
 test('CA-02: navegación fallida actualiza el mismo registro sin borrar pendientes ni forzar clientes', async ({ page, context }) => {
