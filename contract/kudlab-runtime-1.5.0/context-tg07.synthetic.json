@@ -1,0 +1,37 @@
+{
+  "sessionId": "10000000-0000-4000-8000-000000000001",
+  "taskId": "TG-07",
+  "publishedVersionId": "30000000-0000-4000-8000-000000000001",
+  "configVersion": 1,
+  "configurationHash": "db6bb3e58c0a4223a2d6beef54f995965b7c47dbfcc008a0a9505a3b08be8164",
+  "gameBuildId": "tg07-kud-dice-1",
+  "contractVersion": "2.0",
+  "config": {
+    "profile": "TG07_KUD_DICE_V1",
+    "seed": 20263,
+    "startLength": 2,
+    "maxLength": 7,
+    "trialsPerLength": 2,
+    "reservePerLength": 1,
+    "stimOnMs": 600,
+    "stimOffMs": 300,
+    "preSequenceMs": 900,
+    "responseTimeoutMs": 8000,
+    "minRtForStats": 3,
+    "practice": {
+      "length": 2,
+      "maxRounds": 2
+    },
+    "sequenceHash": "e047fcf9909300855203272b0df5b1685dfe3cc961756318e2b5d3f560af5982"
+  },
+  "executionStatus": "READY",
+  "attemptNumber": null,
+  "startAllowedUntil": "2026-10-27T12:15:00Z",
+  "uploadAllowedUntil": null,
+  "serverTime": "2026-10-27T12:00:00Z",
+  "capabilities": {
+    "canStart": true,
+    "canSubmit": false,
+    "canReadReceipt": true
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "sessionId": "10000000-0000-4000-8000-000000000002",
+  "taskId": "TG-02",
+  "publishedVersionId": "20000000-0000-4000-8000-000000000002",
+  "configVersion": 1,
+  "configurationHash": "f98db3144d9ce0e367484ec56c7cd4b7bcbaddac70703750c0164e7ccb267617",
+  "gameBuildId": "tg02-palabra-intrusa-1",
+  "contractVersion": "2.0",
+  "submissionId": "30000000-0000-4000-8000-000000000002",
+  "state": "interrupted",
+  "terminationReason": "user_exit",
+  "phaseReached": "intro",
+  "clock": {
+    "id": "40000000-0000-4000-8000-000000000002",
+    "timeOriginUnixMs": 1794528000000
+  },
+  "timing": {
+    "startedAtMs": 0,
+    "finishedAtMs": 100,
+    "lastCheckpointAtMs": 100,
+    "measurementStartedAtMs": null,
+    "measurementFinishedAtMs": null,
+    "pausedMs": 0
+  },
+  "device": {
+    "viewportWidth": 1920,
+    "viewportHeight": 1080,
+    "stageWidthCss": 1920,
+    "stageHeightCss": 1080,
+    "devicePixelRatio": 1,
+    "touchCapable": false,
+    "pointerTypes": [
+      "mouse"
+    ]
+  },
+  "preparation": {
+    "instruction": {
+      "shownAtMs": 10,
+      "acceptedAtMs": null,
+      "repeats": 0
+    },
+    "practiceCompleted": false,
+    "practice": []
+  },
+  "events": [],
+  "incidents": [],
+  "pauses": [],
+  "emptyResponses": []
+}

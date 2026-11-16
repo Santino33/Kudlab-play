@@ -20,7 +20,7 @@ const server = createServer(async (req, res) => {
     res.setHeader('Content-Type', 'text/javascript'); res.setHeader('Service-Worker-Allowed', '/');
     res.end("self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));"); return;
   }
-  if (!/^\/(index\.html|favicon\.svg|sw\.js|licenses\/(nunito|zod|canonicalize)\.txt|assets\/[A-Za-z0-9_.-]+|mentalista\/v1\/[A-Za-z0-9_-]+\.(png|webp|mp4|webm|txt)|kud-dice\/v1\/[A-Za-z0-9_-]+\.(png|webp|mp4|webm|txt|ttf|mp3|jpeg|js))$/.test(file)) { res.writeHead(404); res.end(); return; }
+  if (!/^\/(index\.html|favicon\.svg|sw\.js|licenses\/(nunito|zod|canonicalize)\.txt|assets\/[A-Za-z0-9_.-]+|games\/tg02\/[A-Za-z0-9_-]+\.(png|webp|mp4|webm|txt|ttf)|mentalista\/v1\/[A-Za-z0-9_-]+\.(png|webp|mp4|webm|txt)|kud-dice\/v1\/[A-Za-z0-9_-]+\.(png|webp|mp4|webm|txt|ttf|mp3|jpeg|js))$/.test(file)) { res.writeHead(404); res.end(); return; }
   try {
     const data = await readFile(`dist${file}`);
     res.setHeader('Content-Type', mime[file.split('.').at(-1)] || 'application/octet-stream');

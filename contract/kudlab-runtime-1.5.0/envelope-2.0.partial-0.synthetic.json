@@ -1,0 +1,55 @@
+{
+  "sessionId": "10000000-0000-4000-8000-000000000001",
+  "taskId": "TG-03",
+  "publishedVersionId": "30000000-0000-4000-8000-000000000001",
+  "configVersion": 1,
+  "configurationHash": "dc5fdbf88e36753f9c4f7df3fd6a3c39a75b9ad77c2780cf041643b5160efdfd",
+  "gameBuildId": "tg03-mentalista-1",
+  "contractVersion": "2.0",
+  "submissionId": "40000000-0000-4000-8000-000000000001",
+  "state": "interrupted",
+  "terminationReason": "user_exit",
+  "clock": {
+    "id": "50000000-0000-4000-8000-000000000001",
+    "timeOriginUnixMs": 1794528000000
+  },
+  "timing": {
+    "startedAtMs": 0,
+    "finishedAtMs": 0,
+    "lastCheckpointAtMs": 0
+  },
+  "device": {
+    "viewportWidth": 390,
+    "viewportHeight": 844,
+    "stageWidthCss": 390,
+    "stageHeightCss": 772,
+    "touchCapable": true,
+    "layoutPreset": "portrait"
+  },
+  "preparation": {
+    "instructionRepeats": 0,
+    "practice": [
+      {
+        "round": 1,
+        "items": [
+          {
+            "itemId": "P1",
+            "selectedIdx": 2,
+            "result": "correct",
+            "rtMs": 500
+          },
+          {
+            "itemId": "P2",
+            "selectedIdx": 1,
+            "result": "correct",
+            "rtMs": 500
+          }
+        ]
+      }
+    ],
+    "resourceIncidents": []
+  },
+  "events": [],
+  "incidents": [],
+  "extraResponses": []
+}

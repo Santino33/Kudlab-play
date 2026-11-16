@@ -8,7 +8,7 @@ import { createHash } from 'node:crypto';
 
 // Exercise the actual generated handler without requiring a pre-existing dist build.
 const dir = await mkdtemp(join(tmpdir(), 'play-sw-build-'));
-for (const name of ['dist/assets', 'dist/mentalista/v1', 'dist/kud-dice/v1', 'node_modules/@fontsource/nunito', 'node_modules/zod', 'node_modules/canonicalize']) {
+for (const name of ['dist/assets', 'dist/mentalista/v1', 'dist/kud-dice/v1', 'dist/games/tg02', 'node_modules/@fontsource/nunito', 'node_modules/zod', 'node_modules/canonicalize']) {
   await mkdir(join(dir, name), { recursive: true });
 }
 const contents = new Map([
@@ -16,6 +16,7 @@ const contents = new Map([
   ['node_modules/@fontsource/nunito/LICENSE', 'nunito'], ['node_modules/zod/LICENSE', 'zod'], ['node_modules/canonicalize/LICENSE', 'canonicalize'],
 ]);
 const sceneFiles = ['escenario-matematico-sin-globo.webp', 'kud-quieto.png', 'nave-frente.png', 'poster-transicion-inicio.webp'].map(name => `dist/mentalista/v1/${name}`);
+sceneFiles.push(...['escenario-laboratorio.webp', 'escenario-biblioteca.webp', 'kud-quieto.png', 'kud-hablando.webp', 'fredoka-500.ttf', 'fredoka-600.ttf', 'OFL.txt'].map(name => `dist/games/tg02/${name}`));
 for (const file of sceneFiles) contents.set(file, `synthetic scene ${file}`);
 for (const [file, text] of contents) await writeFile(join(dir, file), text);
 execFileSync(process.execPath, [resolve('scripts/build-sw.mjs')], { cwd: dir });

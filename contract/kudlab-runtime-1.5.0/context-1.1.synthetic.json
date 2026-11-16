@@ -1,0 +1,48 @@
+{
+  "sessionId": "10000000-0000-4000-8000-000000000001",
+  "taskId": "TG-01",
+  "publishedVersionId": "30000000-0000-4000-8000-000000000001",
+  "configVersion": 1,
+  "configurationHash": "3c96d24508c440d4d129fb6ec7a4fc91c60215c8db270a6d37d81d706703d0fc",
+  "gameBuildId": "tg01-viewport-rebuild-2",
+  "contractVersion": "1.1",
+  "config": {
+    "durationMs": 120000,
+    "segmentBoundariesMs": [
+      0,
+      40000,
+      80000,
+      120000
+    ],
+    "fallSpeedUnitsPerSecond": 210,
+    "spawnIntervalMs": {
+      "min": 1100,
+      "max": 1800
+    },
+    "starProbability": 0.7,
+    "stimulusSizeUnits": {
+      "min": 75,
+      "max": 105
+    },
+    "minimumDistanceUnits": 180,
+    "positionAttempts": 30,
+    "presentationRule": "FULLY_VISIBLE",
+    "maxFrameGapMs": 250,
+    "minimumStageScale": 0.6,
+    "inputProfile": "POINTER_V1",
+    "layoutRule": "VIEWPORT_FIT_V2",
+    "referenceWidthUnits": 480,
+    "minimumLaneWidthUnits": 120,
+    "maximumLanes": 6
+  },
+  "executionStatus": "READY",
+  "attemptNumber": null,
+  "startAllowedUntil": "2026-10-27T12:15:00Z",
+  "uploadAllowedUntil": null,
+  "serverTime": "2026-10-27T12:00:00Z",
+  "capabilities": {
+    "canStart": true,
+    "canSubmit": false,
+    "canReadReceipt": true
+  }
+}

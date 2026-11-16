@@ -1,0 +1,31 @@
+@font-face{font-family:Fredoka;src:url('/games/tg02/fredoka-500.ttf') format('truetype');font-weight:500;font-display:swap}
+@font-face{font-family:Fredoka;src:url('/games/tg02/fredoka-600.ttf') format('truetype');font-weight:600;font-display:swap}
+/* Original TD-PALABRA-INTRUSA@5ce3bdc geometry and artwork; selectors scoped to this game. */
+.tg02{position:relative;width:min(100%,177.78vh);aspect-ratio:16/9;overflow:hidden;container-type:inline-size;background:#14264d url('/games/tg02/escenario-biblioteca.webp') center/cover no-repeat;touch-action:none;font-family:Fredoka,'Trebuchet MS',system-ui,sans-serif;user-select:none;-webkit-tap-highlight-color:transparent;margin:auto}
+.tg02 .layer{position:absolute;display:block;pointer-events:none}.tg02 .hidden{display:none!important}
+.tg02 .full{inset:0;width:100%;height:100%;object-fit:cover}.tg02 .fade{transition:opacity .35s ease}.tg02 .off{opacity:0}
+.tg02 [data-part=kud]{aspect-ratio:1/1}.tg02 [data-part=kud].lab{left:34.01%;top:37.04%;width:31.25%}.tg02 [data-part=kud].library{left:76.46%;top:51.48%;width:21.875%}
+.tg02 [data-part=labText]{position:absolute;left:58.6%;top:27.9%;width:17.3%;height:18.2%;display:flex;align-items:center;justify-content:center;text-align:center;color:#1d2b52;font-weight:500;font-size:1.45cqw;line-height:1.25}
+.tg02 [data-part=kud] img,.tg02 [data-part=kud] video{position:absolute;inset:0;width:100%;height:100%;display:block;background:transparent}
+.tg02 [data-part=bubbleText]{position:absolute;left:75.5%;top:30.6%;width:20.8%;height:15.7%;display:flex;align-items:center;justify-content:center;text-align:center;color:#1d2b52;font-weight:500;font-size:1.45cqw;line-height:1.25;transition:opacity .25s ease}
+.tg02 [data-part=cards]{position:absolute;inset:0;pointer-events:none;transition:opacity .25s ease}
+.tg02 .card{position:absolute;width:19.79%;height:21.3%;box-sizing:border-box;pointer-events:auto;cursor:pointer;border:.3cqw solid #1d2b52;border-radius:1.6cqw;background:#fffaf0;box-shadow:.45cqw .55cqw 0 rgba(107,61,30,.22);display:flex;align-items:center;justify-content:center;padding:3% 0 0;font:600 2.6cqw Fredoka,'Trebuchet MS',sans-serif;color:#1d2b52;transition:transform .12s ease}
+.tg02 .card .band{position:absolute;left:0;right:0;top:0;height:18%;border-radius:1.3cqw 1.3cqw 0 0}
+.tg02 .card.c0{left:28.65%;top:36.11%}.tg02 .card.c0 .band{background:#e8474f}
+.tg02 .card.c1{left:51.56%;top:36.11%}.tg02 .card.c1 .band{background:#4a8fe0}
+.tg02 .card.c2{left:28.65%;top:62.96%}.tg02 .card.c2 .band{background:#ffcc33}
+.tg02 .card.c3{left:51.56%;top:62.96%}.tg02 .card.c3 .band{background:#5fbf5a}
+.tg02 [data-part=cards]:not(.locked) .card:hover{transform:translateY(-.3cqw)}
+.tg02 .card.sel{background:#a8e6dc;outline:.35cqw solid #2ec4b6;outline-offset:.2cqw}
+.tg02 .card.good{background:#d8f3c9;outline:.35cqw solid #5fbf5a;outline-offset:.2cqw}
+.tg02 [data-part=cards].locked .card{cursor:default}
+.tg02 [data-part=progress]{position:absolute;left:1.6%;top:2.4%;width:20%;height:2.4%;background:rgba(20,38,77,.75);border:.22cqw solid #1d2b52;border-radius:2cqw;overflow:hidden}
+.tg02 [data-part=progressFill]{height:100%;width:0%;background:linear-gradient(90deg,#2ec4b6,#a8e6dc);transition:width .3s ease}
+.tg02 [data-part=countdown]{position:absolute;left:28.65%;top:36.11%;width:42.7%;height:48.15%;display:flex;align-items:center;justify-content:center;font:600 9cqw Fredoka,sans-serif;color:#fffaf0;-webkit-text-stroke:.35cqw #1d2b52}
+.tg02 [data-part=buttons]{position:absolute;left:0;right:0;bottom:3.2%;display:flex;gap:1.4cqw;justify-content:center;pointer-events:auto}
+.tg02 .btn{font:600 1.45cqw Fredoka,'Trebuchet MS',sans-serif;color:#fffaf0;background:#ff9a4c;border:.25cqw solid #1d2b52;border-radius:2.2cqw;padding:.7cqw 2.2cqw;cursor:pointer;box-shadow:0 .35cqw 0 #1d2b52}
+.tg02 .btn.alt{background:#2ec4b6}.tg02 .btn:active{transform:translateY(.25cqw);box-shadow:0 .1cqw 0 #1d2b52}
+.tg02 [data-part=transition],.tg02 [data-part=transitionBack]{z-index:20;background:#14264d}
+.tg02 [data-part=loading]{position:absolute;inset:0;display:grid;place-items:center;color:#fffaf0;font-size:1.6cqw;z-index:30;background:#14264d}
+.tg02 button:focus-visible{outline:.35cqw solid #14264d;outline-offset:.4cqw}
+@media(prefers-reduced-motion:reduce){.tg02 .fade,.tg02 [data-part=cards],.tg02 [data-part=bubbleText],.tg02 [data-part=progressFill],.tg02 .card{transition:none}.tg02 .card:hover{transform:none!important}}
